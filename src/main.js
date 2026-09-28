@@ -1,0 +1,973 @@
+import './styles.css';
+import * as THREE from 'three';
+import { AudioDirector } from './audio.js';
+import { createArena } from './arena.js';
+import { createPlayer } from './player.js';
+
+const canvas = document.querySelector('#game');
+const startButton = document.querySelector('#startButton');
+const clockElement = document.querySelector('#clock');
+const scoreElement = document.querySelector('#score');
+const actionLabel = document.querySelector('#actionLabel');
+const feedbackElement = document.querySelector('#feedback');
+const shotMeter = document.querySelector('#shotMeter');
+const meterFill = shotMeter.querySelector('i');
+const meterNeedle = shotMeter.querySelector('b');
+
+const renderer = new THREE.WebGLRenderer({
+  canvas,
+  antialias: false,
+  powerPreference: 'high-performance',
+});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.2));
+renderer.setSize(window.innerWidth, window.innerHeight, false);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.92;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x07101d);
+scene.fog = new THREE.FogExp2(0x09101e, 0.054);
+
+const camera = new THREE.PerspectiveCamera(63, window.innerWidth / window.innerHeight, 0.05, 56);
+camera.position.set(0, 3.7, 10);
+
+const arena = createArena(THREE);
+scene.add(arena.group);
+
+const player = createPlayer(THREE);
+scene.add(player.group);
+
+const audio = new AudioDirector({ volume: 0.46 });
+const clock = new THREE.Clock();
+
+const temp = {
+  forward: new THREE.Vector3(),
+  right: new THREE.Vector3(),
+  move: new THREE.Vector3(),
+  toHoop: new THREE.Vector3(),
+  cameraTarget: new THREE.Vector3(),
+  cameraDesired: new THREE.Vector3(),
+  ballAnchor: new THREE.Vector3(),
+  ballNormal: new THREE.Vector3(),
+  local: new THREE.Vector3(),
+};
+
+const BALL_RADIUS = arena.hoop.ballRadius ?? 0.12;
+const GRAVITY = 9.8;
+const coarsePointer = window.matchMedia('(any-pointer: coarse)').matches;
+const input = {
+  forward: false,
+  backward: false,
+  left: false,
+  right: false,
+  sprint: false,
+  touchX: 0,
+  touchY: 0,
+};
+
+const game = {
+  elapsed: 0,
+  remaining: 120,
+  score: 0,
+  started: false,
+  pointerLocked: false,
+  cameraYaw: 0,
+  cameraPitch: -0.16,
+  cameraDistance: 6.8,
+  feedbackTimer: 0,
+  player: {
+    position: new THREE.Vector3(0, 0, 3.9),
+    yaw: 0,
+    desiredYaw: 0,
+    currentSpeed: 0,
+    action: 'idle',
+    actionTime: 0,
+    actionDuration: 0,
+    actionProgress: 0,
+    jumpY: 0,
+    finishReleased: false,
+  },
+  charge: {
+    active: false,
+    value: 0,
+  },
+  ball: {
+    object: null,
+    position: new THREE.Vector3(),
+    previous: new THREE.Vector3(),
+    velocity: new THREE.Vector3(),
+    mode: 'dribble',
+    dribblePhase: 0,
+    dribbleBob: 0,
+    canScore: false,
+    scored: false,
+    scoreTimer: 0,
+    points: 2,
+    flightAge: 0,
+    finishKind: '',
+  },
+};
+
+function damp(current, target, rate, dt) {
+  return current + (target - current) * (1 - Math.exp(-rate * dt));
+}
+
+function dampAngle(current, target, rate, dt) {
+  let delta = (target - current + Math.PI) % (Math.PI * 2) - Math.PI;
+  if (delta < -Math.PI) delta += Math.PI * 2;
+  return current + delta * (1 - Math.exp(-rate * dt));
+}
+
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function horizontalDistance(a, b) {
+  const dx = a.x - b.x;
+  const dz = a.z - b.z;
+  return Math.hypot(dx, dz);
+}
+
+function getPlayerForward(target = temp.forward) {
+  target.set(-Math.sin(game.player.yaw), 0, -Math.cos(game.player.yaw));
+  return target;
+}
+
+function getPlayerRight(target = temp.right) {
+  target.set(Math.cos(game.player.yaw), 0, -Math.sin(game.player.yaw));
+  return target;
+}
+
+function localPlayerPoint(x, y, z, target = temp.local) {
+  target.set(x, y, z);
+  player.group.localToWorld(target);
+  return target;
+}
+
+function createBasketball() {
+  const ballGroup = new THREE.Group();
+  ballGroup.name = 'game basketball';
+
+  const leather = new THREE.MeshStandardMaterial({
+    color: 0xb95826,
+    roughness: 0.66,
+    metalness: 0.02,
+  });
+  const seam = new THREE.MeshBasicMaterial({ color: 0x1c1010 });
+  const sphere = new THREE.Mesh(new THREE.SphereGeometry(BALL_RADIUS, 12, 8), leather);
+  sphere.castShadow = true;
+  sphere.receiveShadow = true;
+  ballGroup.add(sphere);
+
+  const seamTorus = (rotation) => {
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(BALL_RADIUS * 1.008, BALL_RADIUS * 0.017, 4, 18),
+      seam,
+    );
+    ring.rotation.copy(rotation);
+    ballGroup.add(ring);
+  };
+  seamTorus(new THREE.Euler(Math.PI / 2, 0, 0));
+  seamTorus(new THREE.Euler(0, Math.PI / 2, 0));
+
+  const diagonal = new THREE.Mesh(
+    new THREE.TorusGeometry(BALL_RADIUS * 0.72, BALL_RADIUS * 0.014, 4, 14, Math.PI),
+    seam,
+  );
+  diagonal.rotation.set(0.6, 0.78, 0.36);
+  ballGroup.add(diagonal);
+
+  const shadow = new THREE.Mesh(
+    new THREE.CircleGeometry(BALL_RADIUS * 1.4, 10),
+    new THREE.MeshBasicMaterial({
+      color: 0x05060a,
+      transparent: true,
+      opacity: 0.34,
+      depthWrite: false,
+    }),
+  );
+  shadow.name = 'ball contact shadow';
+  shadow.rotation.x = -Math.PI / 2;
+  shadow.position.y = -BALL_RADIUS + 0.006;
+  ballGroup.add(shadow);
+  ballGroup.userData.shadow = shadow;
+  return ballGroup;
+}
+
+function addDecorativeBallRack() {
+  const rack = new THREE.Group();
+  rack.name = 'sideline ball rack';
+  rack.position.set(4.95, 0, -5.95);
+  rack.rotation.y = -0.18;
+
+  const metal = new THREE.MeshStandardMaterial({
+    color: 0x202232,
+    roughness: 0.38,
+    metalness: 0.85,
+  });
+  const ballMaterial = new THREE.MeshStandardMaterial({
+    color: 0xa64a22,
+    roughness: 0.7,
+  });
+  const sphereGeometry = new THREE.SphereGeometry(0.115, 8, 6);
+  const rail = (x1, y1, z1, x2, y2, z2, radius = 0.035) => {
+    const start = new THREE.Vector3(x1, y1, z1);
+    const end = new THREE.Vector3(x2, y2, z2);
+    const direction = end.clone().sub(start);
+    const mesh = new THREE.Mesh(
+      new THREE.CylinderGeometry(radius, radius, direction.length(), 6),
+      metal,
+    );
+    mesh.position.copy(start).add(end).multiplyScalar(0.5);
+    mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize());
+    mesh.castShadow = true;
+    rack.add(mesh);
+  };
+
+  rail(-0.68, 0.28, -0.2, 0.68, 0.28, -0.2);
+  rail(-0.68, 0.28, 0.2, 0.68, 0.28, 0.2);
+  rail(-0.68, 0.28, -0.2, -0.68, 0.62, -0.2);
+  rail(0.68, 0.28, -0.2, 0.68, 0.62, -0.2);
+  rail(-0.68, 0.28, 0.2, -0.68, 0.62, 0.2);
+  rail(0.68, 0.28, 0.2, 0.68, 0.62, 0.2);
+
+  for (let row = 0; row < 2; row += 1) {
+    for (let column = 0; column < 5; column += 1) {
+      const ball = new THREE.Mesh(sphereGeometry, ballMaterial);
+      ball.position.set(-0.48 + column * 0.24, 0.43 + row * 0.19, row === 0 ? -0.04 : 0.1);
+      ball.castShadow = true;
+      ball.rotation.set(row * 0.35, column * 0.8, 0);
+      rack.add(ball);
+    }
+  }
+
+  scene.add(rack);
+}
+
+game.ball.object = createBasketball();
+scene.add(game.ball.object);
+addDecorativeBallRack();
+
+function setFeedback(text, kind = '', duration = 1.15) {
+  feedbackElement.textContent = text;
+  feedbackElement.classList.remove('is-good', 'is-bad');
+  if (kind) feedbackElement.classList.add(kind === 'good' ? 'is-good' : 'is-bad');
+  game.feedbackTimer = duration;
+}
+
+function updateHud() {
+  const seconds = Math.ceil(Math.max(0, game.remaining));
+  const minutes = Math.floor(seconds / 60);
+  const rest = String(seconds % 60).padStart(2, '0');
+  clockElement.textContent = String(minutes).padStart(2, '0') + ':' + rest;
+  scoreElement.textContent = String(game.score).padStart(2, '0');
+
+  const action = game.charge.active
+    ? 'JUMP SHOT'
+    : game.player.action === 'layup'
+      ? 'LAYUP'
+      : game.player.action === 'dunk'
+        ? 'DUNK'
+        : game.ball.mode === 'loose'
+          ? 'CHASE BALL'
+          : 'FREE RUN';
+  actionLabel.textContent = action;
+
+  if (game.charge.active) {
+    const value = Math.round(game.charge.value * 100);
+    meterFill.style.width = value + '%';
+    meterNeedle.style.left = value + '%';
+    shotMeter.classList.add('is-charging');
+  } else {
+    meterFill.style.width = '0%';
+    meterNeedle.style.left = '0%';
+    shotMeter.classList.remove('is-charging');
+  }
+}
+
+function setBallPosition(position) {
+  game.ball.position.copy(position);
+  game.ball.object.position.copy(position);
+  const shadow = game.ball.object.userData.shadow;
+  shadow.scale.setScalar(clamp(1.1 - position.y * 0.19, 0.32, 1));
+  shadow.material.opacity = clamp(0.37 - position.y * 0.065, 0.04, 0.34);
+}
+
+function updateBallRotation(dt) {
+  const velocity = game.ball.velocity;
+  if (game.ball.mode === 'dribble' || game.ball.mode === 'gather' || game.ball.mode === 'finish') {
+    game.ball.object.rotation.x += dt * 4.4;
+  } else {
+    game.ball.object.rotation.x += velocity.z * dt / BALL_RADIUS;
+    game.ball.object.rotation.z -= velocity.x * dt / BALL_RADIUS;
+  }
+}
+
+function resetPossession(keepScore = true) {
+  game.charge.active = false;
+  game.charge.value = 0;
+  game.player.position.set(0, 0, 3.9);
+  game.player.yaw = 0;
+  game.player.desiredYaw = 0;
+  game.player.currentSpeed = 0;
+  game.player.action = 'idle';
+  game.player.actionTime = 0;
+  game.player.actionDuration = 0;
+  game.player.actionProgress = 0;
+  game.player.jumpY = 0;
+  game.player.finishReleased = false;
+
+  game.ball.mode = 'dribble';
+  game.ball.velocity.set(0, 0, 0);
+  game.ball.canScore = false;
+  game.ball.scored = false;
+  game.ball.scoreTimer = 0;
+  game.ball.flightAge = 0;
+  game.ball.finishKind = '';
+  game.ball.dribblePhase = 0;
+  game.ball.dribbleBob = 0;
+
+  if (!keepScore) {
+    game.score = 0;
+    game.remaining = 120;
+  }
+  setFeedback(keepScore ? 'FRESH POSSESSION' : 'NEW RUN', '', 0.9);
+}
+
+function getShotAnchor(charge = 0, target = temp.ballAnchor) {
+  const lift = clamp(charge, 0, 1);
+  return localPlayerPoint(0.22, 1.24 + lift * 0.48, -0.37, target);
+}
+
+function launchBall(start, target, time, options = {}) {
+  const ball = game.ball;
+  const safeTime = Math.max(0.14, time);
+  setBallPosition(start);
+  ball.previous.copy(start);
+  ball.velocity.copy(target).sub(start).multiplyScalar(1 / safeTime);
+  ball.velocity.y += 0.5 * GRAVITY * safeTime;
+  ball.mode = 'flight';
+  ball.canScore = options.canScore ?? true;
+  ball.scored = false;
+  ball.scoreTimer = 0;
+  ball.points = options.points ?? 2;
+  ball.flightAge = 0;
+  ball.finishKind = options.finishKind ?? '';
+}
+
+function releaseJumpShot() {
+  if (!game.charge.active) return;
+
+  const charge = game.charge.value;
+  const ideal = 0.62;
+  const quality = clamp(1 - Math.abs(charge - ideal) / ideal, 0, 1);
+  const start = getShotAnchor(charge, new THREE.Vector3()).clone();
+  const target = arena.hoop.rimCenter.clone();
+  const distance = horizontalDistance(start, target);
+  const missAmount = Math.pow(1 - quality, 1.45);
+  const side = (Math.random() * 2 - 1) * (0.08 + missAmount * (0.43 + distance * 0.025));
+  const depth = (Math.random() * 2 - 1) * missAmount * 0.2;
+  target.x += side;
+  target.z += depth;
+  target.y += quality > 0.76 ? 0.025 : (Math.random() * 2 - 1) * missAmount * 0.13;
+
+  const isThree = distance > 6.45;
+  // A slightly higher basketball arc keeps a clean, well-timed jumper above
+  // the front lip before it drops through the center of the rim.
+  const flightTime = clamp(0.62 + distance * 0.075, 0.7, 1.35);
+  launchBall(start, target, flightTime, {
+    canScore: quality > 0.28,
+    points: isThree ? 3 : 2,
+  });
+
+  game.charge.active = false;
+  game.player.action = 'shoot';
+  game.player.actionTime = 0;
+  game.player.actionDuration = 0.44;
+  game.player.actionProgress = 0.57;
+  game.player.currentSpeed = 0;
+
+  if (quality > 0.91) {
+    setFeedback('EXCELLENT', 'good', 1.3);
+  } else if (quality > 0.66) {
+    setFeedback('ON TIME', 'good', 1.1);
+  } else if (charge < ideal) {
+    setFeedback('EARLY', 'bad', 1.1);
+  } else {
+    setFeedback('LATE', 'bad', 1.1);
+  }
+}
+
+function releaseFinish() {
+  const action = game.player.action;
+  const isDunk = action === 'dunk';
+  const start = player.getRightHandWorldPosition(new THREE.Vector3());
+  const target = arena.hoop.rimCenter.clone();
+  target.y += isDunk ? -0.12 : 0.035;
+  target.z += isDunk ? 0.015 : 0.055;
+  const distance = horizontalDistance(start, target);
+  // Keep the hoop crossing on the descending half of the arc. A shorter
+  // launch can reach a rim-height target while the ball is still rising,
+  // which looks weightless and skips the make detector on close finishes.
+  launchBall(start, target, isDunk ? 0.42 : clamp(0.64 + distance * 0.04, 0.64, 0.78), {
+    canScore: true,
+    points: 2,
+    finishKind: isDunk ? 'DUNK' : 'LAYUP',
+  });
+  game.player.finishReleased = true;
+  if (isDunk) {
+    arena.hoop.net.userData.energy = 0.9;
+    audio.rim(0.92);
+  }
+}
+
+function startCharge() {
+  if (!game.started || game.charge.active || game.ball.mode !== 'dribble') return;
+  if (game.player.action !== 'idle' && game.player.action !== 'move') return;
+  game.charge.active = true;
+  game.charge.value = 0;
+  game.player.action = 'shoot';
+  game.player.actionTime = 0;
+  game.player.actionDuration = 0;
+  game.player.actionProgress = 0;
+  game.ball.mode = 'gather';
+  setFeedback('FIND THE GREEN', '', 1.4);
+}
+
+function startFinish() {
+  if (!game.started || game.ball.mode !== 'dribble' || game.charge.active) return;
+  if (game.player.action !== 'idle' && game.player.action !== 'move') return;
+
+  const distance = horizontalDistance(game.player.position, arena.hoop.rimCenter);
+  if (distance > 4.9) {
+    setFeedback('GET CLOSER', 'bad', 0.85);
+    return;
+  }
+
+  const dunk = distance < 2.35 && game.player.currentSpeed > 1.6;
+  game.player.action = dunk ? 'dunk' : 'layup';
+  game.player.actionTime = 0;
+  game.player.actionDuration = dunk ? 0.76 : 0.84;
+  game.player.actionProgress = 0;
+  game.player.finishReleased = false;
+  game.ball.mode = 'finish';
+  game.ball.finishKind = dunk ? 'DUNK' : 'LAYUP';
+  setFeedback(dunk ? 'RISE UP' : 'ATTACK THE RIM', '', 0.95);
+}
+
+function scoreBasket() {
+  const ball = game.ball;
+  if (ball.scored) return;
+  ball.scored = true;
+  ball.canScore = false;
+  ball.scoreTimer = 0.68;
+  game.score += ball.points;
+  arena.hoop.net.userData.energy = ball.finishKind === 'DUNK' ? 1.15 : 0.8;
+  audio.score(ball.finishKind === 'DUNK' ? 1 : 0.78);
+
+  const suffix = ball.finishKind || (ball.points === 3 ? '3PT' : 'BUCKET');
+  setFeedback(suffix === 'BUCKET' ? '+2 BUCKET' : '+2 ' + suffix, 'good', 1.55);
+  if (ball.points === 3) setFeedback('+3 BUCKET', 'good', 1.55);
+}
+
+function resolveBackboardCollision() {
+  const ball = game.ball;
+  const board = arena.hoop;
+  if (ball.velocity.z >= 0) return;
+  if (ball.position.x < -board.backboardWidth * 0.5 - BALL_RADIUS) return;
+  if (ball.position.x > board.backboardWidth * 0.5 + BALL_RADIUS) return;
+  if (ball.position.y < board.backboardBottom - BALL_RADIUS) return;
+  if (ball.position.y > board.backboardCenter.y + board.backboardHeight * 0.5 + BALL_RADIUS) return;
+
+  const surface = board.backboardFrontZ + BALL_RADIUS;
+  if (ball.previous.z > surface && ball.position.z <= surface) {
+    ball.position.z = surface;
+    ball.velocity.z = Math.abs(ball.velocity.z) * 0.68;
+    ball.velocity.x *= 0.82;
+    ball.velocity.y *= 0.9;
+    audio.backboard(clamp(ball.velocity.length() / 7, 0.2, 1));
+  }
+}
+
+function resolveRimCollision() {
+  const ball = game.ball;
+  const rim = arena.hoop;
+  // Contextual finishes are authored make paths. Let them enter the cylinder
+  // cleanly; their score callback already drives the net, swish, and dunk
+  // rim hit. Standard jumpers still receive the full physical rim response.
+  if (ball.finishKind && (ball.canScore || ball.scored)) return;
+  const dx = ball.position.x - rim.rimCenter.x;
+  const dz = ball.position.z - rim.rimCenter.z;
+  const radial = Math.hypot(dx, dz);
+  const vertical = ball.position.y - rim.rimHeight;
+  const contact = BALL_RADIUS + 0.055;
+
+  if (Math.abs(vertical) > contact || radial < rim.rimRadius - contact || radial > rim.rimRadius + contact) return;
+
+  temp.ballNormal.set(dx, vertical * 0.68, dz);
+  if (temp.ballNormal.lengthSq() < 0.0001) return;
+  temp.ballNormal.normalize();
+  const incoming = ball.velocity.dot(temp.ballNormal);
+  if (incoming >= 0) return;
+
+  ball.velocity.addScaledVector(temp.ballNormal, -incoming * 1.74);
+  ball.velocity.multiplyScalar(0.83);
+  ball.position.addScaledVector(temp.ballNormal, 0.018);
+  arena.hoop.net.userData.energy = Math.max(arena.hoop.net.userData.energy ?? 0, 0.32);
+  audio.rim(clamp(Math.abs(incoming) / 7, 0.18, 1));
+}
+
+function updateDribble(dt) {
+  const ball = game.ball;
+  ball.dribblePhase += dt * (game.player.currentSpeed > 0.2 ? 11.3 : 7.0);
+  const bob = 0.5 + Math.sin(ball.dribblePhase) * 0.5;
+  const side = getPlayerRight().clone().multiplyScalar(0.42);
+  const front = getPlayerForward().clone().multiplyScalar(0.16);
+  const desired = game.player.position.clone().add(side).add(front);
+  desired.y = BALL_RADIUS + bob * (game.player.currentSpeed > 0.2 ? 0.8 : 0.68);
+  setBallPosition(desired);
+
+  if (bob < 0.11 && ball.dribbleBob >= 0.11) {
+    audio.bounce(game.player.currentSpeed > 0.2 ? 0.72 : 0.48);
+  }
+  ball.dribbleBob = bob;
+}
+
+function updateGatherBall() {
+  const anchor = getShotAnchor(game.charge.value, temp.ballAnchor);
+  setBallPosition(anchor);
+}
+
+function updateFinishBall() {
+  player.group.updateMatrixWorld(true);
+  const hand = player.getRightHandWorldPosition(temp.ballAnchor);
+  setBallPosition(hand);
+}
+
+function updateFlightBall(dt) {
+  const ball = game.ball;
+  ball.previous.copy(ball.position);
+  ball.flightAge += dt;
+  ball.velocity.y -= GRAVITY * dt;
+  ball.position.addScaledVector(ball.velocity, dt);
+
+  const rim = arena.hoop;
+  const segmentX = ball.position.x - ball.previous.x;
+  const segmentZ = ball.position.z - ball.previous.z;
+  const fromRimX = ball.previous.x - rim.rimCenter.x;
+  const fromRimZ = ball.previous.z - rim.rimCenter.z;
+  const segmentLengthSq = segmentX * segmentX + segmentZ * segmentZ;
+  const closestT = segmentLengthSq > 0.000001
+    ? clamp(-(fromRimX * segmentX + fromRimZ * segmentZ) / segmentLengthSq, 0, 1)
+    : 0;
+  const closestRimDistance = Math.hypot(
+    fromRimX + segmentX * closestT,
+    fromRimZ + segmentZ * closestT,
+  );
+  if (
+    ball.canScore
+    && !ball.scored
+    && ball.previous.y > rim.rimHeight
+    && ball.position.y <= rim.rimHeight
+    && ball.velocity.y < 0
+    && closestRimDistance < rim.rimRadius - BALL_RADIUS * 0.1
+  ) {
+    scoreBasket();
+  }
+
+  resolveBackboardCollision();
+  resolveRimCollision();
+
+  if (ball.position.y < BALL_RADIUS) {
+    const impact = Math.abs(ball.velocity.y);
+    ball.position.y = BALL_RADIUS;
+    ball.velocity.y = Math.abs(ball.velocity.y) * 0.6;
+    ball.velocity.x *= 0.8;
+    ball.velocity.z *= 0.8;
+    if (impact > 0.8) audio.bounce(clamp(impact / 7, 0.18, 1));
+    if (impact < 1.25 && ball.velocity.length() < 1.5) {
+      ball.mode = 'loose';
+      ball.velocity.set(0, 0, 0);
+    }
+  }
+
+  setBallPosition(ball.position);
+  if (ball.position.y > 11 || Math.abs(ball.position.x) > 12 || ball.position.z > 12 || ball.position.z < -10) {
+    ball.mode = 'loose';
+    ball.velocity.set(0, 0, 0);
+  }
+  if (ball.flightAge > 5.5) {
+    ball.mode = 'loose';
+  }
+}
+
+function updateLooseBall(dt) {
+  const ball = game.ball;
+  if (ball.position.y > BALL_RADIUS + 0.001) {
+    ball.previous.copy(ball.position);
+    ball.velocity.y -= GRAVITY * dt;
+    ball.position.addScaledVector(ball.velocity, dt);
+    if (ball.position.y < BALL_RADIUS) {
+      ball.position.y = BALL_RADIUS;
+      ball.velocity.y = Math.abs(ball.velocity.y) * 0.48;
+      ball.velocity.x *= 0.66;
+      ball.velocity.z *= 0.66;
+    }
+    setBallPosition(ball.position);
+  }
+
+  if (horizontalDistance(ball.position, game.player.position) < 0.78 && ball.position.y < 0.82) {
+    ball.mode = 'dribble';
+    ball.velocity.set(0, 0, 0);
+    ball.scored = false;
+    ball.canScore = false;
+    setFeedback('BALL SECURED', 'good', 0.8);
+  }
+}
+
+function updateBall(dt) {
+  const ball = game.ball;
+  if (ball.mode === 'dribble') updateDribble(dt);
+  else if (ball.mode === 'gather') updateGatherBall();
+  else if (ball.mode === 'finish') updateFinishBall();
+  else if (ball.mode === 'flight') updateFlightBall(dt);
+  else if (ball.mode === 'loose') updateLooseBall(dt);
+
+  if (ball.scored && ball.scoreTimer > 0) {
+    ball.scoreTimer -= dt;
+    if (ball.scoreTimer <= 0) resetPossession(true);
+  }
+  updateBallRotation(dt);
+}
+
+function constrainPlayerToCourt() {
+  const bounds = arena.court.bounds;
+  game.player.position.x = clamp(game.player.position.x, bounds.minX + 0.48, bounds.maxX - 0.48);
+  game.player.position.z = clamp(game.player.position.z, bounds.minZ + 0.62, bounds.maxZ - 0.48);
+}
+
+function updatePlayer(dt) {
+  const p = game.player;
+  const move = temp.move.set(input.touchX, 0, input.touchY);
+  if (input.forward) move.z += 1;
+  if (input.backward) move.z -= 1;
+  if (input.right) move.x += 1;
+  if (input.left) move.x -= 1;
+
+  if (move.lengthSq() > 0) {
+    move.normalize();
+    const cameraForward = temp.forward.set(-Math.sin(game.cameraYaw), 0, -Math.cos(game.cameraYaw));
+    const cameraRight = temp.right.set(Math.cos(game.cameraYaw), 0, -Math.sin(game.cameraYaw));
+    const worldMove = cameraForward.multiplyScalar(move.z).addScaledVector(cameraRight, move.x);
+    move.copy(worldMove).normalize();
+  }
+
+  p.jumpY = 0;
+  if (game.charge.active) {
+    game.charge.value = Math.min(1, game.charge.value + dt * 0.78);
+    p.action = 'shoot';
+    p.actionProgress = game.charge.value * 0.58;
+    p.currentSpeed = damp(p.currentSpeed, 0, 14, dt);
+    if (game.charge.value >= 1) releaseJumpShot();
+  } else if (p.action === 'shoot') {
+    p.actionTime += dt;
+    p.actionProgress = clamp(0.57 + p.actionTime / Math.max(0.01, p.actionDuration) * 0.43, 0, 1);
+    p.currentSpeed = damp(p.currentSpeed, 0, 13, dt);
+    if (p.actionTime >= p.actionDuration) {
+      p.action = 'idle';
+      p.actionProgress = 0;
+    }
+  } else if (p.action === 'layup' || p.action === 'dunk') {
+    p.actionTime += dt;
+    p.actionProgress = clamp(p.actionTime / p.actionDuration, 0, 1);
+    const hoopDirection = temp.toHoop.copy(arena.hoop.rimCenter).sub(p.position);
+    hoopDirection.y = 0;
+    const distance = hoopDirection.length();
+    if (distance > 0.001) hoopDirection.multiplyScalar(1 / distance);
+    p.desiredYaw = Math.atan2(-hoopDirection.x, -hoopDirection.z);
+    const attackSpeed = p.action === 'dunk' ? 3.55 : 2.75;
+    if (distance > (p.action === 'dunk' ? 0.85 : 1.05)) {
+      p.position.addScaledVector(hoopDirection, attackSpeed * dt);
+    }
+    p.currentSpeed = attackSpeed;
+    p.jumpY = Math.sin(Math.PI * p.actionProgress) * (p.action === 'dunk' ? 0.86 : 0.64);
+
+    const releaseAt = p.action === 'dunk' ? 0.57 : 0.59;
+    if (!p.finishReleased && p.actionProgress >= releaseAt) releaseFinish();
+    if (p.actionProgress >= 1) {
+      p.action = 'idle';
+      p.actionProgress = 0;
+      p.jumpY = 0;
+    }
+  } else {
+    const hasMove = move.lengthSq() > 0;
+    const targetSpeed = hasMove ? (input.sprint ? 5.45 : 3.38) : 0;
+    p.currentSpeed = damp(p.currentSpeed, targetSpeed, hasMove ? 12 : 15, dt);
+    if (hasMove) {
+      p.position.addScaledVector(move, p.currentSpeed * dt);
+      p.desiredYaw = Math.atan2(-move.x, -move.z);
+      p.action = 'move';
+      if (p.currentSpeed > 1.25) audio.shoe(clamp(p.currentSpeed / 5.5, 0.2, 0.72));
+    } else {
+      p.action = 'idle';
+      const hoopDirection = temp.toHoop.copy(arena.hoop.rimCenter).sub(p.position);
+      hoopDirection.y = 0;
+      if (hoopDirection.lengthSq() > 0.01) p.desiredYaw = Math.atan2(-hoopDirection.x, -hoopDirection.z);
+    }
+  }
+
+  constrainPlayerToCourt();
+  p.yaw = dampAngle(p.yaw, p.desiredYaw, p.currentSpeed > 0.2 ? 16 : 7, dt);
+  player.group.position.set(p.position.x, p.jumpY, p.position.z);
+  player.update(dt, {
+    speed: p.currentSpeed,
+    facing: p.yaw,
+    jump: clamp(p.jumpY / 0.9, 0, 1),
+    dribblePhase: game.ball.dribblePhase,
+    action: p.action,
+    shotProgress: p.actionProgress,
+  });
+}
+
+function updateNet(dt) {
+  const net = arena.hoop.net;
+  const energy = Math.max(0, (net.userData.energy ?? 0) - dt * 2.2);
+  net.userData.energy = energy;
+  const pulse = Math.sin(game.elapsed * 27) * energy;
+  net.rotation.x = pulse * 0.09;
+  net.rotation.z = Math.cos(game.elapsed * 21) * energy * 0.075;
+  net.scale.set(1 + energy * 0.05, 1 - energy * 0.09, 1 + energy * 0.05);
+}
+
+function updateArenaPresentation() {
+  const pulse = 1.25 + Math.sin(game.elapsed * 2.2) * 0.32;
+  arena.group.traverse((child) => {
+    if (child.name === 'arena video board' && child.material?.emissiveIntensity !== undefined) {
+      child.material.emissiveIntensity = pulse;
+    }
+  });
+}
+
+function updateCamera(dt) {
+  const target = temp.cameraTarget.copy(game.player.position);
+  target.y += 1.05 + game.player.jumpY * 0.22;
+
+  const pitch = game.cameraPitch;
+  const horizontalDistance = game.cameraDistance * Math.cos(pitch);
+  temp.cameraDesired.set(
+    target.x + Math.sin(game.cameraYaw) * horizontalDistance,
+    target.y + 1.25 - Math.sin(pitch) * game.cameraDistance,
+    target.z + Math.cos(game.cameraYaw) * horizontalDistance,
+  );
+  camera.position.lerp(temp.cameraDesired, 1 - Math.exp(-dt * 11));
+  camera.lookAt(target);
+}
+
+function update(dt) {
+  game.elapsed += dt;
+  if (game.started && game.remaining > 0) game.remaining = Math.max(0, game.remaining - dt);
+  if (game.remaining <= 0 && game.started) {
+    setFeedback('RUN OVER — PRESS R', 'bad', 999);
+  }
+
+  updatePlayer(dt);
+  player.group.updateMatrixWorld(true);
+  updateBall(dt);
+  updateNet(dt);
+  updateArenaPresentation();
+  updateCamera(dt);
+
+  if (game.feedbackTimer > 0 && game.feedbackTimer < 998) {
+    game.feedbackTimer -= dt;
+    if (game.feedbackTimer <= 0) {
+      setFeedback(game.ball.mode === 'loose' ? 'CHASE IT DOWN' : 'FIND THE GREEN', '', 0);
+    }
+  }
+  updateHud();
+}
+
+function render() {
+  const dt = Math.min(clock.getDelta(), 0.05);
+  update(dt);
+  renderer.render(scene, camera);
+}
+
+function unlockAndStart() {
+  game.started = true;
+  audio.unlock();
+  startButton.classList.add('is-hidden');
+  if (!coarsePointer && document.pointerLockElement !== canvas) canvas.requestPointerLock?.();
+  setFeedback('ATTACK THE RIM', '', 1.1);
+}
+
+startButton.addEventListener('click', unlockAndStart);
+canvas.addEventListener('click', () => {
+  if (!game.started) {
+    unlockAndStart();
+  } else if (!coarsePointer && document.pointerLockElement !== canvas) {
+    audio.unlock();
+    canvas.requestPointerLock?.();
+  }
+});
+
+const touchStick = document.querySelector('#touchStick');
+const touchKnob = document.querySelector('#touchKnob');
+const touchSprint = document.querySelector('#touchSprint');
+const touchFinish = document.querySelector('#touchFinish');
+const touchShoot = document.querySelector('#touchShoot');
+const touchReset = document.querySelector('#touchReset');
+let stickPointer = null;
+let lookPointer = null;
+let lastLookX = 0;
+let lastLookY = 0;
+
+function updateTouchStick(event) {
+  const bounds = touchStick.getBoundingClientRect();
+  const half = bounds.width / 2;
+  const dx = (event.clientX - bounds.left - half) / (half * 0.72);
+  const dy = (event.clientY - bounds.top - half) / (half * 0.72);
+  const length = Math.max(1, Math.hypot(dx, dy));
+  input.touchX = clamp(dx / length, -1, 1);
+  input.touchY = clamp(-dy / length, -1, 1);
+  touchKnob.style.transform = 'translate(' + (input.touchX * half * 0.49) + 'px, ' + (-input.touchY * half * 0.49) + 'px)';
+}
+
+touchStick.addEventListener('pointerdown', (event) => {
+  if (stickPointer !== null) return;
+  event.preventDefault();
+  stickPointer = event.pointerId;
+  touchStick.setPointerCapture(event.pointerId);
+  updateTouchStick(event);
+});
+touchStick.addEventListener('pointermove', (event) => {
+  if (event.pointerId === stickPointer) updateTouchStick(event);
+});
+function stopTouchStick(event) {
+  if (event.pointerId !== stickPointer) return;
+  stickPointer = null;
+  input.touchX = 0;
+  input.touchY = 0;
+  touchKnob.style.transform = 'translate(0, 0)';
+}
+touchStick.addEventListener('pointerup', stopTouchStick);
+touchStick.addEventListener('pointercancel', stopTouchStick);
+touchStick.addEventListener('lostpointercapture', stopTouchStick);
+
+canvas.addEventListener('pointerdown', (event) => {
+  if (!coarsePointer || !game.started || lookPointer !== null) return;
+  lookPointer = event.pointerId;
+  lastLookX = event.clientX;
+  lastLookY = event.clientY;
+  canvas.setPointerCapture(event.pointerId);
+});
+canvas.addEventListener('pointermove', (event) => {
+  if (event.pointerId !== lookPointer) return;
+  game.cameraYaw -= (event.clientX - lastLookX) * 0.006;
+  game.cameraPitch = clamp(game.cameraPitch - (event.clientY - lastLookY) * 0.004, -0.52, 0.16);
+  lastLookX = event.clientX;
+  lastLookY = event.clientY;
+});
+function stopTouchLook(event) {
+  if (event.pointerId === lookPointer) lookPointer = null;
+}
+canvas.addEventListener('pointerup', stopTouchLook);
+canvas.addEventListener('pointercancel', stopTouchLook);
+canvas.addEventListener('lostpointercapture', stopTouchLook);
+
+touchSprint.addEventListener('pointerdown', (event) => {
+  event.preventDefault();
+  touchSprint.setPointerCapture(event.pointerId);
+  input.sprint = true;
+  touchSprint.classList.add('is-held');
+});
+function stopTouchSprint() {
+  input.sprint = false;
+  touchSprint.classList.remove('is-held');
+}
+touchSprint.addEventListener('pointerup', stopTouchSprint);
+touchSprint.addEventListener('pointercancel', stopTouchSprint);
+touchSprint.addEventListener('lostpointercapture', stopTouchSprint);
+touchFinish.addEventListener('pointerdown', (event) => {
+  event.preventDefault();
+  startFinish();
+});
+touchShoot.addEventListener('pointerdown', (event) => {
+  event.preventDefault();
+  touchShoot.setPointerCapture(event.pointerId);
+  touchShoot.classList.add('is-held');
+  startCharge();
+});
+function stopTouchShoot() {
+  touchShoot.classList.remove('is-held');
+  releaseJumpShot();
+}
+touchShoot.addEventListener('pointerup', stopTouchShoot);
+touchShoot.addEventListener('pointercancel', stopTouchShoot);
+touchShoot.addEventListener('lostpointercapture', stopTouchShoot);
+touchReset.addEventListener('pointerdown', (event) => {
+  event.preventDefault();
+  resetPossession(false);
+});
+
+document.addEventListener('pointerlockchange', () => {
+  game.pointerLocked = document.pointerLockElement === canvas;
+});
+
+document.addEventListener('mousemove', (event) => {
+  if (!game.pointerLocked) return;
+  game.cameraYaw -= event.movementX * 0.00245;
+  game.cameraPitch = clamp(game.cameraPitch - event.movementY * 0.0018, -0.52, 0.16);
+});
+
+window.addEventListener('wheel', (event) => {
+  game.cameraDistance = clamp(game.cameraDistance + event.deltaY * 0.006, 4.2, 10.2);
+}, { passive: true });
+
+window.addEventListener('keydown', (event) => {
+  if (event.code === 'KeyW') input.forward = true;
+  if (event.code === 'KeyS') input.backward = true;
+  if (event.code === 'KeyA') input.left = true;
+  if (event.code === 'KeyD') input.right = true;
+  if (event.code === 'ShiftLeft' || event.code === 'ShiftRight') input.sprint = true;
+
+  if (event.code === 'Space') {
+    event.preventDefault();
+    if (!event.repeat) startCharge();
+  }
+  if (event.code === 'KeyF' && !event.repeat) startFinish();
+  if (event.code === 'KeyR' && !event.repeat) resetPossession(false);
+  if (!game.started && ['KeyW', 'KeyA', 'KeyS', 'KeyD', 'Space', 'KeyF'].includes(event.code)) {
+    unlockAndStart();
+  }
+});
+
+window.addEventListener('keyup', (event) => {
+  if (event.code === 'KeyW') input.forward = false;
+  if (event.code === 'KeyS') input.backward = false;
+  if (event.code === 'KeyA') input.left = false;
+  if (event.code === 'KeyD') input.right = false;
+  if (event.code === 'ShiftLeft' || event.code === 'ShiftRight') input.sprint = false;
+  if (event.code === 'Space') {
+    event.preventDefault();
+    releaseJumpShot();
+  }
+});
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight, false);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.2));
+});
+
+window.addEventListener('beforeunload', () => {
+  audio.dispose();
+  renderer.dispose();
+});
+
+resetPossession(false);
+clock.start();
+renderer.setAnimationLoop(render);
