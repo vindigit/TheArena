@@ -6,6 +6,8 @@ A solo basketball demo in the browser, styled after early 2000s console games. P
 
 The live build is published at https://vindigit.github.io/TheArena/.
 
+For the repository layout, current implementation status, deployment path, and the next asset-pipeline milestone, see [PROJECT.md](PROJECT.md).
+
 Desktop controls:
 
 - WASD moves; the mouse turns the camera; Shift sprints.
