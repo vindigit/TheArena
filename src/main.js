@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { AudioDirector } from './audio.js';
 import { createArena } from './arena.js';
 import { createPlayer } from './player.js';
+import { createBasketball } from './ball.js';
 import { SHOT_GRAVITY, meterProgress, greenWindow, gradeShot, shotTarget, solveShotArc, sampleShotArc, crossesHoop } from './shooting.js';
 
 const canvas = document.querySelector('#game');
@@ -153,56 +154,6 @@ function localPlayerPoint(x, y, z, target = temp.local) {
   target.set(x, y, z);
   player.group.localToWorld(target);
   return target;
-}
-
-function createBasketball() {
-  const ballGroup = new THREE.Group();
-  ballGroup.name = 'game basketball';
-
-  const leather = new THREE.MeshStandardMaterial({
-    color: 0xb95826,
-    roughness: 0.66,
-    metalness: 0.02,
-  });
-  const seam = new THREE.MeshBasicMaterial({ color: 0x1c1010 });
-  const sphere = new THREE.Mesh(new THREE.SphereGeometry(BALL_RADIUS, 12, 8), leather);
-  sphere.castShadow = true;
-  sphere.receiveShadow = true;
-  ballGroup.add(sphere);
-
-  const seamTorus = (rotation) => {
-    const ring = new THREE.Mesh(
-      new THREE.TorusGeometry(BALL_RADIUS * 1.008, BALL_RADIUS * 0.017, 4, 18),
-      seam,
-    );
-    ring.rotation.copy(rotation);
-    ballGroup.add(ring);
-  };
-  seamTorus(new THREE.Euler(Math.PI / 2, 0, 0));
-  seamTorus(new THREE.Euler(0, Math.PI / 2, 0));
-
-  const diagonal = new THREE.Mesh(
-    new THREE.TorusGeometry(BALL_RADIUS * 0.72, BALL_RADIUS * 0.014, 4, 14, Math.PI),
-    seam,
-  );
-  diagonal.rotation.set(0.6, 0.78, 0.36);
-  ballGroup.add(diagonal);
-
-  const shadow = new THREE.Mesh(
-    new THREE.CircleGeometry(BALL_RADIUS * 1.4, 10),
-    new THREE.MeshBasicMaterial({
-      color: 0x05060a,
-      transparent: true,
-      opacity: 0.34,
-      depthWrite: false,
-    }),
-  );
-  shadow.name = 'ball contact shadow';
-  shadow.rotation.x = -Math.PI / 2;
-  shadow.position.y = -BALL_RADIUS + 0.006;
-  ballGroup.add(shadow);
-  ballGroup.userData.shadow = shadow;
-  return ballGroup;
 }
 
 function addDecorativeBallRack() {

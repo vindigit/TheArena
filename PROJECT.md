@@ -18,7 +18,7 @@ The initial release is a browser-based, third-person solo basketball demo with:
 - Dribbling, jump shots, layups, dunks, a two-minute run, and reset
 - Procedural PS2-era visual treatment, one validated court wood texture, and synthesized gameplay audio
 
-The court wood is the first accepted generated runtime asset; other geometry and all audio remain original procedural placeholders. No NBA marks or real-person likenesses are included. See [`docs/ASSET_PIPELINE.md`](docs/ASSET_PIPELINE.md) and `public/assets/manifest.json` for its source, license scope, and measurements.
+The court wood and basketball are accepted runtime assets. The basketball combines a Scenario-generated leather concept with an original local low-poly mesh; other geometry and all audio remain procedural placeholders. No NBA marks or real-person likenesses are included. See [`docs/ASSET_PIPELINE.md`](docs/ASSET_PIPELINE.md) and `public/assets/manifest.json` for provenance, license scope, measurements, and validation limits.
 
 ## Project rules
 
@@ -32,6 +32,7 @@ The court wood is the first accepted generated runtime asset; other geometry and
 | Path | Responsibility |
 | --- | --- |
 | `src/main.js` | Game loop, input, camera, ball interactions, shooting state, HUD |
+| `src/ball.js` | Replaceable basketball GLB visual, procedural loading/error fallback, contact-shadow reference |
 | `src/player.js` | Player model, animation state, dribble attachment points |
 | `src/arena.js` | Court, arena, basket, net, lighting, collision references |
 | `src/audio.js` | Synthesized bounce, swish, rim, and crowd/game feedback |
@@ -60,7 +61,7 @@ The pipeline now has a style guide, budgets, a machine-readable manifest and sch
 
 Continue replacing the remaining placeholders in small passes:
 
-1. Generate and validate a basketball GLB with a center pivot and a visible 0.12 m radius, then move its replaceable renderer out of `src/main.js` while retaining the current physics and contact shadow.
+1. Basketball replacement completed: centered 0.12 m radius, 352 triangles, one 256² color map, and a narrow renderer in `src/ball.js` with the original fallback. Desktop and emulated touch checks passed. A tested green-timed jumper missed identically in the original and replacement builds; physics remains unchanged. See the manifest for this existing limitation and detailed checks.
 2. Add the remaining tiling materials and short gameplay audio behind `src/arena.js` and `src/audio.js`, one category at a time.
 3. Build a named hoop assembly and arena detail, preserving the fixed gameplay landmarks and mutable net reference.
 4. Rig a generic fictional player last, matching the current hand anchor and action-state API.

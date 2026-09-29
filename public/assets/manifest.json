@@ -44,8 +44,14 @@
           "bytes": 8868,
           "maxBytes": 81920,
           "sha256": "b36c3b4350b571b2ce38bc7d2336f2a375ebe8e62db430622e65452b9b3b3c4d",
-          "dimensions": { "width": 512, "height": 512 },
-          "tiling": { "maxMeanRgbError": 5, "maxPeakRgbError": 20 }
+          "dimensions": {
+            "width": 512,
+            "height": 512
+          },
+          "tiling": {
+            "maxMeanRgbError": 5,
+            "maxPeakRgbError": 20
+          }
         }
       ],
       "validation": {
@@ -73,6 +79,192 @@
       "integration": {
         "module": "src/arena.js",
         "fallback": "The existing colored procedural plank materials remain visible while loading and if the WebP fails to load."
+      }
+    },
+    {
+      "id": "basketball-v1",
+      "category": "model",
+      "status": "accepted",
+      "source": {
+        "type": "scenario",
+        "prompt": "One original unbranded basketball, isolated centered object filling 80 percent of a square image on a plain light gray background. Early-2000s PlayStation 2 basketball game prop art, visibly low-poly spherical silhouette with about sixteen segments around circumference. Worn warm burnt-orange leather, broad baked-looking ochre and amber tonal variation, subtle scuffed mottling, deliberately limited 256-pixel texture appearance. Bold continuous dark brown-black basketball channels, clearly readable at a small gameplay size: equatorial seam, perpendicular great-circle seam and paired curved panel seams, clean regular panel structure. Flat broad shading with a gentle upper-left highlight, no tiny photoreal pores, no glossy reflections. Entire sphere visible, three-quarter view, no floor, no cast shadow, no hoop, no player, no extra balls. No text, numbers, manufacturer marks, league marks, logos, labels, watermarks or branding.",
+        "negativePrompt": null,
+        "modelId": "model_google-gemini-3-1-flash-lite-image",
+        "modelVersion": null,
+        "settings": {
+          "aspectRatio": "1:1",
+          "thinkingLevel": "HIGH",
+          "numOutputs": 1,
+          "teamId": "team_yNLWgjS1fAtTk5MtpGfW7vRy",
+          "projectId": "proj_A12xiMpm5rjCs8EuszXCaqPh",
+          "conceptCostCU": 7,
+          "meshAuthoring": "Local indexed UV sphere, 16 longitude segments and 12 latitude segments, 0.12 meter radius",
+          "textureBake": {
+            "sourcePatch": {
+              "left": 535,
+              "top": 535,
+              "width": 240,
+              "height": 100
+            },
+            "patchResize": [
+              128,
+              64
+            ],
+            "outputSize": [
+              256,
+              256
+            ],
+            "mirrorRepeats": [
+              4,
+              4
+            ],
+            "rgbTint": [
+              1.09,
+              0.9,
+              0.78
+            ],
+            "paletteColors": 128,
+            "dither": 0.25,
+            "seamCore": 0.035,
+            "seamFeather": 0.012,
+            "sideChannelFactor": 0.66,
+            "roughness": 0.9,
+            "metalness": 0,
+            "emissiveFactor": [
+              0.4,
+              0.4,
+              0.4
+            ],
+            "emissiveUsesSameColorTexture": true
+          },
+          "rejectedMeshAttempt": {
+            "modelId": "model_tripo-v3-1-image-to-3d",
+            "parameters": {
+              "image": "asset_x5SfqveSVdEwysHFdAz9N5rQ",
+              "texture": true,
+              "textureQuality": "standard",
+              "textureVersion": "v3.5-20260815",
+              "delight": false,
+              "textureAlignment": "original_image",
+              "geometryQuality": "standard",
+              "textureSeed": 29092026,
+              "orientation": "default",
+              "pbr": false,
+              "faceLimit": 1000,
+              "autoSize": false,
+              "quad": false,
+              "smartLowPoly": true,
+              "generateParts": false,
+              "seed": 29092026
+            },
+            "quotedCostCU": 60,
+            "scenarioJobId": null,
+            "scenarioAssetId": null,
+            "outcome": "Rejected before job creation: free plan team custom-generation limit 50 CU, actionValue 19. User approved local mesh alternative."
+          }
+        },
+        "seed": 325293804,
+        "referenceAssetIds": [],
+        "scenarioAssetId": "asset_x5SfqveSVdEwysHFdAz9N5rQ",
+        "scenarioJobId": "job_KxTTAQCkLqzv3szhEhHnWQRW",
+        "generatedAt": "2026-09-29T21:38:28.667Z",
+        "optimizationSteps": [
+          "Generated one original, unbranded concept through Scenario Gemini 3.1 Lite. User reference photos informed the art direction only; no third-party pixels were used.",
+          "After Scenario rejected the Tripo 3.1 request, the user explicitly chose a local low-poly mesh using the generated concept colors and wear. There is no generated Scenario 3D asset or successful 3D job.",
+          "Sampled an unmarked leather patch from the concept, resized it to 128x64, mirrored it across a 256x256 spherical color map, applied orange tint and broad tonal variation, and baked continuous dark equatorial and curved meridian channels into the map.",
+          "Exported an indexed 16x12 UV sphere with 352 nondegenerate outward-facing triangles, radial unit normals, flipped glTF V coordinates, Y-up meter coordinates, identity node transforms, and a centered pivot.",
+          "Embedded one optimized palette PNG with 128 colors into GLB; one rough material reuses the same color map for a modest emissive contribution so orange and dark seams remain visible under the existing arena lights. No normal/metalness/roughness texture, rig, animation, external image dependency, or decoder extension.",
+          "Validated the shipped binary with gltf-validator and direct geometry/texture measurements before release."
+        ],
+        "outputNotes": "Hybrid asset: Scenario concept-derived leather texture and locally authored topology/channel pattern. Concept is filed in TheArena collection col_rgcLMCsPgwXnr25W3vjnkpNi. Raw concept, intermediates, rejected attempts, and test harness remain in ignored .tmp/ball and are not committed."
+      },
+      "license": {
+        "name": "Scenario Free Tier concept-derived output for noncommercial evaluation; original local mesh",
+        "url": "https://www.scenario.com/pricing",
+        "commercialUse": false,
+        "attribution": null,
+        "evidence": "Scenario pricing checked 2026-09-29 states Free plan outputs are for personal/evaluation use; the existing public browser demo is a noncommercial evaluation. Local topology and seam construction are original project work. No brands, league marks or reference-photo pixels are included. Recheck Scenario rights before commercial release."
+      },
+      "runtime": [
+        {
+          "path": "assets/models/ball/basketball-v1.glb",
+          "format": "glb",
+          "bytes": 54748,
+          "maxBytes": 80000,
+          "sha256": "99e547afd867371d204b769fe05afbbd0c5be16333bd7cfbee2438e1697fe858",
+          "triangles": 352
+        }
+      ],
+      "validation": {
+        "checks": {
+          "sourceVisual": "pass",
+          "branding": "pass",
+          "gltf": "pass",
+          "meshBudget": "pass",
+          "normalsUVsTransforms": "pass",
+          "radiusCenterYUp": "pass",
+          "textureResolution": "pass",
+          "desktopGameView": "pass",
+          "touchPortraitView": "pass",
+          "touchLandscapeView": "pass",
+          "seamReadability": "pass",
+          "dribble": "pass",
+          "gather": "pass",
+          "jumpShotRegressionParity": "pass",
+          "layup": "pass",
+          "dunk": "pass",
+          "rimCollision": "pass",
+          "backboardCollision": "pass",
+          "looseBall": "pass",
+          "scoringAndReset": "pass",
+          "ballRotation": "pass",
+          "contactShadow": "pass",
+          "loadingFallback": "pass",
+          "missingFileFallback": "pass",
+          "decodeErrorFallback": "pass",
+          "loadDuringMotion": "pass",
+          "rackUnchanged": "pass",
+          "rigging": "not-applicable",
+          "assetsCheck": "pass",
+          "productionBuild": "pass",
+          "pagesBasePath": "pass"
+        },
+        "measured": {
+          "runtimeBytes": 54748,
+          "renderedMeshTriangles": 352,
+          "trianglesIncludingExistingContactShadow": 362,
+          "materials": 1,
+          "textureWidth": 256,
+          "textureHeight": 256,
+          "textureBytes": 44177,
+          "visualRadiusMeters": 0.12,
+          "diameterMeters": 0.24,
+          "dimensionXMeters": 0.24,
+          "dimensionYMeters": 0.24,
+          "dimensionZMeters": 0.24,
+          "pivot": "0,0,0",
+          "upAxis": "Y",
+          "minVertexRadiusMeters": 0.11999999530465849,
+          "maxVertexRadiusMeters": 0.12000000441855241,
+          "maxNormalLengthError": 2.9714756433207867e-8,
+          "minTriangleArea": 0.00018622688432800414,
+          "identityNodeTransforms": true,
+          "animations": 0,
+          "skins": 0,
+          "gltfErrors": 0,
+          "gltfWarnings": 0,
+          "gltfHints": 0,
+          "desktopViewport": "1280x720",
+          "touchPortraitViewport": "390x844",
+          "touchLandscapeViewport": "844x390",
+          "browserRegressionChecks": 24,
+          "baselineComparisonCommit": "218259b"
+        },
+        "notes": "24 in-browser deterministic checks passed at desktop and phone portrait dimensions. Visible keyboard shot/reset and emulated touch movement, camera drag, shoot, finish, scoring, and reset were exercised; portrait and landscape touch layouts were inspected. Touch testing uses an ignored local harness enabling the existing coarse-pointer branch and CSS, not a physical phone. Current source outside the extracted ball renderer is byte-for-byte equivalent to baseline, including the decorative rack and physics. A green-timed jumper from the initial position at 120 Hz missed identically before and after replacement (score 0; final position 0.18167904776907193,0.9662099709257157,1.901359530184235); existing shot-arc/rim behavior was preserved per scope. Descending hoop scoring, single scoring, automatic possession reset, layup scoring and dunk scoring pass. Existing desktop pointer-lock is rejected by the in-app browser; keyboard and pointer button interactions work. Shadow object, local transform behavior, opacity and scale remain unchanged. No asset load/decode errors occurred in normal play; missing/corrupt URLs were deliberate fallback tests."
+      },
+      "integration": {
+        "module": "src/ball.js",
+        "fallback": "Exact original procedural basketball is visible while loading and on network, decode, or scale validation failure. main.js retains the stable root, all gameplay/physics and userData.shadow; only decoded visual children replace the fallback."
       }
     }
   ]
