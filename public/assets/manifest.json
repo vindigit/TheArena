@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "assets": [
+    {
+      "id": "court-wood-v1",
+      "category": "texture",
+      "status": "accepted",
+      "source": {
+        "type": "scenario",
+        "prompt": "Top-down seamless light maple hardwood surface for an early-2000s low-polygon basketball video game. One continuous court wood surface with long straight grain running vertically from top to bottom, warm honey and amber bands, restrained pores, broad readable tonal variation, gently baked-looking light. Limited-detail, slightly stylized PS2-era material. No plank joints, floorboards, court lines, logos, text, objects, shadows, perspective, glare, or photographic reflections.",
+        "negativePrompt": null,
+        "modelId": "model_scenario-texture",
+        "modelVersion": null,
+        "settings": {
+          "width": 512,
+          "height": 512,
+          "quality": "medium",
+          "eraseSeam": true,
+          "overlap": 64,
+          "featherRadius": 32
+        },
+        "seed": null,
+        "referenceAssetIds": [],
+        "scenarioAssetId": "asset_YxkmLkYFT9wktoHxXn1jXpUf",
+        "scenarioJobId": "job_87JG22chzGUSHXibPoFQUdLD",
+        "generatedAt": "2026-09-29T19:56:00.228Z",
+        "optimizationSteps": [
+          "Downloaded 512 x 512 PNG source to an ignored local staging directory.",
+          "Encoded the accepted source to WebP at quality 76 with effort 6; no resize or color alteration."
+        ],
+        "outputNotes": "Single sRGB color texture. The generated source is 298,376 bytes and remains out of the repository. Scenario asset is filed in TheArena collection col_rgcLMCsPgwXnr25W3vjnkpNi. Project ID proj_A12xiMpm5rjCs8EuszXCaqPh is currently named Default Project; rename to TheArena is pending."
+      },
+      "license": {
+        "name": "Scenario Free Tier output for noncommercial evaluation",
+        "url": "https://www.scenario.com/pricing",
+        "commercialUse": false,
+        "attribution": null,
+        "evidence": "Scenario pricing, checked 2026-09-29, limits Free plan outputs to personal/evaluation use. This free public browser demo is being used as a noncommercial evaluation. Scenario Terms section 4.3 assigns generated output rights, while section 4.5 puts use review on the user: https://www.scenario.com/terms-and-conditions. Recheck rights before any commercial release."
+      },
+      "runtime": [
+        {
+          "path": "assets/textures/court/wood-v1.webp",
+          "format": "webp",
+          "bytes": 8868,
+          "maxBytes": 81920,
+          "sha256": "b36c3b4350b571b2ce38bc7d2336f2a375ebe8e62db430622e65452b9b3b3c4d",
+          "dimensions": { "width": 512, "height": 512 },
+          "tiling": { "maxMeanRgbError": 5, "maxPeakRgbError": 20 }
+        }
+      ],
+      "validation": {
+        "checks": {
+          "sourceVisual": "pass",
+          "seam": "pass",
+          "compression": "pass",
+          "desktopGameView": "pass",
+          "touchGameView": "pass",
+          "runtimeScale": "not-applicable",
+          "rigging": "not-applicable"
+        },
+        "measured": {
+          "sourceBytes": 298376,
+          "runtimeBytes": 8868,
+          "edgeError": 3.15,
+          "edgeX": 3.66,
+          "edgeY": 2.64,
+          "peakRgbEdgeError": 18,
+          "desktopViewport": "1280x800",
+          "touchViewport": "390x844"
+        },
+        "notes": "The downloaded image and a 2x2 tile proof were inspected. The optimized file loaded in local Vite and the wood reads under current arena lighting at desktop and touch sizes. Desktop movement, shot and reset and touch joystick, camera drag, shot and reset were exercised. No controls or collision data changed. Headless desktop pointer lock did not activate, so mouse-look still needs a headed check."
+      },
+      "integration": {
+        "module": "src/arena.js",
+        "fallback": "The existing colored procedural plank materials remain visible while loading and if the WebP fails to load."
+      }
+    }
+  ]
+}

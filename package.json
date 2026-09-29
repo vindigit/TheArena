@@ -6,12 +6,16 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
-    "preview": "vite preview --host 127.0.0.1"
+    "preview": "vite preview --host 127.0.0.1",
+    "assets:check": "node scripts/validate-assets.mjs",
+    "assets:optimize:texture": "node scripts/prepare-texture.mjs"
   },
   "dependencies": {
     "three": "^0.183.0"
   },
   "devDependencies": {
+    "ajv": "^8.20.0",
+    "sharp": "^0.35.5",
     "vite": "^7.2.0"
   }
 }

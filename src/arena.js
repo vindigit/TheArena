@@ -155,7 +155,7 @@ export function createArena(THREE) {
   const plankWidth = court.width / 16;
   for (let i = 0; i < 16; i += 1) {
     const x = -court.halfWidth + plankWidth * (i + 0.5);
-    addBox(
+    const plank = addBox(
       plankWidth - 0.012,
       0.021,
       court.depth - 0.16,
@@ -163,7 +163,40 @@ export function createArena(THREE) {
       V(x, 0.054, 0),
       `parquet plank ${i + 1}`,
     );
+
+    // Each strip samples a different part of the shared texture. This keeps
+    // knots and grain from lining up across all sixteen procedural planks.
+    const uv = plank.geometry.getAttribute('uv');
+    const offsetU = (i * 0.37) % 1;
+    const offsetV = (i * 0.19) % 1;
+    for (let vertex = 0; vertex < uv.count; vertex += 1) {
+      uv.setXY(vertex, uv.getX(vertex) * 0.64 + offsetU, uv.getY(vertex) + offsetV);
+    }
+    uv.needsUpdate = true;
   }
+
+  // Keep the procedural colors visible while loading, and on any load error.
+  // Court markings and all gameplay coordinates remain independent of this map.
+  group.userData.courtWoodStatus = 'loading';
+  new THREE.TextureLoader().load(
+    `${import.meta.env.BASE_URL}assets/textures/court/wood-v1.webp`,
+    (texture) => {
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      texture.anisotropy = 2;
+      const plankTints = [0xffffff, 0xf2e3cf, 0xe8d0b3];
+      boardMaterials.forEach((material, index) => {
+        material.map = texture;
+        material.color.setHex(plankTints[index]);
+        material.roughness = 0.72;
+        material.needsUpdate = true;
+      });
+      group.userData.courtWoodStatus = 'ready';
+    },
+    undefined,
+    () => { group.userData.courtWoodStatus = 'fallback'; },
+  );
 
   const keyCenterZ = court.baselineZ + court.keyLength / 2;
   addBox(court.keyWidth, 0.024, court.keyLength, materials.paint, V(0, 0.082, keyCenterZ), "painted key");

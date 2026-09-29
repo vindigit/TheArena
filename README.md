@@ -6,7 +6,7 @@ A solo basketball demo in the browser, styled after early 2000s console games. P
 
 The live build is published at https://vindigit.github.io/TheArena/.
 
-For the repository layout, current implementation status, deployment path, and the next asset-pipeline milestone, see [PROJECT.md](PROJECT.md).
+For the repository layout, current implementation status, and deployment path, see [PROJECT.md](PROJECT.md).
 
 Desktop controls:
 
@@ -21,4 +21,4 @@ On a touch screen, use the left stick to move, drag the court to turn the camera
 
 Run npm ci, then npm run dev.
 
-This first playable build uses original procedural geometry and synthesized sounds. The player and arena contain no NBA team marks or real-player likenesses. The source is structured so game-ready character, arena, ball, texture, and sound assets can replace the procedural parts in a later asset pass.
+The [asset pipeline](docs/ASSET_PIPELINE.md) records the PS2-era art direction, replacement interfaces, runtime budgets, generation recipes, and acceptance checks. Run `npm run assets:check` before `npm run build` when changing an asset. The first accepted slice is a small court wood texture with procedural plank colors as a load fallback. Other geometry and sounds remain original procedural placeholders; the player and arena contain no NBA marks or real-player likenesses.

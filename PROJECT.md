@@ -16,9 +16,9 @@ The initial release is a browser-based, third-person solo basketball demo with:
 - One indoor arena, player, basketball, hoop, backboard, and net
 - Keyboard/mouse and touch controls
 - Dribbling, jump shots, layups, dunks, a two-minute run, and reset
-- Procedural PS2-era visual treatment and synthesized gameplay audio
+- Procedural PS2-era visual treatment, one validated court wood texture, and synthesized gameplay audio
 
-All current art and audio are original procedural placeholders—no NBA marks or real-person likenesses are included.
+The court wood is the first accepted generated runtime asset; other geometry and all audio remain original procedural placeholders. No NBA marks or real-person likenesses are included. See [`docs/ASSET_PIPELINE.md`](docs/ASSET_PIPELINE.md) and `public/assets/manifest.json` for its source, license scope, and measurements.
 
 ## Project rules
 
@@ -54,14 +54,15 @@ npm run build
 
 Then test desktop controls and a narrow touch viewport. A push to `main` triggers the Pages deployment; verify the live URL after the workflow finishes.
 
-## Recommended next milestone: asset pipeline
+## Asset pipeline status and next milestone
 
-Replace the procedural placeholders in a deliberately small order:
+The pipeline now has a style guide, budgets, a machine-readable manifest and schema, `npm run assets:check`, and a repeatable WebP optimization command. The first court wood material is integrated behind `src/arena.js` with procedural fallback. It has passed source/runtime seam checks, a production build with the GitHub Pages base path, and local desktop/touch checks.
 
-1. Create a style guide from the approved PS2 reference look.
-2. Generate and validate a generic rigged player, basketball, court/arena materials, and gameplay sound set.
-3. Optimize and export web-ready files (GLB/textures/audio) into a documented `public/assets/` structure.
-4. Swap one asset category at a time, preserving the current gameplay interfaces.
-5. Rebuild, test desktop and touch, then deploy.
+Continue replacing the remaining placeholders in small passes:
 
-This keeps the present game stable while visual quality improves in controlled passes.
+1. Generate and validate a basketball GLB with a center pivot and a visible 0.12 m radius, then move its replaceable renderer out of `src/main.js` while retaining the current physics and contact shadow.
+2. Add the remaining tiling materials and short gameplay audio behind `src/arena.js` and `src/audio.js`, one category at a time.
+3. Build a named hoop assembly and arena detail, preserving the fixed gameplay landmarks and mutable net reference.
+4. Rig a generic fictional player last, matching the current hand anchor and action-state API.
+
+`main` remains the deployment branch. Verify each replacement before pushing; the current live build should remain on the last accepted asset set. The Scenario project used for the first texture is still named “Default Project”; renaming it to “TheArena” remains a workspace follow-up.
