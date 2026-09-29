@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { AudioDirector } from './audio.js';
 import { createArena } from './arena.js';
 import { createPlayer } from './player.js';
+import { SHOT_GRAVITY, meterProgress, greenWindow, gradeShot, shotTarget, solveShotArc, sampleShotArc, crossesHoop } from './shooting.js';
 
 const canvas = document.querySelector('#game');
 const startButton = document.querySelector('#startButton');
@@ -11,8 +12,11 @@ const scoreElement = document.querySelector('#score');
 const actionLabel = document.querySelector('#actionLabel');
 const feedbackElement = document.querySelector('#feedback');
 const shotMeter = document.querySelector('#shotMeter');
+const meterTrack = shotMeter.querySelector('.shot-meter__track');
 const meterFill = shotMeter.querySelector('i');
 const meterNeedle = shotMeter.querySelector('b');
+const meterDebug = new URLSearchParams(window.location.search).has('meterDebug');
+let meterTrackWidth = 0;
 
 const renderer = new THREE.WebGLRenderer({
   canvas,
@@ -56,7 +60,7 @@ const temp = {
 };
 
 const BALL_RADIUS = arena.hoop.ballRadius ?? 0.12;
-const GRAVITY = 9.8;
+const GRAVITY = SHOT_GRAVITY;
 const coarsePointer = window.matchMedia('(any-pointer: coarse)').matches;
 const input = {
   forward: false,
@@ -93,6 +97,8 @@ const game = {
   charge: {
     active: false,
     value: 0,
+    pressTime: 0,
+    window: greenWindow(4),
   },
   ball: {
     object: null,
@@ -108,6 +114,8 @@ const game = {
     points: 2,
     flightAge: 0,
     finishKind: '',
+    shotArc: null,
+    perfectShot: false,
   },
 };
 
@@ -258,7 +266,16 @@ function setFeedback(text, kind = '', duration = 1.15) {
   game.feedbackTimer = duration;
 }
 
-function updateHud() {
+function eventTime(event) {
+  // Older Safari builds exposed epoch timestamps; performance.now uses a relative clock.
+  return event.timeStamp > 1e12 ? event.timeStamp - performance.timeOrigin : event.timeStamp;
+}
+
+function chargeProgress(now) {
+  return meterProgress(game.charge.pressTime, now);
+}
+
+function updateHud(now) {
   const seconds = Math.ceil(Math.max(0, game.remaining));
   const minutes = Math.floor(seconds / 60);
   const rest = String(seconds % 60).padStart(2, '0');
@@ -277,14 +294,18 @@ function updateHud() {
   actionLabel.textContent = action;
 
   if (game.charge.active) {
-    const value = Math.round(game.charge.value * 100);
-    meterFill.style.width = value + '%';
-    meterNeedle.style.left = value + '%';
+    game.charge.value = chargeProgress(now);
     shotMeter.classList.add('is-charging');
   } else {
-    meterFill.style.width = '0%';
-    meterNeedle.style.left = '0%';
     shotMeter.classList.remove('is-charging');
+  }
+  const progress = game.charge.value;
+  meterFill.style.transform = `scaleX(${progress})`;
+  meterNeedle.style.transform = `translateX(${progress * meterTrackWidth}px)`;
+  if (meterDebug && game.charge.active) {
+    const fillEdge = meterFill.getBoundingClientRect().right;
+    const markerCenter = meterNeedle.getBoundingClientRect().left + 1.5;
+    console.debug('meter edges', { fillEdge, markerCenter, deltaPx: fillEdge - markerCenter, progress });
   }
 }
 
@@ -309,6 +330,7 @@ function updateBallRotation(dt) {
 function resetPossession(keepScore = true) {
   game.charge.active = false;
   game.charge.value = 0;
+  game.charge.pressTime = 0;
   game.player.position.set(0, 0, 3.9);
   game.player.yaw = 0;
   game.player.desiredYaw = 0;
@@ -327,6 +349,8 @@ function resetPossession(keepScore = true) {
   game.ball.scoreTimer = 0;
   game.ball.flightAge = 0;
   game.ball.finishKind = '';
+  game.ball.shotArc = null;
+  game.ball.perfectShot = false;
   game.ball.dribblePhase = 0;
   game.ball.dribbleBob = 0;
 
@@ -356,31 +380,27 @@ function launchBall(start, target, time, options = {}) {
   ball.points = options.points ?? 2;
   ball.flightAge = 0;
   ball.finishKind = options.finishKind ?? '';
+  ball.shotArc = options.shotArc ?? null;
+  ball.perfectShot = options.perfectShot ?? false;
 }
 
-function releaseJumpShot() {
+function releaseJumpShot(releaseTime = performance.now()) {
   if (!game.charge.active) return;
 
-  const charge = game.charge.value;
-  const ideal = 0.62;
-  const quality = clamp(1 - Math.abs(charge - ideal) / ideal, 0, 1);
+  const charge = chargeProgress(releaseTime);
+  game.charge.value = charge;
+  const grade = gradeShot(charge, game.charge.window);
   const start = getShotAnchor(charge, new THREE.Vector3()).clone();
-  const target = arena.hoop.rimCenter.clone();
-  const distance = horizontalDistance(start, target);
-  const missAmount = Math.pow(1 - quality, 1.45);
-  const side = (Math.random() * 2 - 1) * (0.08 + missAmount * (0.43 + distance * 0.025));
-  const depth = (Math.random() * 2 - 1) * missAmount * 0.2;
-  target.x += side;
-  target.z += depth;
-  target.y += quality > 0.76 ? 0.025 : (Math.random() * 2 - 1) * missAmount * 0.13;
-
+  const rim = arena.hoop.rimCenter;
+  const distance = horizontalDistance(start, rim);
+  const target = shotTarget(start, rim, grade, charge, game.charge.window);
+  const arc = solveShotArc(start, target);
   const isThree = distance > 6.45;
-  // A slightly higher basketball arc keeps a clean, well-timed jumper above
-  // the front lip before it drops through the center of the rim.
-  const flightTime = clamp(0.62 + distance * 0.075, 0.7, 1.35);
-  launchBall(start, target, flightTime, {
-    canScore: quality > 0.28,
+  launchBall(start, target, arc.time, {
+    canScore: grade === 'ON TIME' || Math.abs(charge - (grade === 'EARLY' ? game.charge.window.start : game.charge.window.end)) < 0.03,
     points: isThree ? 3 : 2,
+    shotArc: arc,
+    perfectShot: grade === 'ON TIME',
   });
 
   game.charge.active = false;
@@ -390,15 +410,7 @@ function releaseJumpShot() {
   game.player.actionProgress = 0.57;
   game.player.currentSpeed = 0;
 
-  if (quality > 0.91) {
-    setFeedback('EXCELLENT', 'good', 1.3);
-  } else if (quality > 0.66) {
-    setFeedback('ON TIME', 'good', 1.1);
-  } else if (charge < ideal) {
-    setFeedback('EARLY', 'bad', 1.1);
-  } else {
-    setFeedback('LATE', 'bad', 1.1);
-  }
+  setFeedback(grade, grade === 'ON TIME' ? 'good' : 'bad', 1.1);
 }
 
 function releaseFinish() {
@@ -424,11 +436,16 @@ function releaseFinish() {
   }
 }
 
-function startCharge() {
+function startCharge(pressTime = performance.now()) {
   if (!game.started || game.charge.active || game.ball.mode !== 'dribble') return;
   if (game.player.action !== 'idle' && game.player.action !== 'move') return;
   game.charge.active = true;
   game.charge.value = 0;
+  game.charge.pressTime = pressTime;
+  const distance = horizontalDistance(game.player.position, arena.hoop.rimCenter);
+  game.charge.window = greenWindow(distance, game.player.currentSpeed);
+  shotMeter.style.setProperty('--green-start', `${game.charge.window.start * 100}%`);
+  shotMeter.style.setProperty('--green-width', `${(game.charge.window.end - game.charge.window.start) * 100}%`);
   game.player.action = 'shoot';
   game.player.actionTime = 0;
   game.player.actionDuration = 0;
@@ -489,7 +506,9 @@ function resolveBackboardCollision() {
     ball.velocity.x *= 0.82;
     ball.velocity.y *= 0.9;
     audio.backboard(clamp(ball.velocity.length() / 7, 0.2, 1));
+    return true;
   }
+  return false;
 }
 
 function resolveRimCollision() {
@@ -518,6 +537,7 @@ function resolveRimCollision() {
   ball.position.addScaledVector(temp.ballNormal, 0.018);
   arena.hoop.net.userData.energy = Math.max(arena.hoop.net.userData.energy ?? 0, 0.32);
   audio.rim(clamp(Math.abs(incoming) / 7, 0.18, 1));
+  return true;
 }
 
 function updateDribble(dt) {
@@ -551,35 +571,33 @@ function updateFlightBall(dt) {
   const ball = game.ball;
   ball.previous.copy(ball.position);
   ball.flightAge += dt;
-  ball.velocity.y -= GRAVITY * dt;
-  ball.position.addScaledVector(ball.velocity, dt);
+  if (ball.shotArc) {
+    const sample = sampleShotArc(ball.shotArc, ball.flightAge);
+    ball.position.set(sample.position.x, sample.position.y, sample.position.z);
+    ball.velocity.set(sample.velocity.x, sample.velocity.y, sample.velocity.z);
+  } else {
+    ball.velocity.y -= GRAVITY * dt;
+    ball.position.addScaledVector(ball.velocity, dt);
+  }
 
   const rim = arena.hoop;
-  const segmentX = ball.position.x - ball.previous.x;
-  const segmentZ = ball.position.z - ball.previous.z;
-  const fromRimX = ball.previous.x - rim.rimCenter.x;
-  const fromRimZ = ball.previous.z - rim.rimCenter.z;
-  const segmentLengthSq = segmentX * segmentX + segmentZ * segmentZ;
-  const closestT = segmentLengthSq > 0.000001
-    ? clamp(-(fromRimX * segmentX + fromRimZ * segmentZ) / segmentLengthSq, 0, 1)
-    : 0;
-  const closestRimDistance = Math.hypot(
-    fromRimX + segmentX * closestT,
-    fromRimZ + segmentZ * closestT,
-  );
   if (
     ball.canScore
     && !ball.scored
-    && ball.previous.y > rim.rimHeight
-    && ball.position.y <= rim.rimHeight
-    && ball.velocity.y < 0
-    && closestRimDistance < rim.rimRadius - BALL_RADIUS * 0.1
+    && crossesHoop(ball.previous, ball.position, ball.velocity, rim, BALL_RADIUS)
   ) {
     scoreBasket();
   }
 
-  resolveBackboardCollision();
-  resolveRimCollision();
+  if (!ball.perfectShot || ball.position.y < rim.rimHeight - BALL_RADIUS * 2) {
+    const hitBoard = resolveBackboardCollision();
+    const hitRim = resolveRimCollision();
+    if (hitBoard || hitRim) ball.shotArc = null;
+  }
+  if (ball.position.y < rim.rimHeight - BALL_RADIUS * 2) {
+    ball.shotArc = null;
+    ball.perfectShot = false;
+  }
 
   if (ball.position.y < BALL_RADIUS) {
     const impact = Math.abs(ball.velocity.y);
@@ -649,7 +667,7 @@ function constrainPlayerToCourt() {
   game.player.position.z = clamp(game.player.position.z, bounds.minZ + 0.62, bounds.maxZ - 0.48);
 }
 
-function updatePlayer(dt) {
+function updatePlayer(dt, now) {
   const p = game.player;
   const move = temp.move.set(input.touchX, 0, input.touchY);
   if (input.forward) move.z += 1;
@@ -667,11 +685,11 @@ function updatePlayer(dt) {
 
   p.jumpY = 0;
   if (game.charge.active) {
-    game.charge.value = Math.min(1, game.charge.value + dt * 0.78);
+    game.charge.value = chargeProgress(now);
     p.action = 'shoot';
     p.actionProgress = game.charge.value * 0.58;
     p.currentSpeed = damp(p.currentSpeed, 0, 14, dt);
-    if (game.charge.value >= 1) releaseJumpShot();
+    if (game.charge.value >= 1) releaseJumpShot(now);
   } else if (p.action === 'shoot') {
     p.actionTime += dt;
     p.actionProgress = clamp(0.57 + p.actionTime / Math.max(0.01, p.actionDuration) * 0.43, 0, 1);
@@ -766,14 +784,14 @@ function updateCamera(dt) {
   camera.lookAt(target);
 }
 
-function update(dt) {
+function update(dt, now) {
   game.elapsed += dt;
   if (game.started && game.remaining > 0) game.remaining = Math.max(0, game.remaining - dt);
   if (game.remaining <= 0 && game.started) {
     setFeedback('RUN OVER — PRESS R', 'bad', 999);
   }
 
-  updatePlayer(dt);
+  updatePlayer(dt, now);
   player.group.updateMatrixWorld(true);
   updateBall(dt);
   updateNet(dt);
@@ -786,12 +804,12 @@ function update(dt) {
       setFeedback(game.ball.mode === 'loose' ? 'CHASE IT DOWN' : 'FIND THE GREEN', '', 0);
     }
   }
-  updateHud();
+  updateHud(now);
 }
 
 function render() {
   const dt = Math.min(clock.getDelta(), 0.05);
-  update(dt);
+  update(dt, performance.now());
   renderer.render(scene, camera);
 }
 
@@ -819,8 +837,11 @@ const touchSprint = document.querySelector('#touchSprint');
 const touchFinish = document.querySelector('#touchFinish');
 const touchShoot = document.querySelector('#touchShoot');
 const touchReset = document.querySelector('#touchReset');
+const touchControls = document.querySelector('.touch-controls');
 let stickPointer = null;
 let lookPointer = null;
+let shootPointer = null;
+let finishPointer = null;
 let lastLookX = 0;
 let lastLookY = 0;
 
@@ -892,17 +913,33 @@ touchSprint.addEventListener('pointercancel', stopTouchSprint);
 touchSprint.addEventListener('lostpointercapture', stopTouchSprint);
 touchFinish.addEventListener('pointerdown', (event) => {
   event.preventDefault();
+  if (finishPointer !== null) return;
+  finishPointer = event.pointerId;
+  touchFinish.setPointerCapture(event.pointerId);
+  touchFinish.classList.add('is-held');
   startFinish();
 });
+function stopTouchFinish(event) {
+  if (event.pointerId !== finishPointer) return;
+  finishPointer = null;
+  touchFinish.classList.remove('is-held');
+}
+touchFinish.addEventListener('pointerup', stopTouchFinish);
+touchFinish.addEventListener('pointercancel', stopTouchFinish);
+touchFinish.addEventListener('lostpointercapture', stopTouchFinish);
 touchShoot.addEventListener('pointerdown', (event) => {
   event.preventDefault();
+  if (shootPointer !== null) return;
+  shootPointer = event.pointerId;
   touchShoot.setPointerCapture(event.pointerId);
   touchShoot.classList.add('is-held');
-  startCharge();
+  startCharge(eventTime(event));
 });
-function stopTouchShoot() {
+function stopTouchShoot(event) {
+  if (event.pointerId !== shootPointer) return;
+  shootPointer = null;
   touchShoot.classList.remove('is-held');
-  releaseJumpShot();
+  releaseJumpShot(eventTime(event));
 }
 touchShoot.addEventListener('pointerup', stopTouchShoot);
 touchShoot.addEventListener('pointercancel', stopTouchShoot);
@@ -911,6 +948,11 @@ touchReset.addEventListener('pointerdown', (event) => {
   event.preventDefault();
   resetPossession(false);
 });
+
+touchControls.addEventListener('touchstart', (event) => event.preventDefault(), { passive: false });
+for (const type of ['contextmenu', 'selectstart', 'gesturestart']) {
+  document.querySelector('#app').addEventListener(type, (event) => event.preventDefault());
+}
 
 document.addEventListener('pointerlockchange', () => {
   game.pointerLocked = document.pointerLockElement === canvas;
@@ -935,7 +977,7 @@ window.addEventListener('keydown', (event) => {
 
   if (event.code === 'Space') {
     event.preventDefault();
-    if (!event.repeat) startCharge();
+    if (!event.repeat) startCharge(eventTime(event));
   }
   if (event.code === 'KeyF' && !event.repeat) startFinish();
   if (event.code === 'KeyR' && !event.repeat) resetPossession(false);
@@ -952,7 +994,7 @@ window.addEventListener('keyup', (event) => {
   if (event.code === 'ShiftLeft' || event.code === 'ShiftRight') input.sprint = false;
   if (event.code === 'Space') {
     event.preventDefault();
-    releaseJumpShot();
+    releaseJumpShot(eventTime(event));
   }
 });
 
@@ -961,6 +1003,7 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight, false);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.2));
+  meterTrackWidth = meterTrack.clientWidth;
 });
 
 window.addEventListener('beforeunload', () => {
@@ -969,5 +1012,6 @@ window.addEventListener('beforeunload', () => {
 });
 
 resetPossession(false);
+meterTrackWidth = meterTrack.clientWidth;
 clock.start();
 renderer.setAnimationLoop(render);

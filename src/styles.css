@@ -12,6 +12,14 @@
 html, body, #app { width: 100%; min-width: 320px; height: 100%; margin: 0; overflow: hidden; }
 body { background: #07121d; }
 
+#app, #game, .touch-controls, .touch-controls * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
 #game {
   display: block;
   width: 100%;
@@ -41,9 +49,10 @@ body { background: #07121d; }
 .shot-meter { width: min(280px, 25vw); justify-self: center; opacity: .48; transition: opacity .15s ease, transform .15s ease; text-align: center; }
 .shot-meter.is-charging { opacity: 1; transform: translateY(-4px); }
 .shot-meter__track { height: 12px; padding: 2px; border: 2px solid #f7f2e8; background: #101c2d; box-shadow: 3px 3px 0 #000; overflow: hidden; position: relative; }
-.shot-meter__track::after { content: ""; position: absolute; inset: 0; left: 44%; width: 14%; background: #7adc73; opacity: .85; }
-.shot-meter__track i { position: absolute; z-index: 1; inset: 0 auto 0 0; width: 0%; background: #f6bc58; transition: width .04s linear; }
-.shot-meter__track b { position: absolute; z-index: 2; top: -2px; bottom: -2px; width: 3px; left: 0%; background: #fff; box-shadow: 1px 0 0 #111; }
+.shot-meter__track::after { content: ""; position: absolute; inset: 0; left: var(--green-start, 44%); width: var(--green-width, 14%); background: #7adc73; opacity: .85; }
+.shot-meter__track i { position: absolute; z-index: 1; inset: 0; background: #f6bc58; transform: scaleX(0); transform-origin: left center; }
+.shot-meter__track b { position: absolute; z-index: 2; top: -2px; bottom: -2px; width: 3px; left: -1.5px; background: #fff; box-shadow: 1px 0 0 #111; transform: translateX(0); }
+.shot-meter.is-charging, .shot-meter.is-charging * { transition: none; animation: none; }
 .shot-meter span { display: block; margin-top: 5px; color: #d1dbe1; font: 500 10px/1 "DM Mono", monospace; letter-spacing: .18em; }
 
 .feedback { min-width: 160px; color: #f7f2e8; font-size: clamp(14px, 1.6vw, 21px); font-weight: 800; letter-spacing: .08em; text-align: left; text-shadow: 2px 2px 0 #15172a; }
