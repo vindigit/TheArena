@@ -16,9 +16,9 @@ The initial release is a browser-based, third-person solo basketball demo with:
 - One indoor arena, player, basketball, hoop, backboard, and net
 - Keyboard/mouse and touch controls
 - Dribbling, jump shots, layups, dunks, a two-minute run, and reset
-- Procedural PS2-era visual treatment, one validated court wood texture, and synthesized gameplay audio
+- Procedural PS2-era visual treatment, validated runtime assets, sampled ball/hoop impacts with synthesized fallback, and a quiet guarded-loop arena bed
 
-The court wood, basketball, and arena shell are accepted runtime assets. The basketball combines a Scenario-generated leather concept with an original local low-poly mesh; the shell and fictional venue atlas are locally authored. The hoop and player geometry and all audio remain procedural placeholders. No NBA marks or real-person likenesses are included. See [`docs/ASSET_PIPELINE.md`](docs/ASSET_PIPELINE.md) and `public/assets/manifest.json` for provenance, license scope, measurements, and validation limits.
+The court wood, basketball, and arena shell are accepted runtime assets. The basketball combines a Scenario-generated leather concept with an original local low-poly mesh; the shell and fictional venue atlas are locally authored. Three original local variants now back each basketball bounce, metal-rim impact, tempered-glass backboard hit, and hardwood shoe squeak, while one compact layered impact backs the authored dunk event. One quiet original indoor-arena ambience file loops behind an independent low-level gain path after game-start unlock. All live behind `AudioDirector` with synthesized gameplay fallback and failure-isolated ambience; the remaining one-shot audio cues are procedural placeholders. No NBA marks or real-person likenesses are included. See [`docs/ASSET_PIPELINE.md`](docs/ASSET_PIPELINE.md) and `public/assets/manifest.json` for provenance, license scope, measurements, and validation limits.
 
 ## Project rules
 
@@ -35,7 +35,7 @@ The court wood, basketball, and arena shell are accepted runtime assets. The bas
 | `src/ball.js` | Replaceable basketball GLB visual, procedural loading/error fallback, contact-shadow reference |
 | `src/player.js` | Player model, animation state, dribble attachment points |
 | `src/arena.js` | Court, arena, basket, net, lighting, collision references |
-| `src/audio.js` | Synthesized bounce, swish, rim, and crowd/game feedback |
+| `src/audio.js` | Sample-backed basketball bounces, rim/backboard/dunk impacts, and shoe squeaks with synthesized fallback; guarded-loop arena ambience on an independent gain path; synthesized swish and crowd/game feedback |
 | `src/styles.css` | HUD, start screen, and responsive touch controls |
 | `.github/workflows/pages.yml` | GitHub Pages build and deployment |
 
@@ -63,7 +63,7 @@ Continue replacing the remaining placeholders in small passes:
 
 1. Basketball replacement completed: centered 0.12 m radius, 352 triangles, one 256² color map, and a narrow renderer in `src/ball.js` with the original fallback. Desktop and emulated touch checks passed. A tested green-timed jumper missed identically in the original and replacement builds; physics remains unchanged. See the manifest for this existing limitation and detailed checks.
 2. Arena shell replacement completed: an 85.7 KB GLB with 956 triangles, one 512² fictional venue atlas, and 240 instanced seats. The original procedural shell is the loading/error fallback. The court wood, hoop landmarks, lights, camera, and controls remain unchanged. Desktop and narrow portrait/landscape game views and a missing-model fallback were checked; physical-phone FPS remains unmeasured.
-3. Add the remaining tiling materials and short gameplay audio behind `src/arena.js` and `src/audio.js`, one category at a time.
+3. Add the remaining tiling materials and short gameplay-audio categories behind `src/arena.js` and `src/audio.js`, one category at a time.
 4. Build a named hoop assembly, preserving the fixed gameplay landmarks and mutable net reference.
 5. Rig a generic fictional player last, matching the current hand anchor and action-state API.
 

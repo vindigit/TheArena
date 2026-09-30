@@ -384,6 +384,7 @@ function releaseFinish() {
   if (isDunk) {
     arena.hoop.net.userData.energy = 0.9;
     audio.rim(0.92);
+    audio.dunk(1);
   }
 }
 

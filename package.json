@@ -7,8 +7,15 @@
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
+    "assets:build:ambience": "node scripts/build-arena-ambience.mjs",
+    "assets:build:backboards": "node scripts/build-backboard-audio.mjs",
+    "assets:build:bounces": "node scripts/build-bounce-audio.mjs",
+    "assets:build:dunk": "node scripts/build-dunk-audio.mjs",
+    "assets:build:rims": "node scripts/build-rim-audio.mjs",
+    "assets:build:shoes": "node scripts/build-shoe-audio.mjs",
     "assets:check": "node scripts/validate-assets.mjs",
-    "assets:optimize:texture": "node scripts/prepare-texture.mjs"
+    "assets:optimize:texture": "node scripts/prepare-texture.mjs",
+    "test:audio": "node --test tests/audio.test.mjs"
   },
   "dependencies": {
     "three": "^0.183.0"
@@ -16,6 +23,7 @@
   "devDependencies": {
     "ajv": "^8.20.0",
     "sharp": "^0.35.5",
-    "vite": "^7.2.0"
+    "vite": "^7.2.0",
+    "vorbis-encoder-js": "^1.0.2"
   }
 }

@@ -502,109 +502,731 @@
       }
     },
     {
-      "id": "painted-metal-v1",
-      "category": "texture",
+      "id": "basketball-bounces-v1",
+      "category": "audio",
       "status": "accepted",
       "source": {
-        "type": "scenario",
-        "prompt": "A single seamless tileable base-color texture swatch for dark painted structural steel in a stylized PS2-era indoor basketball arena. Flat front-on material surface, no object or geometry. Deep charcoal and muted black-purple paint with broad low-frequency eggplant-violet tonal variation, soft baked-looking grime, gentle irregular worn patches and very sparse small chipped paint flecks revealing dark graphite steel. Restrained fine pores; almost no sharp high-frequency speckle. Matte to satin appearance with subdued painted reflections represented only by color, no bright glints. Visually calm at gameplay distance, practical when repeated across basket support arms, structural trim, and metal posts. Seamless in both axes with matching tone and pattern at all edges. Uniform ambient illumination and opaque sRGB color, no directional shading. No logos, text, labels, graffiti, symbols, bolts, rivets, panel seams, welds, objects, scene, perspective, cast shadows, photographic glare, or specular highlights.",
-        "negativePrompt": null,
-        "modelId": "model_scenario-texture",
+        "type": "local",
+        "prompt": "Three original short, dry indoor hardwood basketball bounces with slight tonal variation. Each file contains one close basketball-to-maple-floor impact: a compact rubber-and-leather body thump, a brief floor slap, and a restrained wood resonance. No voices, crowd, music, reverb tail, whistles, branding, or recognizable broadcast audio.",
+        "negativePrompt": "No voices, crowd, music, room reverb, long tail, whistles, shoe squeaks, hoop or backboard hits, logos, branding, broadcast beds, or repeated multi-bounce rhythm.",
+        "modelId": null,
         "modelVersion": null,
         "settings": {
-          "width": 512,
-          "height": 512,
-          "quality": "medium",
-          "eraseSeam": true,
-          "overlap": 64,
-          "featherRadius": 32,
-          "quotedCostCU": 12,
-          "teamId": "team_yNLWgjS1fAtTk5MtpGfW7vRy",
-          "projectId": "proj_A12xiMpm5rjCs8EuszXCaqPh"
+          "scenarioDiscovery": {
+            "teamId": "team_yNLWgjS1fAtTk5MtpGfW7vRy",
+            "projectId": "proj_A12xiMpm5rjCs8EuszXCaqPh",
+            "capability": "txt2audio",
+            "result": "No generation run: all genuine catalog matches required a paid plan unavailable to this Free-plan project.",
+            "specialtyModel": "model_sonilo-v1-1-text-to-sound-effects",
+            "specialtyRequirement": "Pro",
+            "alternativeModel": "model_mm-audio-2-t2a",
+            "alternativeRequirement": "Starter",
+            "additionalCandidateModel": "model_elevenlabs-sound-effects-v2",
+            "additionalCandidateRequirement": "cu-basic",
+            "additionalCandidateDryRun": "403 ModelAccessRestrictedError; no job created",
+            "additionalCandidateTraceId": "mcpt_Fz82ReoNiTfw231MSpy2JSNP",
+            "privateOwnedAudioMatches": 0,
+            "usableOnCurrentPlanMatches": 0
+          },
+          "generatorScript": "scripts/build-bounce-audio.mjs",
+          "generatorBytes": 5974,
+          "generatorSha256": "c62a997999ec14f47fe4516bf93735a4c9705ad71145603615da3109607a42e9",
+          "method": "Deterministic additive and filtered-noise Foley synthesis with separate ball-body, shell, hardwood, floor-slap, leather-texture, and pressure-click components",
+          "sampleRateHz": 32000,
+          "channels": 1,
+          "codec": "Ogg Vorbis",
+          "encoder": "vorbis-encoder-js 1.0.2",
+          "encoderQuality": -0.1,
+          "targetRmsDbfs": -18.5,
+          "peakCeilingDbfs": -1.5,
+          "variants": [
+            {
+              "file": "dribble-01.ogg",
+              "seed": 129092026,
+              "sourceDurationSeconds": 0.235,
+              "bodyFrequencyHz": "176 to 61 exponential sweep",
+              "shellFrequencyHz": 318,
+              "woodFrequencyHz": 690,
+              "decaysPerSecond": "body 27, shell 43, wood 67"
+            },
+            {
+              "file": "dribble-02.ogg",
+              "seed": 229092026,
+              "sourceDurationSeconds": 0.225,
+              "bodyFrequencyHz": "188 to 66 exponential sweep",
+              "shellFrequencyHz": 346,
+              "woodFrequencyHz": 735,
+              "decaysPerSecond": "body 29, shell 46, wood 72"
+            },
+            {
+              "file": "dribble-03.ogg",
+              "seed": 329092026,
+              "sourceDurationSeconds": 0.245,
+              "bodyFrequencyHz": "164 to 57 exponential sweep",
+              "shellFrequencyHz": 294,
+              "woodFrequencyHz": 648,
+              "decaysPerSecond": "body 25, shell 40, wood 63"
+            }
+          ]
         },
         "seed": null,
         "referenceAssetIds": [],
-        "scenarioAssetId": "asset_VE7dSe99xaL43fNPLkvV1ShE",
-        "scenarioJobId": "job_TB2LfejS7ngrPt5hfjhhAhHC",
-        "generatedAt": "2026-09-30T04:33:36.690Z",
+        "scenarioAssetId": null,
+        "scenarioJobId": null,
+        "generatedAt": "2026-09-30T04:20:00Z",
         "optimizationSteps": [
-          "Downloaded the opaque 512 x 512 sRGB PNG source into ignored .tmp/metal staging.",
-          "Downsampled to 256 x 256 with Sharp Lanczos3; no seam repainting or color adjustment.",
-          "Encoded WebP candidates with npm run assets:optimize:texture at qualities 76, 88, and 95 using Sharp effort 6; selected quality 95 to preserve broad wear and keep opposite-edge differences closest to neighboring-pixel variation.",
-          "Copied only the selected WebP into public/assets/textures/metal; kept the raw source, rejected candidates, and 2 x 2 proof images outside the tracked assets."
+          "Resolved the existing Scenario team and project, searched owned and public audio, and used live txt2audio recommendations before authoring. Sonilo and MM Audio were plan-gated; a no-charge ElevenLabs Sound Effects 2 dry run also returned a plan-access 403. No Scenario generation job was launched.",
+          "Synthesized three independent single-impact mono sources at 32 kHz from deterministic seeded oscillators and filtered noise; removed DC, applied a sub-millisecond attack and short end fade, and normalized each full source to -18.5 dBFS RMS without limiting.",
+          "Encoded each source directly to mono Ogg Vorbis at quality -0.1 with pinned Ogg serial and encoder time seeds, verified byte-identical output across two complete rebuilds, then measured the committed files after browser decode through a 32 kHz OfflineAudioContext."
         ],
-        "outputNotes": "One opaque sRGB base-color map only; no normal, roughness, metalness, or height map. Scenario source PNG is 353,068 bytes with SHA-256 fa1c0b57bef1b0ca7a652af5364791db39dc193400d4fdc33ceead450cf0cc8c. No reference images or seed were supplied or exposed. Filed in TheArena Scenario collection col_rgcLMCsPgwXnr25W3vjnkpNi."
+        "outputNotes": "Original local audio with no recorded or generated third-party source. Scenario model, asset, and job IDs are null because the viable live catalog models required Pro, Starter, or cu-basic and no job was created. The reproducible generator is committed; no PCM intermediates are stored."
       },
       "license": {
-        "name": "Scenario Free Tier output for personal and noncommercial evaluation",
-        "url": "https://www.scenario.com/pricing",
-        "commercialUse": false,
+        "name": "Original locally authored TheArena audio",
+        "url": null,
+        "commercialUse": true,
         "attribution": null,
-        "evidence": "Scenario pricing checked 2026-09-29 says Free plan outputs are for personal and evaluation use only; paid plans include commercial use. Scenario Terms v2.1.1 sections 4.3 and 4.5 assign generated output rights subject to terms and user review: https://www.scenario.com/terms-and-conditions. Recheck rights before a commercial release."
+        "evidence": "The waveforms and variation recipe were authored deterministically for this repository without third-party recordings, voices, music, broadcast material, or brand audio. vorbis-encoder-js is a development-only encoder dependency; its package license remains recorded in package-lock.json."
       },
       "runtime": [
         {
-          "path": "assets/textures/metal/painted-metal-v1.webp",
-          "format": "webp",
-          "bytes": 9392,
-          "maxBytes": 50000,
-          "sha256": "8a3ee897045afe19429895dfd72ae1e02e07c0ab14e104c95afee80caaa92c29",
-          "dimensions": {
-            "width": 256,
-            "height": 256
-          },
-          "tiling": {
-            "maxMeanRgbError": 4,
-            "maxPeakRgbError": 20
-          }
+          "path": "assets/audio/gameplay/dribble-01.ogg",
+          "format": "ogg",
+          "bytes": 4333,
+          "maxBytes": 40960,
+          "sha256": "f40bc51d7173bc3ec5f9d959f72715b7015b7089324b1406aca20ae9d0f0f6fb",
+          "durationSeconds": 0.227
+        },
+        {
+          "path": "assets/audio/gameplay/dribble-02.ogg",
+          "format": "ogg",
+          "bytes": 4326,
+          "maxBytes": 40960,
+          "sha256": "d1afde673224236044fff47079e73cef85dbb34235130a54063bfdfe4ebeb796",
+          "durationSeconds": 0.217
+        },
+        {
+          "path": "assets/audio/gameplay/dribble-03.ogg",
+          "format": "ogg",
+          "bytes": 4303,
+          "maxBytes": 40960,
+          "sha256": "2dceb3e21c7b59a0cc24a6b11ee055f656702e9d8339c62cdc4dc71fb17338f8",
+          "durationSeconds": 0.237
         }
       ],
       "validation": {
         "checks": {
-          "sourceVisual": "pass",
-          "opaqueSrgb": "pass",
-          "sourceSeam": "pass",
-          "optimizedVisual": "pass",
-          "tileProof": "pass",
-          "seam": "pass",
-          "compression": "pass",
-          "materialFallback": "pass",
-          "authoredHoopSupportArm": "pass",
-          "desktopGameView": "pass",
-          "touchPortraitView": "pass",
-          "geometryAndGameplayUnchanged": "pass",
+          "originalRights": "pass",
+          "mono": "pass",
+          "sampleRate": "pass",
+          "fileSize": "pass",
+          "leadingSilence": "pass",
+          "noClipping": "pass",
+          "levelConsistency": "pass",
+          "tonalVariation": "pass",
+          "deterministicRebuild": "pass",
+          "loadOnlyAfterStart": "pass",
+          "standingDribbles": "pass",
+          "movingDribbles": "pass",
+          "looseBallImpacts": "pass",
+          "rapidCueCalls": "pass",
+          "intensityResponse": "pass",
+          "desktopStartUnlock": "pass",
+          "touchStartUnlock": "pass",
+          "loadFailureFallback": "pass",
+          "decodeFailureFallback": "pass",
           "assetsCheck": "pass",
           "productionBuild": "pass"
         },
         "measured": {
-          "sourceBytes": 353068,
-          "sourceWidth": 512,
-          "sourceHeight": 512,
-          "sourceEdgeX": 2.809,
-          "sourceEdgeY": 3.314,
-          "sourceInteriorX": 2.436,
-          "sourceInteriorY": 2.458,
-          "sourcePeakRgbEdgeError": 20,
-          "runtimeBytes": 9392,
-          "runtimeWidth": 256,
-          "runtimeHeight": 256,
-          "edgeError": 2.758,
-          "edgeX": 2.559,
-          "edgeY": 2.956,
-          "interiorX": 1.698,
-          "interiorY": 1.69,
-          "nearEdgeX": 1.799,
-          "nearEdgeY": 1.507,
-          "peakRgbEdgeError": 15,
-          "desktopViewport": "1280x720",
+          "runtimeBytes": 12962,
+          "files": 3,
+          "codec": "Ogg Vorbis",
+          "sampleRateHz": 32000,
+          "channels": 1,
+          "decodedDurationsSeconds": "0.227, 0.217, 0.237",
+          "decodedRmsDbfs": "-18.53, -18.35, -18.23",
+          "decodedPeakDbfs": "-4.01, -3.63, -3.37",
+          "leadingSilenceMsBelowMinus60Dbfs": "0.000, 0.031, 0.000",
+          "trailingSilenceMsBelowMinus60Dbfs": "0.000, 5.063, 0.000",
+          "rmsSpreadDb": 0.3,
+          "highestPeakDbfs": -3.37,
+          "byteIdenticalRebuilds": 2,
+          "cooldownMs": 72,
           "touchViewport": "390x844",
-          "authoredHoopUvRepeat": "4x2"
+          "audioUnitTests": 4
         },
-        "notes": "Inspected the Scenario 512-square source, optimized 256-square WebP, and ignored 2 x 2 proof. Joins were not conspicuous; opposite-edge mean RGB differences remain near ordinary adjacent-pixel differences. Inspected the desktop start and active game at 1280 x 720, and start, active and moved views at 390 x 844 with the existing coarse-pointer layout and input branch forced in an ignored local preview. A temporary material probe reported the new WebP on authored hoop support and arm and on the shell trim; their UV repeat was 4 x 2 on the hoop. No obvious aliasing appeared at the inspected gameplay distance; physical-device motion shimmer was not measured. The preview is browser emulation, not a physical touch-device test. No geometry, gameplay coordinates, collision landmarks, lighting, or controls were changed."
+        "notes": "All three committed files decoded successfully as mono 32 kHz in Chromium at native rate and stayed far below the 40 KB ceiling. Browser play checks covered idle standing dribbles, movement input, an early shot followed through its floor impact, finish and reset, desktop button and keyboard start, and a 390x844 coarse-pointer touch harness with start, stick movement, shoot, finish and reset. The touch harness forces the existing coarse-pointer branch and layout; it is not a physical-phone audio test. Unit tests verify no pre-start fetch, three-file rotation, intensity-controlled playback rate and gain, the unchanged 72 ms rapid-call cooldown, and synthesized fallback for both HTTP loading and decode failures. The in-app browser retained its known pointer-lock limitation; no sample-load or decode error appeared during normal runs."
       },
       "integration": {
-        "module": "src/arena.js",
-        "fallback": "The original flat procedural trim, dark-metal and painted-metal materials and the authored shell trim remain visible while loading and on texture failure. The authored hoop keeps its original atlas until the color map loads; only its named support and arm receive a cloned material and remapped copy of the same color map. Board, padding, rim, mounts, net and markings keep their atlas."
+        "module": "src/audio.js",
+        "fallback": "AudioDirector loads the three OGG files only from unlock(), after the game start path has set game.started. Until decoding succeeds, and whenever all requests or decodes fail, bounce(intensity) uses the complete original synthesized bounce with the same cooldown and intensity input."
+      }
+    },
+    {
+      "id": "basketball-rim-impacts-v1",
+      "category": "audio",
+      "status": "accepted",
+      "source": {
+        "type": "local",
+        "prompt": "Three short dry indoor basketball-to-metal-rim impacts in one tonal family: light, medium, and hard. Each is one isolated hit with a sharp attack, compact ball contact, and short inharmonic steel ring. No voices, crowd, music, backboard impact, broadcast ambience, branding, or long reverb.",
+        "negativePrompt": "No voices, crowd, music, backboard or glass impact, arena or broadcast ambience, whistles, shoe squeaks, branding, repeated rhythm, echo, or long reverb tail.",
+        "modelId": null,
+        "modelVersion": null,
+        "settings": {
+          "scenarioDiscovery": {
+            "workflowOrder": "scenario-game-assets first; routed to scenario-audio for the audio generation lane",
+            "teamId": "team_yNLWgjS1fAtTk5MtpGfW7vRy",
+            "projectId": "proj_A12xiMpm5rjCs8EuszXCaqPh",
+            "capability": "txt2audio",
+            "ownedMatchingAudioAssets": 0,
+            "result": "No Scenario generation: every suitable live SFX recommendation required an unavailable paid plan.",
+            "recommendedModels": [
+              {
+                "modelId": "model_elevenlabs-sound-effects-v2",
+                "name": "ElevenLabs Sound Effects 2",
+                "requiredPlan": "Starter",
+                "quotedCostCuPerAsset": 25.5
+              },
+              {
+                "modelId": "model_sonilo-v1-1-text-to-sound-effects",
+                "name": "Sonilo V1.1 Text to SFX",
+                "requiredPlan": "Pro",
+                "quotedCostCuPerAsset": 1
+              },
+              {
+                "modelId": "model_mm-audio-2-t2a",
+                "name": "MM Audio 2 Text-To-Audio (SFX)",
+                "requiredPlan": "Starter",
+                "quotedCostCuPerAsset": 1
+              }
+            ],
+            "scenarioAssetIds": [],
+            "scenarioJobIds": []
+          },
+          "generatorScript": "scripts/build-rim-audio.mjs",
+          "generatorBytes": 5765,
+          "generatorSha256": "e26b824594e21073891b2cf4dd99c64301f5fa6c144bf55bf41a711cb7757dac",
+          "method": "Deterministic modal metal-impact synthesis using a short filtered-noise strike, paired slightly detuned inharmonic rim modes, compact ball-contact body, DC removal, end fade, and unclipped RMS normalization",
+          "sampleRateHz": 32000,
+          "channels": 1,
+          "codec": "Ogg Vorbis",
+          "encoder": "vorbis-encoder-js 1.0.2",
+          "encoderQuality": -0.1,
+          "targetRmsDbfs": -20,
+          "peakCeilingDbfs": -2,
+          "intensitySelection": {
+            "light": "intensity < 0.4",
+            "medium": "0.4 <= intensity < 0.75",
+            "hard": "intensity >= 0.75"
+          },
+          "variants": [
+            {
+              "file": "rim-light-01.ogg",
+              "strength": "light",
+              "seed": 140092026,
+              "sourceDurationSeconds": 0.225,
+              "fundamentalHz": 610,
+              "baseDecayPerSecond": 25,
+              "strikeScale": 0.66
+            },
+            {
+              "file": "rim-medium-01.ogg",
+              "strength": "medium",
+              "seed": 240092026,
+              "sourceDurationSeconds": 0.275,
+              "fundamentalHz": 622,
+              "baseDecayPerSecond": 21,
+              "strikeScale": 0.82
+            },
+            {
+              "file": "rim-hard-01.ogg",
+              "strength": "hard",
+              "seed": 340092026,
+              "sourceDurationSeconds": 0.335,
+              "fundamentalHz": 598,
+              "baseDecayPerSecond": 17.5,
+              "strikeScale": 1
+            }
+          ]
+        },
+        "seed": null,
+        "referenceAssetIds": [],
+        "scenarioAssetId": null,
+        "scenarioJobId": null,
+        "generatedAt": "2026-09-30T05:15:00Z",
+        "optimizationSteps": [
+          "Resolved the only Scenario team/project and recalled its workspace memory, then applied scenario-game-assets before scenario-audio. Searched owned audio and requested current txt2audio recommendations; every suitable SFX model was plan-gated, so no Scenario run or job was created.",
+          "Synthesized three independent mono impacts at 32 kHz from deterministic seeded noise, five paired inharmonic metal modes, and restrained ball-contact components; removed DC, used a sub-millisecond attack and 14 ms end fade, and normalized without a limiter.",
+          "Encoded directly to mono Ogg Vorbis at quality -0.1 with pinned Ogg serial and encoder time seeds, verified byte-identical hashes across two complete rebuilds, and measured the shipped files after native 32 kHz Chromium decode."
+        ],
+        "outputNotes": "Original local audio without recorded or Scenario-generated source material. Model, asset, and job IDs are null because the live suitable models required Starter or Pro and were not runnable in this Free-plan project. No PCM intermediate is committed."
+      },
+      "license": {
+        "name": "Original locally authored TheArena audio",
+        "url": null,
+        "commercialUse": true,
+        "attribution": null,
+        "evidence": "The waveforms, strike, modal family, variations, and deterministic generator were authored for this repository without third-party recordings, voices, music, broadcast material, brand audio, or Scenario output. vorbis-encoder-js is a development-only encoder dependency recorded in package-lock.json."
+      },
+      "runtime": [
+        {
+          "path": "assets/audio/gameplay/rim-light-01.ogg",
+          "format": "ogg",
+          "bytes": 4238,
+          "maxBytes": 40960,
+          "sha256": "1f71c4f4da867e21f07cdcfcc7ae4f089d56a56773e8753465af990898d4c693",
+          "durationSeconds": 0.217
+        },
+        {
+          "path": "assets/audio/gameplay/rim-medium-01.ogg",
+          "format": "ogg",
+          "bytes": 4301,
+          "maxBytes": 40960,
+          "sha256": "6cc9219057ffd029e5b26f03b09e96928ecd59295596bfcd89d081605a28c950",
+          "durationSeconds": 0.267
+        },
+        {
+          "path": "assets/audio/gameplay/rim-hard-01.ogg",
+          "format": "ogg",
+          "bytes": 4365,
+          "maxBytes": 40960,
+          "sha256": "f2b9d27f5fdf8f43644a4860e65e373f35cfcd550c2c08d83799747cb39211a4",
+          "durationSeconds": 0.327
+        }
+      ],
+      "validation": {
+        "checks": {
+          "originalRights": "pass",
+          "mono": "pass",
+          "sampleRate": "pass",
+          "fileSize": "pass",
+          "leadingSilence": "pass",
+          "noClipping": "pass",
+          "levelConsistency": "pass",
+          "tonalFamily": "pass",
+          "strengthVariation": "pass",
+          "deterministicRebuild": "pass",
+          "loadOnlyAfterStart": "pass",
+          "ordinaryRimCollisions": "pass",
+          "hardImpacts": "pass",
+          "dunks": "pass",
+          "repeatedContacts": "pass",
+          "intensityResponse": "pass",
+          "desktopStartUnlock": "pass",
+          "touchStartUnlock": "pass",
+          "loadFailureFallback": "pass",
+          "decodeFailureFallback": "pass",
+          "dunkAndCollisionCallSitesUnchanged": "pass",
+          "assetsCheck": "pass",
+          "productionBuild": "pass"
+        },
+        "measured": {
+          "runtimeBytes": 12904,
+          "files": 3,
+          "codec": "Ogg Vorbis",
+          "sampleRateHz": 32000,
+          "channels": 1,
+          "decodedDurationsSeconds": "0.217, 0.267, 0.327",
+          "decodedRmsDbfs": "-20.10, -19.96, -20.03",
+          "decodedPeakDbfs": "-2.96, -2.27, -2.01",
+          "clippedSamples": "0, 0, 0",
+          "leadingSilenceMsBelowMinus60Dbfs": "0.000, 0.000, 0.000",
+          "trailingSilenceMsBelowMinus60Dbfs": "0.688, 0.125, 0.063",
+          "rmsSpreadDb": 0.14,
+          "highestPeakDbfs": -2.01,
+          "byteIdenticalRebuilds": 2,
+          "cooldownMs": 95,
+          "desktopViewport": "1280x720",
+          "touchViewport": "390x844 emulated",
+          "audioUnitTests": 9
+        },
+        "notes": "All three committed files decoded successfully as mono 32 kHz in Chromium at native rate and remained far below the 40 KB ceiling. A browser runtime harness reached a running AudioContext with three decoded variants and accepted ordinary collision (0.28), hard impact (1.0), and dunk (0.92) calls; an immediate repeated pair returned true then false under the unchanged cooldown. Desktop game start was exercised at 1280x720. A 390x844 forced-coarse-pointer touch harness exercised start, finish, shoot, and reset, while a touch-sized audio harness independently confirmed all three decodes; these are browser emulations, not a physical-phone test. Unit tests cover deferred loading, light/medium/hard selection, continuous gain response, cooldown, HTTP/decode fallback, and the unchanged main.js collision and dunk call sites."
+      },
+      "integration": {
+        "module": "src/audio.js",
+        "fallback": "AudioDirector starts the three rim fetch/decode operations only inside unlock(). rim(intensity) uses the nearest decoded light, medium, or hard buffer when available; while loading, when all requests/decodes fail, or before any buffer is ready, it uses the complete original synthesized rim with the same 95 ms cooldown. src/main.js remains unchanged."
+      }
+    },
+    {
+      "id": "basketball-backboard-impacts-v1",
+      "category": "audio",
+      "status": "accepted",
+      "source": {
+        "type": "local",
+        "prompt": "Three short compact basketball-to-tempered-glass backboard impacts in one tonal family: soft, medium, and hard. Each is one isolated contact with a tight transient, flat low-mid panel body, light high-frequency glass and mounting-hardware rattle, and a very short indoor tail. No rim ring, crowd, speech, music, branding, or broadcast ambience.",
+        "negativePrompt": "No metal rim ring, net sound, crowd, speech, music, whistles, branding, broadcast ambience, repeated rhythm, glass breaking, shards, echo, or long reverb tail.",
+        "modelId": null,
+        "modelVersion": null,
+        "settings": {
+          "scenarioDiscovery": {
+            "workflowOrder": "scenario-game-assets first; routed to scenario-audio for the audio generation lane",
+            "teamId": "team_yNLWgjS1fAtTk5MtpGfW7vRy",
+            "projectId": "proj_A12xiMpm5rjCs8EuszXCaqPh",
+            "capability": "txt2audio",
+            "ownedMatchingAudioAssets": 0,
+            "result": "No Scenario generation: every suitable live SFX recommendation required an unavailable paid plan.",
+            "recommendedModels": [
+              {
+                "modelId": "model_elevenlabs-sound-effects-v2",
+                "name": "ElevenLabs Sound Effects 2",
+                "requiredPlan": "Starter",
+                "quotedCostCuPerAsset": 25.5
+              },
+              {
+                "modelId": "model_sonilo-v1-1-text-to-sound-effects",
+                "name": "Sonilo V1.1 Text to SFX",
+                "requiredPlan": "Pro",
+                "quotedCostCuPerAsset": 1
+              },
+              {
+                "modelId": "model_mm-audio-2-t2a",
+                "name": "MM Audio 2 Text-To-Audio (SFX)",
+                "requiredPlan": "Starter",
+                "quotedCostCuPerAsset": 1
+              }
+            ],
+            "scenarioAssetIds": [],
+            "scenarioJobIds": []
+          },
+          "generatorScript": "scripts/build-backboard-audio.mjs",
+          "generatorBytes": 5839,
+          "generatorSha256": "279d85e67072a8a2740a922a18abda0ced3d2f07aca70ded0367ab3a327f0382",
+          "method": "Deterministic tempered-glass panel synthesis using four rapidly damped low-mid modes, a broad flat strike, differentiated high-frequency noise rattle, a short hardware tick, one restrained 15 ms reflection, DC removal, end fade, and unclipped RMS normalization",
+          "sampleRateHz": 32000,
+          "channels": 1,
+          "codec": "Ogg Vorbis",
+          "encoder": "vorbis-encoder-js 1.0.2",
+          "encoderQuality": -0.1,
+          "targetRmsDbfs": -21,
+          "peakCeilingDbfs": -2,
+          "intensitySelection": {
+            "soft": "intensity < 0.45",
+            "medium": "0.45 <= intensity < 0.78",
+            "hard": "intensity >= 0.78"
+          },
+          "variants": [
+            {
+              "file": "backboard-soft-01.ogg",
+              "strength": "soft",
+              "seed": 150092026,
+              "sourceDurationSeconds": 0.17,
+              "panelFrequencyHz": 246,
+              "panelDecayPerSecond": 35,
+              "strikeScale": 0.62,
+              "rattleScale": 0.16
+            },
+            {
+              "file": "backboard-medium-01.ogg",
+              "strength": "medium",
+              "seed": 250092026,
+              "sourceDurationSeconds": 0.205,
+              "panelFrequencyHz": 258,
+              "panelDecayPerSecond": 31,
+              "strikeScale": 0.82,
+              "rattleScale": 0.21
+            },
+            {
+              "file": "backboard-hard-01.ogg",
+              "strength": "hard",
+              "seed": 350092026,
+              "sourceDurationSeconds": 0.245,
+              "panelFrequencyHz": 238,
+              "panelDecayPerSecond": 27,
+              "strikeScale": 1,
+              "rattleScale": 0.27
+            }
+          ]
+        },
+        "seed": null,
+        "referenceAssetIds": [],
+        "scenarioAssetId": null,
+        "scenarioJobId": null,
+        "generatedAt": "2026-09-30T05:03:00Z",
+        "optimizationSteps": [
+          "Resolved the only Scenario team/project and recalled its workspace memory, then applied scenario-game-assets before scenario-audio. Searched owned audio and requested current txt2audio recommendations; every suitable SFX model was plan-gated, so no Scenario run or job was created.",
+          "Synthesized three independent mono panel impacts at 32 kHz from deterministic seeded oscillators and filtered noise; removed DC, used a sub-millisecond attack and 12 ms end fade, and normalized each full source toward -21 dBFS RMS without a limiter.",
+          "Encoded directly to mono Ogg Vorbis at quality -0.1 with pinned Ogg serial and encoder time seeds, verified byte-identical hashes across two complete rebuilds, and measured the shipped files after native 32 kHz Chromium decode."
+        ],
+        "outputNotes": "Original local audio without recorded or Scenario-generated source material. Model, asset, and job IDs are null because the live suitable models required Starter or Pro and were not runnable in this Free-plan project. No PCM intermediate is committed."
+      },
+      "license": {
+        "name": "Original locally authored TheArena audio",
+        "url": null,
+        "commercialUse": true,
+        "attribution": null,
+        "evidence": "The panel body, strike, rattle, short reflection, variations, and deterministic generator were authored for this repository without third-party recordings, voices, music, broadcast material, brand audio, or Scenario output. vorbis-encoder-js is a development-only encoder dependency recorded in package-lock.json."
+      },
+      "runtime": [
+        {
+          "path": "assets/audio/gameplay/backboard-soft-01.ogg",
+          "format": "ogg",
+          "bytes": 4299,
+          "maxBytes": 40960,
+          "sha256": "57e7deb79b07eaaf6410557313910363419b3efb5d4d93b99c751cb62824c49a",
+          "durationSeconds": 0.162
+        },
+        {
+          "path": "assets/audio/gameplay/backboard-medium-01.ogg",
+          "format": "ogg",
+          "bytes": 4375,
+          "maxBytes": 40960,
+          "sha256": "e123fab9fb1484e5b19c99b34313e6446a1f2ca735742fe21f461107d9635f92",
+          "durationSeconds": 0.197
+        },
+        {
+          "path": "assets/audio/gameplay/backboard-hard-01.ogg",
+          "format": "ogg",
+          "bytes": 4370,
+          "maxBytes": 40960,
+          "sha256": "5bbbacb5a4e97dd043b748de9b26ab1b80dc33cf7780770cd82c2ffee32fb8b3",
+          "durationSeconds": 0.237
+        }
+      ],
+      "validation": {
+        "checks": {
+          "originalRights": "pass",
+          "mono": "pass",
+          "sampleRate": "pass",
+          "fileSize": "pass",
+          "tightTransient": "pass",
+          "leadingSilence": "pass",
+          "noClipping": "pass",
+          "levelConsistency": "pass",
+          "tonalFamily": "pass",
+          "strengthVariation": "pass",
+          "deterministicRebuild": "pass",
+          "loadOnlyAfterStart": "pass",
+          "softContacts": "pass",
+          "hardContacts": "pass",
+          "repeatedCollisionProtection": "pass",
+          "intensityResponse": "pass",
+          "desktopStartUnlock": "pass",
+          "touchStartUnlock": "pass",
+          "loadFailureFallback": "pass",
+          "decodeFailureFallback": "pass",
+          "backboardCollisionCallSiteUnchanged": "pass",
+          "assetsCheck": "pass",
+          "productionBuild": "pass"
+        },
+        "measured": {
+          "runtimeBytes": 13044,
+          "files": 3,
+          "codec": "Ogg Vorbis",
+          "sampleRateHz": 32000,
+          "channels": 1,
+          "decodedDurationsSeconds": "0.162, 0.197, 0.237",
+          "decodedRmsDbfs": "-20.78, -20.75, -20.84",
+          "decodedPeakDbfs": "-3.08, -1.11, -2.59",
+          "clippedSamples": "0, 0, 0",
+          "leadingSilenceMsBelowMinus60Dbfs": "0.000, 0.000, 0.000",
+          "trailingSilenceMsBelowMinus60Dbfs": "1.813, 0.000, 15.844",
+          "rmsSpreadDb": 0.09,
+          "highestPeakDbfs": -1.11,
+          "byteIdenticalRebuilds": 2,
+          "cooldownMs": 110,
+          "desktopViewport": "1280x720",
+          "touchViewport": "390x844 emulated",
+          "audioUnitTests": 14
+        },
+        "notes": "All three committed files decoded successfully as mono 32 kHz in Chromium at native rate and remained far below the 40 KB ceiling. A browser runtime harness reached a running AudioContext with three decoded variants and accepted soft (0.2) and hard (1.0) calls; an immediate repeated pair returned true then false under the unchanged cooldown. Desktop game start was exercised at 1280x720. A 390x844 forced-coarse-pointer touch harness exercised start, finish, and reset, while a touch-sized audio harness independently confirmed all three decodes; these are browser emulations, not a physical-phone test. Unit tests cover deferred loading, soft/medium/hard selection, continuous gain response, cooldown, HTTP/decode fallback, and the unchanged main.js collision response and intensity call."
+      },
+      "integration": {
+        "module": "src/audio.js",
+        "fallback": "AudioDirector starts the three backboard fetch/decode operations only inside unlock(). backboard(intensity) uses the nearest decoded soft, medium, or hard buffer when available; while loading, when all requests/decodes fail, or before any buffer is ready, it uses the complete original synthesized backboard with the same 110 ms cooldown. src/main.js remains unchanged."
+      }
+    },
+    {
+      "id": "basketball-shoe-squeaks-v1",
+      "category": "audio",
+      "status": "accepted",
+      "source": {
+        "type": "local",
+        "prompt": "Three short dry basketball sneaker sounds on polished indoor hardwood in one tonal family: a compact rising rubber chirp, a compact falling rubber chirp, and a brief lateral skid. Keep the friction clear but comfortable on phone speakers, with no room tail.",
+        "negativePrompt": "No footsteps, heel strikes, speech, whistles, crowd, music, branding, broadcast ambience, rhythmic loop, harsh ultrasonic fizz, echo, or long reverb.",
+        "modelId": null,
+        "modelVersion": null,
+        "settings": {
+          "scenarioDiscovery": {
+            "workflowOrder": "scenario-game-assets first; routed to scenario-audio for the audio generation lane",
+            "teamId": "team_yNLWgjS1fAtTk5MtpGfW7vRy",
+            "projectId": "proj_A12xiMpm5rjCs8EuszXCaqPh",
+            "capability": "txt2audio",
+            "ownedMatchingAudioAssets": 0,
+            "result": "No Scenario generation: every suitable live SFX recommendation required an unavailable paid plan.",
+            "recommendedModels": [
+              {
+                "modelId": "model_elevenlabs-sound-effects-v2",
+                "name": "ElevenLabs Sound Effects 2",
+                "requiredPlan": "Starter",
+                "quotedCostCuPerAsset": 25.5
+              },
+              {
+                "modelId": "model_mm-audio-2-t2a",
+                "name": "MM Audio 2 Text-To-Audio (SFX)",
+                "requiredPlan": "Starter",
+                "quotedCostCuPerAsset": 1
+              },
+              {
+                "modelId": "model_sonilo-v1-1-text-to-sound-effects",
+                "name": "Sonilo V1.1 Text to SFX",
+                "requiredPlan": "Pro",
+                "quotedCostCuPerAsset": 1
+              }
+            ],
+            "scenarioAssetIds": [],
+            "scenarioJobIds": []
+          },
+          "generatorScript": "scripts/build-shoe-audio.mjs",
+          "generatorBytes": 6056,
+          "generatorSha256": "6925a78b1ebd91cdb7ac8f3c611c31def746f4a02b1fd77db82c310ed7ffd72b",
+          "method": "Deterministic rubber-friction synthesis using shaped chirped partials, band-limited seeded noise, asymmetric flutter, a restrained sole-release component, DC removal, a 14 ms end fade, and unclipped RMS normalization",
+          "sampleRateHz": 32000,
+          "channels": 1,
+          "codec": "Ogg Vorbis",
+          "encoder": "vorbis-encoder-js 1.0.2",
+          "encoderQuality": -0.1,
+          "targetRmsDbfs": -22.5,
+          "peakCeilingDbfs": -3.5,
+          "runtimeGain": "0.3 + intensity * 0.62",
+          "runtimePlaybackRate": "0.96 + intensity * 0.08",
+          "runtimeCadenceMs": "clamp(260 - intensity * 110 + rotating variation [0, 14, -8], 170, 235)",
+          "variants": [
+            {
+              "file": "shoe-squeak-01.ogg",
+              "kind": "short rising chirp",
+              "seed": 160092026,
+              "sourceDurationSeconds": 0.125,
+              "startFrequencyHz": 2280,
+              "endFrequencyHz": 3420,
+              "toneScale": 0.78,
+              "frictionScale": 0.32
+            },
+            {
+              "file": "shoe-squeak-02.ogg",
+              "kind": "short falling chirp",
+              "seed": 260092026,
+              "sourceDurationSeconds": 0.15,
+              "startFrequencyHz": 3260,
+              "endFrequencyHz": 2440,
+              "toneScale": 0.7,
+              "frictionScale": 0.38
+            },
+            {
+              "file": "shoe-skid-01.ogg",
+              "kind": "brief lateral skid",
+              "seed": 360092026,
+              "sourceDurationSeconds": 0.205,
+              "startFrequencyHz": 2140,
+              "endFrequencyHz": 2740,
+              "toneScale": 0.52,
+              "frictionScale": 0.56
+            }
+          ]
+        },
+        "seed": null,
+        "referenceAssetIds": [],
+        "scenarioAssetId": null,
+        "scenarioJobId": null,
+        "generatedAt": "2026-09-30T05:23:30Z",
+        "optimizationSteps": [
+          "Resolved the only Scenario team/project and recalled its workspace memory, then applied scenario-game-assets before scenario-audio. Searched owned audio and requested current txt2audio recommendations; every suitable SFX model was plan-gated, so no Scenario run or job was created.",
+          "Synthesized three independent mono shoe-friction cues at 32 kHz from seeded chirps and noise explicitly low-passed at 6.2 kHz, removed DC, applied a tight attack and end fade, and normalized each source toward -22.5 dBFS RMS without a limiter.",
+          "Encoded directly to mono Ogg Vorbis at quality -0.1 with pinned Ogg serial and encoder time seeds, verified byte-identical hashes across two complete rebuilds, and measured the shipped files after native 32 kHz Chromium decode."
+        ],
+        "outputNotes": "Original local audio without recorded or Scenario-generated source material. Model, asset, and job IDs are null because the live suitable models required Starter or Pro and were not runnable in this Free-plan project. No PCM intermediate is committed."
+      },
+      "license": {
+        "name": "Original locally authored TheArena audio",
+        "url": null,
+        "commercialUse": true,
+        "attribution": null,
+        "evidence": "The rubber chirps, friction noise, lateral skid, variations, and deterministic generator were authored for this repository without third-party recordings, voices, music, broadcast material, brand audio, or Scenario output. vorbis-encoder-js is a development-only encoder dependency recorded in package-lock.json."
+      },
+      "runtime": [
+        {
+          "path": "assets/audio/gameplay/shoe-squeak-01.ogg",
+          "format": "ogg",
+          "bytes": 4436,
+          "maxBytes": 40960,
+          "sha256": "32ccc35ac346c9fa3ddc78e554da1bbbf2d05c85d5eb1ef4ea38d85fa61ac5f0",
+          "durationSeconds": 0.117
+        },
+        {
+          "path": "assets/audio/gameplay/shoe-squeak-02.ogg",
+          "format": "ogg",
+          "bytes": 4515,
+          "maxBytes": 40960,
+          "sha256": "a421c2222b5d708e762dbbc2bcea90fd52746f5991693a950292a0995fc7c7d7",
+          "durationSeconds": 0.142
+        },
+        {
+          "path": "assets/audio/gameplay/shoe-skid-01.ogg",
+          "format": "ogg",
+          "bytes": 4815,
+          "maxBytes": 40960,
+          "sha256": "cd81f571c2255ad679e5e428aa4b4ded30f6417a6211766b5b94387f757fdfb6",
+          "durationSeconds": 0.197
+        }
+      ],
+      "validation": {
+        "checks": {
+          "originalRights": "pass",
+          "mono": "pass",
+          "sampleRate": "pass",
+          "fileSize": "pass",
+          "shortDuration": "pass",
+          "leadingSilence": "pass",
+          "noClipping": "pass",
+          "levelConsistency": "pass",
+          "controlledHighFrequencies": "pass",
+          "variation": "pass",
+          "deterministicRebuild": "pass",
+          "loadOnlyAfterStart": "pass",
+          "walking": "pass",
+          "sprinting": "pass",
+          "directionChanges": "pass",
+          "rapidRepetitionProtection": "pass",
+          "intensityResponse": "pass",
+          "desktopStartUnlock": "pass",
+          "touchStartUnlock": "pass",
+          "phoneSpeakerBandpass": "pass",
+          "loadFailureFallback": "pass",
+          "decodeFailureFallback": "pass",
+          "movementCallSiteUnchanged": "pass",
+          "assetsCheck": "pass",
+          "productionBuild": "pass"
+        },
+        "measured": {
+          "runtimeBytes": 13766,
+          "files": 3,
+          "codec": "Ogg Vorbis",
+          "sampleRateHz": 32000,
+          "channels": 1,
+          "decodedDurationsSeconds": "0.117, 0.142, 0.197",
+          "decodedRmsDbfs": "-21.63, -22.33, -22.30",
+          "decodedPeakDbfs": "-9.67, -9.94, -9.99",
+          "clippedSamples": "0, 0, 0",
+          "leadingSilenceMsBelowMinus60Dbfs": "0.000, 0.000, 0.000",
+          "trailingSilenceMsBelowMinus60Dbfs": "0.000, 0.000, 0.000",
+          "rmsSpreadDb": 0.7,
+          "highestPeakDbfs": -9.67,
+          "phoneBandpassHz": "260 high-pass, 6800 low-pass, 0.5 gain",
+          "phoneBandRmsDbfs": "-27.10, -27.56, -27.83",
+          "phoneBandPeakDbfs": "-15.13, -14.36, -16.06",
+          "phoneBandClippedSamples": "0, 0, 0",
+          "byteIdenticalRebuilds": 2,
+          "cooldownMs": 58,
+          "cadenceRangeMs": "170-235",
+          "desktopViewport": "1280x720",
+          "touchViewport": "390x844 emulated",
+          "audioUnitTests": 19
+        },
+        "notes": "All three committed files decoded successfully as mono 32 kHz in Chromium at native rate and remained far below the 40 KB ceiling. A browser harness reached a running AudioContext with three decoded variants and accepted walking, sprinting, and direction-change intensity calls; an immediate repeated call returned false under the new cadence gate while the original 58 ms cooldown remained configured. Offline phone-speaker emulation at 260-6800 Hz produced zero clipping and peaks no higher than -14.36 dBFS. Desktop game start and keyboard walking, sprint, and alternating direction inputs were exercised at 1280x720. A 390x844 browser pass exercised game start and independently confirmed audio unlock, all three decodes, cadence, and phone-band playback; it is touch-sized browser emulation, not a physical-phone speaker or touch-hardware test. Unit tests cover deferred loading, variant rotation, intensity response, cadence, the unchanged cooldown, HTTP/decode fallback, and the unchanged main.js movement call site."
+      },
+      "integration": {
+        "module": "src/audio.js",
+        "fallback": "AudioDirector starts the three shoe fetch/decode operations only inside unlock(). shoe(intensity) rotates decoded chirp/chirp/skid buffers with continuous gain and playback-rate response plus a 170-235 ms cadence guard; the existing 58 ms cue cooldown remains in place. While loading or when all requests/decodes fail, it uses the complete original synthesized shoe cue. src/main.js remains unchanged."
       }
     },
     {
@@ -765,6 +1387,226 @@
       }
     },
     {
+      "id": "painted-metal-v1",
+      "category": "texture",
+      "status": "accepted",
+      "source": {
+        "type": "scenario",
+        "prompt": "A single seamless tileable base-color texture swatch for dark painted structural steel in a stylized PS2-era indoor basketball arena. Flat front-on material surface, no object or geometry. Deep charcoal and muted black-purple paint with broad low-frequency eggplant-violet tonal variation, soft baked-looking grime, gentle irregular worn patches and very sparse small chipped paint flecks revealing dark graphite steel. Restrained fine pores; almost no sharp high-frequency speckle. Matte to satin appearance with subdued painted reflections represented only by color, no bright glints. Visually calm at gameplay distance, practical when repeated across basket support arms, structural trim, and metal posts. Seamless in both axes with matching tone and pattern at all edges. Uniform ambient illumination and opaque sRGB color, no directional shading. No logos, text, labels, graffiti, symbols, bolts, rivets, panel seams, welds, objects, scene, perspective, cast shadows, photographic glare, or specular highlights.",
+        "negativePrompt": null,
+        "modelId": "model_scenario-texture",
+        "modelVersion": null,
+        "settings": {
+          "width": 512,
+          "height": 512,
+          "quality": "medium",
+          "eraseSeam": true,
+          "overlap": 64,
+          "featherRadius": 32,
+          "quotedCostCU": 12,
+          "teamId": "team_yNLWgjS1fAtTk5MtpGfW7vRy",
+          "projectId": "proj_A12xiMpm5rjCs8EuszXCaqPh"
+        },
+        "seed": null,
+        "referenceAssetIds": [],
+        "scenarioAssetId": "asset_VE7dSe99xaL43fNPLkvV1ShE",
+        "scenarioJobId": "job_TB2LfejS7ngrPt5hfjhhAhHC",
+        "generatedAt": "2026-09-30T04:33:36.690Z",
+        "optimizationSteps": [
+          "Downloaded the opaque 512 x 512 sRGB PNG source into ignored .tmp/metal staging.",
+          "Downsampled to 256 x 256 with Sharp Lanczos3; no seam repainting or color adjustment.",
+          "Encoded WebP candidates with npm run assets:optimize:texture at qualities 76, 88, and 95 using Sharp effort 6; selected quality 95 to preserve broad wear and keep opposite-edge differences closest to neighboring-pixel variation.",
+          "Copied only the selected WebP into public/assets/textures/metal; kept the raw source, rejected candidates, and 2 x 2 proof images outside the tracked assets."
+        ],
+        "outputNotes": "One opaque sRGB base-color map only; no normal, roughness, metalness, or height map. Scenario source PNG is 353,068 bytes with SHA-256 fa1c0b57bef1b0ca7a652af5364791db39dc193400d4fdc33ceead450cf0cc8c. No reference images or seed were supplied or exposed. Filed in TheArena Scenario collection col_rgcLMCsPgwXnr25W3vjnkpNi."
+      },
+      "license": {
+        "name": "Scenario Free Tier output for personal and noncommercial evaluation",
+        "url": "https://www.scenario.com/pricing",
+        "commercialUse": false,
+        "attribution": null,
+        "evidence": "Scenario pricing checked 2026-09-29 says Free plan outputs are for personal and evaluation use only; paid plans include commercial use. Scenario Terms v2.1.1 sections 4.3 and 4.5 assign generated output rights subject to terms and user review: https://www.scenario.com/terms-and-conditions. Recheck rights before a commercial release."
+      },
+      "runtime": [
+        {
+          "path": "assets/textures/metal/painted-metal-v1.webp",
+          "format": "webp",
+          "bytes": 9392,
+          "maxBytes": 50000,
+          "sha256": "8a3ee897045afe19429895dfd72ae1e02e07c0ab14e104c95afee80caaa92c29",
+          "dimensions": {
+            "width": 256,
+            "height": 256
+          },
+          "tiling": {
+            "maxMeanRgbError": 4,
+            "maxPeakRgbError": 20
+          }
+        }
+      ],
+      "validation": {
+        "checks": {
+          "sourceVisual": "pass",
+          "opaqueSrgb": "pass",
+          "sourceSeam": "pass",
+          "optimizedVisual": "pass",
+          "tileProof": "pass",
+          "seam": "pass",
+          "compression": "pass",
+          "materialFallback": "pass",
+          "authoredHoopSupportArm": "pass",
+          "desktopGameView": "pass",
+          "touchPortraitView": "pass",
+          "geometryAndGameplayUnchanged": "pass",
+          "assetsCheck": "pass",
+          "productionBuild": "pass"
+        },
+        "measured": {
+          "sourceBytes": 353068,
+          "sourceWidth": 512,
+          "sourceHeight": 512,
+          "sourceEdgeX": 2.809,
+          "sourceEdgeY": 3.314,
+          "sourceInteriorX": 2.436,
+          "sourceInteriorY": 2.458,
+          "sourcePeakRgbEdgeError": 20,
+          "runtimeBytes": 9392,
+          "runtimeWidth": 256,
+          "runtimeHeight": 256,
+          "edgeError": 2.758,
+          "edgeX": 2.559,
+          "edgeY": 2.956,
+          "interiorX": 1.698,
+          "interiorY": 1.69,
+          "nearEdgeX": 1.799,
+          "nearEdgeY": 1.507,
+          "peakRgbEdgeError": 15,
+          "desktopViewport": "1280x720",
+          "touchViewport": "390x844",
+          "authoredHoopUvRepeat": "4x2"
+        },
+        "notes": "Inspected the Scenario 512-square source, optimized 256-square WebP, and ignored 2 x 2 proof. Joins were not conspicuous; opposite-edge mean RGB differences remain near ordinary adjacent-pixel differences. Inspected the desktop start and active game at 1280 x 720, and start, active and moved views at 390 x 844 with the existing coarse-pointer layout and input branch forced in an ignored local preview. A temporary material probe reported the new WebP on authored hoop support and arm and on the shell trim; their UV repeat was 4 x 2 on the hoop. No obvious aliasing appeared at the inspected gameplay distance; physical-device motion shimmer was not measured. The preview is browser emulation, not a physical touch-device test. No geometry, gameplay coordinates, collision landmarks, lighting, or controls were changed."
+      },
+      "integration": {
+        "module": "src/arena.js",
+        "fallback": "The original flat procedural trim, dark-metal and painted-metal materials and the authored shell trim remain visible while loading and on texture failure. The authored hoop keeps its original atlas until the color map loads; only its named support and arm receive a cloned material and remapped copy of the same color map. Board, padding, rim, mounts, net and markings keep their atlas."
+      }
+    },
+    {
+      "id": "fictional-player-v2",
+      "category": "model",
+      "status": "accepted",
+      "source": {
+        "type": "third-party",
+        "prompt": "Generate exactly ONE complete game-ready basketball player from this single front-view T-pose reference. The input contains one person. Create one body only: no duplicates, extra figures, turnaround board. Preserve the character’s dark brown skin, short black hair, lean long-limbed athletic build, broad shoulders, large hands, and oversized high-top shoes. Use connected natural anatomy with clean shoulders, elbows, wrists, hips, knees, and ankles. Keep a symmetrical T-pose with straight horizontal arms, palms down, separated fingers, straight legs, and parallel feet. Match the original fictional uniform: deep muted-purple loose jersey and baggy knee-length shorts, cream piping, cream angular side panels, small broken-square chest emblem, and cream number 07. Use cream socks and chunky cream shoes with purple panels and dark soles. Style it like a 2004 PS2 basketball-game player: smooth-shaded economical geometry, strong readable silhouette.",
+        "negativePrompt": null,
+        "modelId": "Tripo H3.1",
+        "modelVersion": "H3.1",
+        "settings": {
+          "observed": {
+            "textureResolution": 2048,
+            "topology": "triangles",
+            "faces": 4704
+          },
+          "requested": {
+            "ultraMeshQuality": false,
+            "texture": true,
+            "textureQuality": "2K",
+            "removeLighting": true,
+            "pbr": false,
+            "topology": "triangle",
+            "polycount": 5000
+          },
+          "note": "Requested settings were supplied to user; complete generation-job settings and seed unavailable.",
+          "tripoAssetId": "fb35316e-7853-4934-811f-9236bf0ef04b",
+          "tripoJobId": null,
+          "source": {
+            "bytes": 894440,
+            "sha256": "9974eb81e5c8710384c86de38ab885f202a0d0b08e4bdeaca79c5a0a4f9051a1"
+          },
+          "releaseAuthorization": "User requested GitHub Pages publication on 2026-09-30 to play from work after rendered and local in-game previews."
+        },
+        "seed": null,
+        "referenceAssetIds": [],
+        "scenarioAssetId": null,
+        "scenarioJobId": null,
+        "generatedAt": null,
+        "optimizationSteps": [
+          "Live Blender MCP import and silhouette pass; 2.05m scale and floor origin.",
+          "Resize embedded color atlas from 2048 to 512; one rough nonmetal material.",
+          "Rotate forward to game -Z and rebuild all 17 bind axes as translation-only glTF frames.",
+          "Move shoulder/elbow/wrist joints onto actual mesh; revise shoulder, neck and wrist skin weights with two influences maximum.",
+          "Adapt T-pose hand orientation and ball anchors; use candidate-specific reachable idle and finish targets.",
+          "Export selected mesh and rig only from live Blender; retain raw and working files outside runtime assets."
+        ],
+        "outputNotes": "Tripo Studio export optimized and rigged through live Blender MCP. Unknown job/seed/reference IDs remain null or empty. Generated fingers and angular elbows remain visible close-up."
+      },
+      "license": {
+        "name": "Tripo Studio Pro generated output",
+        "url": "https://www.tripo3d.ai/help/privacy-policy/how-to-use-tripo-models-commercially",
+        "commercialUse": true,
+        "attribution": null,
+        "evidence": "User states generation used Tripo Studio Pro; paid output rights include modification, distribution and commercial game use, subject to input rights. Original fictional reference reported in conversation; historical sports screenshots used for general era inspiration only. Checked 2026-09-30."
+      },
+      "runtime": [
+        {
+          "path": "assets/models/player/fictional-player-v2.glb",
+          "format": "glb",
+          "bytes": 582124,
+          "maxBytes": 800000,
+          "sha256": "af5fba2627efdad63d5c7e8e14fd10aad43fc364987e57ddcdf4e910a1368ced",
+          "triangles": 4704
+        }
+      ],
+      "validation": {
+        "checks": {
+          "bindPose": "pass",
+          "deformation": "pass",
+          "scaleOrientation": "pass",
+          "rootMotion": "pass",
+          "idle": "pass",
+          "move": "pass",
+          "shoot": "pass",
+          "layup": "pass",
+          "dunk": "pass",
+          "handAnchors": "pass",
+          "ballAttachment": "pass",
+          "desktop": "pass",
+          "touch": "pass",
+          "loadFailureFallback": "pass",
+          "invalidRigFallback": "pass",
+          "gameView": "pass",
+          "assetsCheck": "pass",
+          "productionBuild": "pass"
+        },
+        "measured": {
+          "downloadBytes": 582124,
+          "triangles": 4704,
+          "vertices": 3265,
+          "materials": 1,
+          "bones": 17,
+          "maximumBoneInfluences": 2,
+          "atlasWidth": 512,
+          "atlasHeight": 512,
+          "animationClips": 0,
+          "bindHeightMeters": 2.05,
+          "upAxis": "Y",
+          "forwardAxis": "-Z",
+          "sampledPoses": 305,
+          "maxGatherErrorMeters": 7.28550816809042e-16,
+          "maxDunkGripErrorMeters": 8.627699134216878e-16,
+          "minGameFloorMeters": -0.0035000360134869153,
+          "desktopHandlerChecks": 19,
+          "touchHandlerChecks": 18
+        },
+        "notes": "Rendered Blender action poses and inspected desktop/phone-sized game captures. Browser handler tests use synthetic keyboard/pointer events and forced touch layout at 390x844; physical phone remains untested. User authorized publication for remote play after previews. Scale and action adapter corrected after initial rig failure; final source hash recorded."
+      },
+      "integration": {
+        "module": "src/player.js",
+        "fallback": "Original procedural player remains functional during loading and on load, rig or budget validation failure. Game code retains root movement and ball physics."
+      }
+    },
+    {
       "id": "uniform-fabric-v1",
       "category": "texture",
       "status": "accepted",
@@ -894,120 +1736,6 @@
       "integration": {
         "module": "src/player.js",
         "fallback": "Accepted asset for future cream jersey and shorts fabric regions in the player's authored texture atlas, separate from skin, trim and markings. There is no runtime binding in this pass. The existing procedural materials and the authored player atlas continue to supply the current appearance."
-      }
-    },
-    {
-      "id": "fictional-player-v2",
-      "category": "model",
-      "status": "accepted",
-      "source": {
-        "type": "third-party",
-        "prompt": "Generate exactly ONE complete game-ready basketball player from this single front-view T-pose reference. The input contains one person. Create one body only: no duplicates, extra figures, turnaround board. Preserve the character’s dark brown skin, short black hair, lean long-limbed athletic build, broad shoulders, large hands, and oversized high-top shoes. Use connected natural anatomy with clean shoulders, elbows, wrists, hips, knees, and ankles. Keep a symmetrical T-pose with straight horizontal arms, palms down, separated fingers, straight legs, and parallel feet. Match the original fictional uniform: deep muted-purple loose jersey and baggy knee-length shorts, cream piping, cream angular side panels, small broken-square chest emblem, and cream number 07. Use cream socks and chunky cream shoes with purple panels and dark soles. Style it like a 2004 PS2 basketball-game player: smooth-shaded economical geometry, strong readable silhouette.",
-        "negativePrompt": null,
-        "modelId": "Tripo H3.1",
-        "modelVersion": "H3.1",
-        "settings": {
-          "observed": {
-            "textureResolution": 2048,
-            "topology": "triangles",
-            "faces": 4704
-          },
-          "requested": {
-            "ultraMeshQuality": false,
-            "texture": true,
-            "textureQuality": "2K",
-            "removeLighting": true,
-            "pbr": false,
-            "topology": "triangle",
-            "polycount": 5000
-          },
-          "note": "Requested settings were supplied to user; complete generation-job settings and seed unavailable.",
-          "tripoAssetId": "fb35316e-7853-4934-811f-9236bf0ef04b",
-          "tripoJobId": null,
-          "source": {
-            "bytes": 894440,
-            "sha256": "9974eb81e5c8710384c86de38ab885f202a0d0b08e4bdeaca79c5a0a4f9051a1"
-          },
-          "releaseAuthorization": "User requested GitHub Pages publication on 2026-09-30 to play from work after rendered and local in-game previews."
-        },
-        "seed": null,
-        "referenceAssetIds": [],
-        "scenarioAssetId": null,
-        "scenarioJobId": null,
-        "generatedAt": null,
-        "optimizationSteps": [
-          "Live Blender MCP import and silhouette pass; 2.05m scale and floor origin.",
-          "Resize embedded color atlas from 2048 to 512; one rough nonmetal material.",
-          "Rotate forward to game -Z and rebuild all 17 bind axes as translation-only glTF frames.",
-          "Move shoulder/elbow/wrist joints onto actual mesh; revise shoulder, neck and wrist skin weights with two influences maximum.",
-          "Adapt T-pose hand orientation and ball anchors; use candidate-specific reachable idle and finish targets.",
-          "Export selected mesh and rig only from live Blender; retain raw and working files outside runtime assets."
-        ],
-        "outputNotes": "Tripo Studio export optimized and rigged through live Blender MCP. Unknown job/seed/reference IDs remain null or empty. Generated fingers and angular elbows remain visible close-up."
-      },
-      "license": {
-        "name": "Tripo Studio Pro generated output",
-        "url": "https://www.tripo3d.ai/help/privacy-policy/how-to-use-tripo-models-commercially",
-        "commercialUse": true,
-        "attribution": null,
-        "evidence": "User states generation used Tripo Studio Pro; paid output rights include modification, distribution and commercial game use, subject to input rights. Original fictional reference reported in conversation; historical sports screenshots used for general era inspiration only. Checked 2026-09-30."
-      },
-      "runtime": [
-        {
-          "path": "assets/models/player/fictional-player-v2.glb",
-          "format": "glb",
-          "bytes": 582124,
-          "maxBytes": 800000,
-          "sha256": "af5fba2627efdad63d5c7e8e14fd10aad43fc364987e57ddcdf4e910a1368ced",
-          "triangles": 4704
-        }
-      ],
-      "validation": {
-        "checks": {
-          "bindPose": "pass",
-          "deformation": "pass",
-          "scaleOrientation": "pass",
-          "rootMotion": "pass",
-          "idle": "pass",
-          "move": "pass",
-          "shoot": "pass",
-          "layup": "pass",
-          "dunk": "pass",
-          "handAnchors": "pass",
-          "ballAttachment": "pass",
-          "desktop": "pass",
-          "touch": "pass",
-          "loadFailureFallback": "pass",
-          "invalidRigFallback": "pass",
-          "gameView": "pass",
-          "assetsCheck": "pass",
-          "productionBuild": "pass"
-        },
-        "measured": {
-          "downloadBytes": 582124,
-          "triangles": 4704,
-          "vertices": 3265,
-          "materials": 1,
-          "bones": 17,
-          "maximumBoneInfluences": 2,
-          "atlasWidth": 512,
-          "atlasHeight": 512,
-          "animationClips": 0,
-          "bindHeightMeters": 2.05,
-          "upAxis": "Y",
-          "forwardAxis": "-Z",
-          "sampledPoses": 305,
-          "maxGatherErrorMeters": 7.28550816809042e-16,
-          "maxDunkGripErrorMeters": 8.627699134216878e-16,
-          "minGameFloorMeters": -0.0035000360134869153,
-          "desktopHandlerChecks": 19,
-          "touchHandlerChecks": 18
-        },
-        "notes": "Rendered Blender action poses and inspected desktop/phone-sized game captures. Browser handler tests use synthetic keyboard/pointer events and forced touch layout at 390x844; physical phone remains untested. User authorized publication for remote play after previews. Scale and action adapter corrected after initial rig failure; final source hash recorded."
-      },
-      "integration": {
-        "module": "src/player.js",
-        "fallback": "Original procedural player remains functional during loading and on load, rig or budget validation failure. Game code retains root movement and ball physics."
       }
     },
     {
@@ -1169,6 +1897,274 @@
       "integration": {
         "module": "src/arena.js",
         "fallback": "The procedural seat slabs, separate bleacher-riser material, and 240-instanced-seat material keep their original flat colors until the single sRGB WebP loads or if it fails. On success, authored seating platforms and tiered bleachers receive cloned materials with the map; the shared upper wall stripe retains its original material. The existing 240-seat InstancedMesh and crowd instancing remain unchanged."
+      }
+    },
+    {
+      "id": "basketball-dunk-impact-v1",
+      "category": "audio",
+      "status": "accepted",
+      "source": {
+        "type": "local",
+        "prompt": "Create one compact, dry, gameplay-focused basketball dunk impact cue under one second: hard metal rim flex, taut net snap, basketball compression thump, and a very short support vibration. Mono delivery suitable for Ogg Vorbis at 32 kHz, with a tight onset, no clipping, and no excess silence.",
+        "negativePrompt": "No crowd cheer, speech, music, horn, whistle, branding, broadcast effects, backboard impact, arena bed, echo, or long reverb tail.",
+        "modelId": null,
+        "modelVersion": null,
+        "settings": {
+          "scenarioDiscovery": {
+            "workflowOrder": "scenario-game-assets first; routed to scenario-audio for the audio generation lane",
+            "teamId": "team_yNLWgjS1fAtTk5MtpGfW7vRy",
+            "projectId": "proj_A12xiMpm5rjCs8EuszXCaqPh",
+            "capability": "txt2audio",
+            "ownedMatchingAudioAssets": 0,
+            "result": "No Scenario generation: every suitable live SFX recommendation required an unavailable paid plan.",
+            "recommendedModels": [
+              {
+                "modelId": "model_elevenlabs-sound-effects-v2",
+                "name": "ElevenLabs Sound Effects 2",
+                "requiredPlan": "Starter",
+                "quotedCostCuPerAsset": 25.5
+              },
+              {
+                "modelId": "model_mm-audio-2-t2a",
+                "name": "MM Audio 2 Text-To-Audio (SFX)",
+                "requiredPlan": "Starter",
+                "quotedCostCuPerAsset": 1
+              },
+              {
+                "modelId": "model_sonilo-v1-1-text-to-sound-effects",
+                "name": "Sonilo V1.1 Text to SFX",
+                "requiredPlan": "Pro",
+                "quotedCostCuPerAsset": 1
+              }
+            ],
+            "scenarioAssetIds": [],
+            "scenarioJobIds": []
+          },
+          "generatorScript": "scripts/build-dunk-audio.mjs",
+          "generatorBytes": 6496,
+          "generatorSha256": "42db3be3bb8a65433c9dccf918e3dc574753b267a1e46b95db2358ad30d3f56b",
+          "method": "Deterministic layered Foley synthesis using a swept ball-compression body, paired inharmonic rim-flex modes, two bands of seeded strike and net noise, five decaying net-knot ticks, three delayed support modes, DC removal, a sub-millisecond attack, an 18 ms end fade, and unclipped RMS normalization",
+          "sampleRateHz": 32000,
+          "channels": 1,
+          "codec": "Ogg Vorbis",
+          "encoder": "vorbis-encoder-js 1.0.2",
+          "encoderQuality": -0.1,
+          "sourceDurationSeconds": 0.46,
+          "targetRmsDbfs": -19.5,
+          "peakCeilingDbfs": -2.2,
+          "runtimeGain": "0.34 + intensity * 0.66",
+          "runtimePlaybackRate": "0.97 + intensity * 0.06",
+          "cooldownMs": 420
+        },
+        "seed": 170092026,
+        "referenceAssetIds": [],
+        "scenarioAssetId": null,
+        "scenarioJobId": null,
+        "generatedAt": "2026-09-30T05:50:00Z",
+        "optimizationSteps": [
+          "Resolved the only Scenario team/project and recalled its workspace memory, then applied scenario-game-assets before scenario-audio. Searched owned audio and requested current txt2audio recommendations; every suitable SFX model was plan-gated, so no Scenario run or job was created.",
+          "Synthesized one mono cue at 32 kHz from deterministic seeded oscillators and band-limited noise, removed DC, applied a 0.55 ms attack and 18 ms end fade, and normalized without a limiter.",
+          "Encoded directly to mono Ogg Vorbis at quality -0.1 with pinned Ogg serial and encoder time seeds, verified the same SHA-256 across two complete rebuilds, and measured the shipped file after native 32 kHz Chromium decode."
+        ],
+        "outputNotes": "Original local audio without recorded or Scenario-generated source material. Model, asset, and job IDs are null because the live suitable models required Starter or Pro and were not runnable in this Free-plan project. No PCM intermediate is committed."
+      },
+      "license": {
+        "name": "Original locally authored TheArena audio",
+        "url": null,
+        "commercialUse": true,
+        "attribution": null,
+        "evidence": "The ball-compression body, rim-flex modes, net snap, knot ticks, support vibration, waveform recipe, and deterministic generator were authored for this repository without third-party recordings, voices, music, broadcast material, brand audio, or Scenario output. vorbis-encoder-js is a development-only encoder dependency recorded in package-lock.json."
+      },
+      "runtime": [
+        {
+          "path": "assets/audio/gameplay/dunk-impact-01.ogg",
+          "format": "ogg",
+          "bytes": 4763,
+          "maxBytes": 51200,
+          "sha256": "d5edc642571eb19c603638b45440f5c180ebb3124ba5479aeeed70e18518d245",
+          "durationSeconds": 0.452
+        }
+      ],
+      "validation": {
+        "checks": {
+          "originalRights": "pass",
+          "mono": "pass",
+          "sampleRate": "pass",
+          "fileSize": "pass",
+          "duration": "pass",
+          "leadingSilence": "pass",
+          "trailingSilence": "pass",
+          "noClipping": "pass",
+          "deterministicRebuild": "pass",
+          "loadOnlyAfterStart": "pass",
+          "successfulDunkPath": "pass",
+          "repeatedFinishAttempts": "pass",
+          "rimCuePreserved": "pass",
+          "scoreCuePreserved": "pass",
+          "intensityResponse": "pass",
+          "volumeAndEnableDisable": "pass",
+          "desktopStartUnlock": "pass",
+          "touchStartUnlock": "pass",
+          "loadFailureFallback": "pass",
+          "decodeFailureFallback": "pass",
+          "dunkTimingReleaseScoringPhysicsUnchanged": "pass",
+          "assetsCheck": "pass",
+          "productionBuild": "pass"
+        },
+        "measured": {
+          "runtimeBytes": 4763,
+          "files": 1,
+          "codec": "Ogg Vorbis",
+          "sampleRateHz": 32000,
+          "channels": 1,
+          "decodedDurationSeconds": 0.452,
+          "decodedRmsDbfs": -19.93,
+          "decodedPeakDbfs": -1.02,
+          "clippedSamples": 0,
+          "leadingSilenceMsBelowMinus60Dbfs": 0,
+          "trailingSilenceMsBelowMinus60Dbfs": 0,
+          "byteIdenticalRebuilds": 2,
+          "cooldownMs": 420,
+          "desktopViewport": "1280x720",
+          "touchViewport": "390x844 emulated",
+          "audioUnitTests": 24
+        },
+        "notes": "The committed file decoded successfully as mono 32 kHz in Chromium at native rate, stayed far below the 50 KB ceiling, and had no clipped or excess-silence samples. A gesture-driven browser harness confirmed no pre-start fetch, a running AudioContext, one successful decode, volume and enable/disable behavior, the rim(0.92), dunk(1), and score(1) sequence, plus immediate duplicate-dunk rejection. The same harness passed at desktop 1280x720 and a 390x844 responsive viewport; the latter is touch-sized browser emulation, not physical touch hardware. Static integration tests protect the established authored success path, finish-state/release guards, 0.42-second dunk launch, 0.57 release threshold, rim cue, score cue, and exactly one new dunk call. They do not replace a physical-device listening pass."
+      },
+      "integration": {
+        "module": "src/audio.js",
+        "fallback": "AudioDirector starts the single dunk fetch/decode only inside unlock(), after the game-start path sets game.started. dunk(intensity) plays the accepted buffer through the shared compressor/master path with continuous intensity response and a 420 ms cooldown. While loading, when the request fails, or when decode fails, it uses the complete layered synthesized dunk cue. src/main.js adds exactly one dunk(1) call inside the established isDunk release branch while preserving the existing rim cue, launch, release, scoring, and physics values."
+      }
+    },
+    {
+      "id": "indoor-arena-ambience-v1",
+      "category": "audio",
+      "status": "accepted",
+      "source": {
+        "type": "local",
+        "prompt": "Create one seamless loopable quiet indoor basketball arena ambience bed, about 8 seconds: restrained and lightly occupied, with distant indistinct crowd murmur, subtle HVAC room tone, and occasional soft movement. No intelligible speech, music, chants, team names, whistles, announcements, buzzer events, branding, broadcast ambience, or identifiable recordings. Keep it dry, clean, quiet beneath gameplay cues, and free of clicks, level jumps, clipping, and excess transient events.",
+        "negativePrompt": "No intelligible speech, music, melody, chants, team names, whistles, announcements, buzzer events, cheers, branding, broadcast ambience, identifiable recordings, clipping, loud transients, level jumps, or long reverb.",
+        "modelId": null,
+        "modelVersion": null,
+        "settings": {
+          "scenarioDiscovery": {
+            "workflowOrder": "scenario-game-assets first; routed to scenario-audio for the audio generation lane",
+            "teamId": "team_yNLWgjS1fAtTk5MtpGfW7vRy",
+            "projectId": "proj_A12xiMpm5rjCs8EuszXCaqPh",
+            "capability": "txt2audio",
+            "requestedDurationSeconds": 8,
+            "priority": "quality",
+            "ownedMatchingAudioAssets": 0,
+            "recommendedModelId": "model_sonilo-v1-1-text-to-sound-effects",
+            "recommendedModelName": "Sonilo V1.1 Text to SFX",
+            "requiredPlan": "Pro",
+            "quotedCostCuPerAsset": 1,
+            "result": "No Scenario generation: the purpose-built Sonilo SFX recommendation required Pro. The only ranked model runnable on the Free plan was music-focused Meta MusicGen and was rejected because the brief explicitly excludes music.",
+            "scenarioAssetIds": [],
+            "scenarioJobIds": []
+          },
+          "generatorScript": "scripts/build-arena-ambience.mjs",
+          "generatorBytes": 7569,
+          "generatorSha256": "f889e1faf8717e43bd2d3bd854adbd928fbe05cc5ebd3288736f523ac31b37b1",
+          "method": "Deterministic circular synthesis from three seeded noise fields: a three-pass 115-1750 Hz crowd-murmur band with periodic slow modulation, a three-pass 92 Hz HVAC-air bed plus restrained 60/120 Hz room modes, and three Gaussian-windowed soft movement swells from a 420-2850 Hz band. DC is removed, the periodic buffer is rotated to its quietest level/slope join, RMS is normalized without limiting, and 250 ms copies from the adjacent cycle guard both codec edges.",
+          "sampleRateHz": 32000,
+          "channels": 1,
+          "codec": "Ogg Vorbis",
+          "encoder": "vorbis-encoder-js 1.0.2",
+          "encoderQuality": -0.1,
+          "encodedDurationSeconds": 8.5,
+          "loopStartSeconds": 0.25,
+          "loopEndSeconds": 8.25,
+          "loopDurationSeconds": 8,
+          "targetRmsDbfs": -28.5,
+          "peakCeilingDbfs": -7,
+          "runtimeAmbienceGain": 0.22,
+          "runtimeMasterGain": 0.42
+        },
+        "seed": 30092026,
+        "referenceAssetIds": [],
+        "scenarioAssetId": null,
+        "scenarioJobId": null,
+        "generatedAt": "2026-09-30T12:00:00Z",
+        "optimizationSteps": [
+          "Resolved the only Scenario team/project, recalled its empty workspace memory, searched owned audio, and requested a current quality-priority txt2audio recommendation after scenario-game-assets routed the task to scenario-audio. The suitable SFX model was plan-gated, so no Scenario job or asset was created.",
+          "Synthesized one original mono 32 kHz periodic arena bed from deterministic circularly filtered noise and low room modes, removed DC, rotated the cycle to its quietest join, and normalized it to -28.5 dBFS RMS without a limiter.",
+          "Wrapped the 8-second cycle with 250 ms pre/post guard audio, encoded directly to Ogg Vorbis at quality -0.1 with pinned Ogg serial/time seeds, and configured Web Audio to loop only the guarded interior from 0.25 to 8.25 seconds.",
+          "Repeated the complete build and obtained the same runtime SHA-256, then decoded and measured the committed file in Chromium at a 48 kHz AudioContext output rate."
+        ],
+        "outputNotes": "Original local audio without recorded, sampled, or Scenario-generated source material. Model, asset, and job IDs are null because the purpose-built current recommendation required Pro; no music model was used. No PCM intermediate is committed."
+      },
+      "license": {
+        "name": "Original locally authored TheArena audio",
+        "url": null,
+        "commercialUse": true,
+        "attribution": null,
+        "evidence": "The crowd-like texture, HVAC bed, soft movement swells, periodic waveform recipe, guard regions, and deterministic generator were authored for this repository from seeded mathematical noise and oscillators, without third-party recordings, voices, music, broadcast material, brand audio, or Scenario output. vorbis-encoder-js is a development-only encoder dependency recorded in package-lock.json."
+      },
+      "runtime": [
+        {
+          "path": "assets/audio/ambience/arena-loop-01.ogg",
+          "format": "ogg",
+          "bytes": 38860,
+          "maxBytes": 256000,
+          "sha256": "813aafba41f04f35574519bcdc483b807d1fec31682a79540d695eed3d8a9e5e",
+          "durationSeconds": 8.5
+        }
+      ],
+      "validation": {
+        "checks": {
+          "originalRights": "pass",
+          "mono": "pass",
+          "encodedSampleRate": "pass",
+          "fileSize": "pass",
+          "quietGameplayMix": "pass",
+          "noClipping": "pass",
+          "forbiddenContent": "pass",
+          "guardedLoopJoin": "pass",
+          "deterministicRebuild": "pass",
+          "loadOnlyAfterGameStartAndUnlock": "pass",
+          "independentAmbienceVolume": "pass",
+          "synthesizedGameplayCuesPreserved": "pass",
+          "missingFileIsolation": "pass",
+          "decodeFailureIsolation": "pass",
+          "desktopStartUnlock": "pass",
+          "touchStartUnlock": "pass",
+          "suspendedResumedTab": "pass",
+          "cleanDisposal": "pass",
+          "assetsCheck": "pass",
+          "productionBuild": "pass"
+        },
+        "measured": {
+          "runtimeBytes": 38860,
+          "files": 1,
+          "codec": "Ogg Vorbis",
+          "encodedSampleRateHz": 32000,
+          "channels": 1,
+          "encodedDurationSeconds": 8.5,
+          "loopStartSeconds": 0.25,
+          "loopEndSeconds": 8.25,
+          "loopDurationSeconds": 8,
+          "sourceRmsDbfs": -28.5,
+          "sourcePeakDbfs": -15.44,
+          "sourceBoundaryStepDbfs": -99.64,
+          "chromiumAudioContextSampleRateHz": 48000,
+          "chromiumDecodedFrames": 408000,
+          "chromiumDecodedRmsDbfs": -28.56,
+          "chromiumDecodedPeakDbfs": -16.13,
+          "clippedSamples": 0,
+          "runtimeLoopBoundaryStepDbfs": -53.17,
+          "runtimeLoopBoundaryBelowP999StepDb": 17.16,
+          "firstLast250msLevelDeltaDb": 0.407,
+          "runtimeAmbienceGain": 0.22,
+          "estimatedPostGainRmsDbfs": -49.25,
+          "byteIdenticalRebuilds": 2,
+          "audioUnitTests": 31
+        },
+        "notes": "The committed file is mono 32 kHz Ogg Vorbis and stays far below the 250 KB ceiling. A gesture-driven Chromium harness confirmed that it is not requested before unlock, then decodes, starts one looping source, and leaves a synthesized bounce playable. The guarded 0.25-8.25 second join measured -53.17 dBFS, 17.16 dB below the decoded buffer's 99.9th-percentile ordinary sample step, with a 0.407 dB head/tail window-level difference and no clipped samples. Explicit suspension followed by gesture resume retained the same source without duplication; disposal stopped and cleared the source and buffer. Desktop game start was exercised in the app. The shared click start path used by touch was protected by static/unit coverage; a physical phone speaker and touch-hardware listening pass remains recommended."
+      },
+      "integration": {
+        "module": "src/audio.js",
+        "fallback": "AudioDirector begins the ambience request only inside unlock(), which the existing game-start click/key flow calls after setting game.started. The loop uses its own gain node into the master, bypassing the gameplay compressor so court cues remain dominant; setAmbienceVolume controls this path and setEnabled mutes/unmutes it. Request or decode failure leaves ambience silent and does not alter any synthesized gameplay cue. dispose() stops and disconnects the looping source before releasing buffers and the audio context."
       }
     }
   ]

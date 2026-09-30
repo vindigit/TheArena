@@ -22,7 +22,7 @@ Three.js units are meters; Y is up, X is court width, and the basket is at negat
 | Court and arena | `src/arena.js` returns `{ group, hoop, court }`; visual geometry can change inside this module. | Court **15.2 × 14 m**, floor Y **0**, bounds X **±7.6**, Z **−7 to 7**. Retain the court data and current lighting/gameplay references. |
 | Hoop assembly | `src/arena.js` owns hoop visuals and exported coordinate data. | Rim center **(0, 3.05, −5.82)**, radius **0.23 m**; backboard center **(0, 3.56, −6.25)**, **1.83 × 1.07 m**. `hoop.net` is animated through `userData.energy`, rotation, and scale. Keep collision data independent of decorative mesh topology. |
 | Materials | Court planks, painted key/lines, concrete shell, painted metal, and seating are currently colored procedural meshes in `src/arena.js`. | Replace material assignments or selected presentation meshes behind `createArena`; preserve world dimensions and line visibility. |
-| Audio | `src/audio.js` exposes `AudioDirector` and its `unlock`, `bounce`, `rim`, `backboard`, `swish`, `shoe`, `crowd`, `score`, volume, enabled, and dispose methods. | Preserve gesture unlock, intensity inputs, cooldown behavior, and synthesized fallback. Add a `dunk` cue inside this module when that sample set is accepted. |
+| Audio | `src/audio.js` exposes `AudioDirector` and its `unlock`, `bounce`, `rim`, `dunk`, `backboard`, `swish`, `shoe`, `crowd`, `score`, master/ambience volume, enabled, and dispose methods. | Preserve gesture unlock, intensity inputs, cooldown behavior, and synthesized gameplay fallback. Sample and ambience loading begins only after `unlock()` runs from game start. |
 
 ## Runtime layout
 
@@ -49,8 +49,8 @@ public/assets/
     gameplay/backboard-01.mp3
     gameplay/swish-01.mp3
     gameplay/shoe-01.mp3
-    gameplay/dunk-01.mp3
-    ambience/arena-loop-01.mp3
+    gameplay/dunk-impact-01.ogg
+    ambience/arena-loop-01.ogg
 ```
 
 These paths describe slots, not a requirement to fill them all at once. Keep generation intermediates, source scans, project files, and rejected outputs outside `public/assets/` and outside commits. Use GLB for meshes, WebP or optimized PNG for color and alpha textures, and compressed MP3 or OGG for audio. Use KTX2 only after confirming a transcoder and fallback path on target browsers. For tiling maps, preserve UV repeat and texture color space; color maps use sRGB and data maps use linear color space.
@@ -126,9 +126,52 @@ Use `null` for unavailable generation fields on locally authored assets. A sampl
 - `src/arena.js` displays the original procedural shell while loading and on any GLB load/validation failure; after a valid load, it removes and disposes the fallback geometry. The decoded board mesh restores the exact name consumed by the existing emissive presentation pulse.
 - The manifest records the exact recipe, original-art rights, optimized bytes and hashes, scale, bounds, geometry checks, viewport inspections, and fallback test. Narrow portrait and landscape views were inspected in a fine-pointer browser viewport; physical touch-device FPS has not been measured.
 
+## Accepted basketball bounce set
+
+- `scripts/build-bounce-audio.mjs` deterministically authors three original, single-impact hardwood basketball bounces. Each is mono 32 kHz Ogg Vorbis, 0.217–0.237 seconds after decode, and about 4.3 KB. No recorded source, voice, crowd, music, branding, or broadcast audio is used.
+- Scenario's live audio recommendations were checked first. Sonilo V1.1 Text to SFX required Pro, MM Audio 2 required Starter, and a no-charge ElevenLabs Sound Effects 2 dry run required cu-basic; the current Free-plan project had no owned suitable take, so no Scenario job was launched and the manifest records null job and asset IDs plus the exact local recipe.
+- `AudioDirector.unlock()` starts the three fetch/decode operations only after the game start gesture. `bounce(intensity)` rotates through decoded buffers, maps intensity to gain and playback rate, and retains the original 72 ms cooldown. While loading, or when all requests or decodes fail, it uses the unchanged synthesized bounce.
+- Native-rate Chromium measurements show 0–0.031 ms leading silence, −18.53 to −18.23 dBFS RMS, and peaks at or below −3.37 dBFS. Desktop keyboard/mouse and a 390 × 844 forced-coarse-pointer touch harness exercised start/unlock, standing and moving dribbles, an early-shot floor impact, finish, and reset. The touch pass is emulation rather than a physical-phone audio test.
+
+## Accepted basketball rim-impact set
+
+- `scripts/build-rim-audio.mjs` deterministically authors light, medium, and hard dry metal-rim hits from one modal family. The mono 32 kHz Ogg Vorbis files decode to 0.217–0.327 seconds and 4.2–4.4 KB, with a sharp noise attack, paired inharmonic metal modes, restrained ball contact, and no recorded source, backboard, voice, crowd, music, ambience, or reverb.
+- The `scenario-game-assets` workflow routed the audio category to `scenario-audio`. The existing Scenario Free-plan project had no owned matching audio; live recommendations returned ElevenLabs Sound Effects 2 and MM Audio 2 behind Starter and Sonilo V1.1 behind Pro, so no inaccessible generation or dry-run job was launched. The manifest records the exact assessment and null Scenario job/asset IDs.
+- `AudioDirector.unlock()` starts the three additional fetch/decode operations only after the same game-start gesture. `rim(intensity)` chooses light below 0.4, medium below 0.75, and hard at or above 0.75, then preserves continuous intensity response through gain and a narrow playback-rate range. The existing 95 ms cooldown and complete original synthesized rim fallback remain unchanged; partial loads use the nearest decoded strength.
+- Chromium measurements show 0 ms leading silence, −20.10 to −19.96 dBFS RMS, peaks at or below −2.01 dBFS, and zero clipped samples. A browser runtime harness exercised ordinary, hard, dunk-strength, and rapid repeated calls; desktop and a 390 × 844 forced-coarse-pointer touch harness both reached a running audio context with all three samples decoded. The touch pass is emulation rather than a physical-phone test.
+
+## Accepted basketball backboard-impact set
+
+- `scripts/build-backboard-audio.mjs` deterministically authors soft, medium, and hard tempered-glass backboard contacts from one compact panel family. The mono 32 kHz Ogg Vorbis files decode to 0.162–0.237 seconds and about 4.3 KB, combining a flat low-mid body, brief high-frequency glass/hardware rattle, and one restrained 15 ms indoor reflection. No recorded source, rim ring, crowd, speech, music, branding, or broadcast ambience is used.
+- The `scenario-game-assets` workflow again routed the audio category to `scenario-audio`. The current Free-plan project had no owned matching audio; live recommendations returned ElevenLabs Sound Effects 2 and MM Audio 2 behind Starter and Sonilo V1.1 behind Pro, so no inaccessible generation or dry-run job was launched. The manifest records this assessment and null Scenario job/asset IDs.
+- `AudioDirector.unlock()` starts these three fetch/decode operations only after the same game-start gesture. `backboard(intensity)` selects soft below 0.45, medium below 0.78, and hard at or above 0.78, with continuous gain and narrow playback-rate response. The existing 110 ms cooldown and complete original synthesized backboard fallback remain unchanged; partial loads use the nearest decoded strength.
+- Chromium measurements show 0 ms leading silence, −20.84 to −20.75 dBFS RMS, peaks at or below −1.11 dBFS, and zero clipped samples. A runtime harness exercised soft, hard, and immediate repeated calls. Desktop game start and a 390 × 844 forced-coarse-pointer touch start both unlocked successfully with all three backboard samples decoded; the touch pass is emulation rather than a physical-phone test.
+
+## Accepted basketball shoe-squeak set
+
+- `scripts/build-shoe-audio.mjs` deterministically authors two compact rubber chirps and one brief lateral skid on polished hardwood. The mono 32 kHz Ogg Vorbis files decode to 0.117–0.197 seconds and 4.4–4.8 KB. Seeded chirps and 6.2 kHz-low-passed friction noise keep the attack readable without harsh phone-speaker fizz; no recorded source, footsteps, speech, whistles, crowd, music, ambience, or reverb is used.
+- The `scenario-game-assets` workflow routed the category to `scenario-audio`. The current Scenario Free-plan project had no matching owned audio; live recommendations returned ElevenLabs Sound Effects 2 and MM Audio 2 behind Starter and Sonilo V1.1 behind Pro, so no inaccessible generation or dry-run job was launched. The manifest records the assessment and null Scenario job/asset IDs.
+- `AudioDirector.unlock()` starts the three fetch/decode operations only after the game-start gesture. `shoe(intensity)` rotates chirp/chirp/skid variants and preserves continuous gain and playback-rate response. The original 58 ms cue cooldown remains configured, while an additional 170–235 ms movement cadence guard prevents frame-driven machine-gun repetition. Loading and complete request/decode failure use the original synthesized shoe cue.
+- Chromium measurements show 0 ms leading silence, −22.33 to −21.63 dBFS RMS, peaks at or below −9.67 dBFS, and zero clipped samples. A 260–6800 Hz offline phone-speaker render remained unclipped with peaks at or below −14.36 dBFS. Desktop start plus walking, sprinting, and alternating direction inputs were exercised. A 390 × 844 browser pass exercised start/unlock and the same three runtime calls; this is touch-sized and phone-band emulation, not a physical-device speaker or touch-hardware test.
+
+## Accepted basketball dunk-impact cue
+
+- `scripts/build-dunk-audio.mjs` deterministically authors one dry, layered finish hit from a ball-compression thump, paired inharmonic rim-flex modes, a short band-limited net snap, five compact knot ticks, and low support vibration. The original mono 32 kHz Ogg Vorbis cue is 4.8 KB and decodes to 0.452 seconds. It contains no recorded source, crowd, speech, music, horn, whistle, branding, broadcast effect, backboard strike, or long room tail.
+- The `scenario-game-assets` workflow routed the category to `scenario-audio`. The only Scenario project had no matching owned audio. Current recommendations returned ElevenLabs Sound Effects 2 and MM Audio 2 behind Starter and Sonilo V1.1 behind Pro, so the Free-plan workspace could not run any appropriate model; no job was launched and the manifest records the exact prompt, recommendation result, and null Scenario asset/job IDs.
+- `AudioDirector.unlock()` starts the single fetch/decode only after `unlockAndStart()` has set `game.started`. `dunk(intensity)` uses the shared enable, master-volume, compressor, and cooldown architecture; intensity controls gain and a narrow playback-rate range. A 420 ms cue cooldown rejects duplicate finish callbacks, and loading, request, or decode failure uses a complete layered synthesized fallback.
+- The established `releaseFinish()` dunk branch still supplies the same 0.42-second launch, release threshold, net energy, and `rim(0.92)` call; it now adds exactly one `dunk(1)` call. The score path remains `score(1)` for a dunk. Native Chromium decode measured −19.93 dBFS RMS, −1.02 dBFS peak, zero clipped samples, and zero leading/trailing samples below −60 dBFS. Desktop 1280 × 720 and 390 × 844 touch-sized browser starts both reached a running context and decoded the cue; the latter is responsive-browser emulation, not physical touch hardware.
+
+## Accepted indoor arena ambience loop
+
+- `scripts/build-arena-ambience.mjs` deterministically authors one restrained indoor bed from a circularly filtered crowd-like texture, low HVAC air and 60/120 Hz room modes, plus three soft movement swells. It uses only seeded mathematical noise and oscillators—no recording, intelligible speech, music, chant, whistle, announcement, buzzer, team name, brand, or broadcast source. The mono 32 kHz Ogg Vorbis file is 38,860 bytes.
+- The `scenario-game-assets` workflow routed the category to `scenario-audio`. The only project had no matching owned audio. Sonilo V1.1 Text to SFX was the correct recommendation but required Pro; the only ranked Free-plan option was a music model and was rejected because music is explicitly excluded. No Scenario generation or job was created, and the manifest records the team/project/model IDs and exact outcome.
+- The encoded buffer includes 250 ms guards around an exact 8-second periodic cycle. `AudioDirector` loops the decoded interior from 0.25 to 8.25 seconds, keeping the runtime seam away from Vorbis edge windows. Chromium measured a −53.17 dBFS join (17.16 dB below its 99.9th-percentile ordinary sample step), a 0.407 dB first/last 250 ms level difference, −28.56 dBFS decoded RMS, −16.13 dBFS peak, and zero clipped samples.
+- The ambience request starts only inside the existing gesture-driven `unlock()` call after game start. Its 0.22 gain path bypasses the gameplay compressor and feeds the master independently, putting the estimated post-gain bed near −49.25 dBFS while leaving every sampled and synthesized court cue unchanged. Missing/decode failure is silent, suspend/resume retains one loop source, and disposal stops/disconnects the source and clears its buffer. Desktop start and the shared touch-compatible click path were checked; a physical-phone speaker and touch-hardware listening pass remains recommended.
+- Rebuild the deterministic file with `npm run assets:build:ambience`, run its loading/lifecycle/fallback coverage with `npm run test:audio`, and use `npm run dev` to listen after clicking or tapping the game start overlay. The bed should remain subtle beneath dribbles, shoe cues, rim/backboard hits, dunks, and scoring feedback.
+
 ## Generation order and ceilings
 
-Budgets are acceptance targets for the **optimized runtime files**. They are ceilings rather than instructions to add detail until a limit is reached. Maintain a target of **under 3 MB total added runtime assets** for the full first pass; load audio after the game starts and keep optional ambience deferred.
+Budgets are acceptance targets for the **optimized runtime files**. They are ceilings rather than instructions to add detail until a limit is reached. Maintain a target of **under 3 MB total added runtime assets** for the full first pass; load audio and the accepted ambience only after the game starts.
 
 | Priority | Asset and generation approach | Runtime target |
 | --- | --- | --- |
