@@ -287,9 +287,16 @@
           "courtWidthAxis": "X",
           "courtLengthAxis": "Z",
           "basketDirection": "negative Z",
-          "rootPivot": [0, 0, 0],
+          "rootPivot": [
+            0,
+            0,
+            0
+          ],
           "materials": 10,
-          "textureAtlas": [512, 512],
+          "textureAtlas": [
+            512,
+            512
+          ],
           "seatInstances": 240,
           "seatGeometryTriangles": 24,
           "glbTriangleBudget": 10000,
@@ -331,7 +338,10 @@
           "bytes": 8917,
           "maxBytes": 81920,
           "sha256": "3595e7e9d36a32036439d4edc69391ab1de5bd1652ccef9f176ca0b15c4d747a",
-          "dimensions": { "width": 512, "height": 512 }
+          "dimensions": {
+            "width": 512,
+            "height": 512
+          }
         }
       ],
       "validation": {
@@ -439,8 +449,14 @@
           "bytes": 17166,
           "maxBytes": 51200,
           "sha256": "1217b81323d5cc2898bc2937160276aa72e5a39696e81015add3833421492974",
-          "dimensions": { "width": 256, "height": 256 },
-          "tiling": { "maxMeanRgbError": 5, "maxPeakRgbError": 25 }
+          "dimensions": {
+            "width": 256,
+            "height": 256
+          },
+          "tiling": {
+            "maxMeanRgbError": 5,
+            "maxPeakRgbError": 25
+          }
         }
       ],
       "validation": {
@@ -878,6 +894,204 @@
       "integration": {
         "module": "src/player.js",
         "fallback": "Accepted asset for future cream jersey and shorts fabric regions in the player's authored texture atlas, separate from skin, trim and markings. There is no runtime binding in this pass. The existing procedural materials and the authored player atlas continue to supply the current appearance."
+      }
+    },
+    {
+      "id": "fictional-player-v1",
+      "category": "model",
+      "status": "accepted",
+      "source": {
+        "type": "local",
+        "prompt": "A 2003 console basketball video game character model screenshot. ONE full-body adult male athlete in a neutral A-pose, front view, empty hands away from body, all feet in frame. Realistic adult human proportions, 7.5 heads tall, long muscular legs, broad deltoids, strong forearms, large anatomically human hands with fingers. Angular realistic generic face, eyes with lids and brows, broad nose, short black buzz cut, warm dark brown skin. Cream sleeveless loose mesh basketball jersey, cream baggy long shorts down to knees, solid dark muted purple side panels and small ochre piping, blank unbranded uniform. White crew socks and chunky charcoal basketball shoes with cream soles. Original fictional face and kit. Flat grey background. Low polygon 3D mesh with hand-painted low-resolution diffuse texture, baked-looking muscle shading, visible angular surfaces, authentic early-2000s sports simulation graphics. Neutral flat lighting. No cartoon, no toy, no plastic, no chibi, no dot eyes, no rounded toy head, no modern stylized mobile-game look, no logos, no text, no ball, no pedestal, no real athlete likeness.",
+        "negativePrompt": null,
+        "modelId": "model_p-image",
+        "modelVersion": null,
+        "settings": {
+          "concept": {
+            "prompt": "A 2003 console basketball video game character model screenshot. ONE full-body adult male athlete in a neutral A-pose, front view, empty hands away from body, all feet in frame. Realistic adult human proportions, 7.5 heads tall, long muscular legs, broad deltoids, strong forearms, large anatomically human hands with fingers. Angular realistic generic face, eyes with lids and brows, broad nose, short black buzz cut, warm dark brown skin. Cream sleeveless loose mesh basketball jersey, cream baggy long shorts down to knees, solid dark muted purple side panels and small ochre piping, blank unbranded uniform. White crew socks and chunky charcoal basketball shoes with cream soles. Original fictional face and kit. Flat grey background. Low polygon 3D mesh with hand-painted low-resolution diffuse texture, baked-looking muscle shading, visible angular surfaces, authentic early-2000s sports simulation graphics. Neutral flat lighting. No cartoon, no toy, no plastic, no chibi, no dot eyes, no rounded toy head, no modern stylized mobile-game look, no logos, no text, no ball, no pedestal, no real athlete likeness.",
+            "width": 832,
+            "height": 1216,
+            "seed": 290927,
+            "creativeUnits": 1,
+            "widthReturned": 832,
+            "heightReturned": 1216,
+            "sourceBytes": 111114,
+            "collectionId": "col_4tG1aREGNQ38oMVAVk2zzjdp"
+          },
+          "referenceUse": "Seven supplied game screenshots informed era/proportion only; no reference pixels were uploaded, traced, projected or embedded; no likeness or branding was copied.",
+          "localAuthoring": {
+            "script": "scripts/build-player.mjs",
+            "recipe": "Original ring-profile mesh, sculpted facial features, articulated arm/leg topology and oversized shoes/hands; original cream, muted-purple and ochre number-27 kit. One skinned primitive. Atlas synthesized from original SVG, 512-square indexed PNG with 128-color palette and no alpha. Meter-scale Y-up, forward -Z; 17 identity-axis bones with translation-only bind transforms and inverse bind matrices. At most two normalized influences; rigid hand/finger detail, blended elbows, wrists, knees and waist. No animations or root-motion tracks.",
+            "embeddedAtlasSha256": "7e56d94eae40f997d4d265ea64e61d35e42bf649fb9d279cbe9e57f80933174b"
+          },
+          "meshRequest": {
+            "modelId": "model_tripo-v3-1-image-to-3d",
+            "parameters": {
+              "image": "asset_QPsNLXJboFPec2ZcRQNs8xtv",
+              "texture": true,
+              "textureQuality": "standard",
+              "textureVersion": "",
+              "delight": true,
+              "textureAlignment": "original_image",
+              "geometryQuality": "standard",
+              "textureSeed": 290927,
+              "orientation": "align_image",
+              "pbr": false,
+              "faceLimit": 5500,
+              "autoSize": true,
+              "quad": false,
+              "smartLowPoly": true,
+              "generateParts": false,
+              "seed": 290927
+            },
+            "dryRunCreativeUnits": 60,
+            "status": "rejected-before-job",
+            "jobId": null,
+            "assetId": null,
+            "reason": "429 PlanLimitReachedError: custom-generation actionLimit 50, actionValue 26, scope team, plan free, nextPlan cu-basic; diagnostics healthy.",
+            "traceId": "mcpt_Fz82ReoNiTfw231MSpy2JSNP"
+          },
+          "meshLowerCostDryRun": {
+            "parameters": {
+              "image": "asset_QPsNLXJboFPec2ZcRQNs8xtv",
+              "texture": false,
+              "textureQuality": "standard",
+              "textureVersion": "",
+              "delight": true,
+              "textureAlignment": "original_image",
+              "geometryQuality": "standard",
+              "textureSeed": 290927,
+              "orientation": "align_image",
+              "pbr": false,
+              "faceLimit": 5500,
+              "autoSize": true,
+              "quad": false,
+              "smartLowPoly": false,
+              "generateParts": false,
+              "seed": 290927
+            },
+            "creativeUnits": 30,
+            "status": "dry-run-only; not launched"
+          },
+          "riggingDiscovery": {
+            "models": [
+              "model_uthana-character-rigging",
+              "model_meshy-rigging"
+            ],
+            "result": "Both require paid-plan upgrades; neither launched. Blender MCP bridge unavailable. Rig and skin weights authored locally in the deterministic GLB builder."
+          },
+          "rejectedConcept": {
+            "modelId": "model_p-image",
+            "parameters": {
+              "prompt": "Full-body original fictional adult male basketball player, neutral symmetrical A pose, front view, isolated on plain light grey field, feet fully visible apart, open empty hands angled away from thighs. Early 2000s PS2 console character art, chunky low-polygon athletic anatomy, broad rounded shoulders, thick forearms, large expressive hands, oversized unbranded high-top shoes, loose knee-length basketball shorts and sleeveless jersey. Warm medium-brown skin, original angular face with short cropped hair, no resemblance to any real person. Fictional plain cream uniform with muted purple side panels and narrow ochre piping, blank chest, no logos, no lettering, no numbers, no league or team designs. Painted ambient shading and restrained 512 pixel texture detail, realistic athletic proportions with exaggerated silhouette. No basketball, no props, no floor platform, no scene, no watermark. Clean separations at armpits and between legs, suitable for conversion to a skinned 3D game mesh.",
+              "width": 832,
+              "height": 1216,
+              "seed": 290926
+            },
+            "jobId": "job_XHTRBGCboSxEp4FNat2qEUYB",
+            "assetId": "asset_DgRTt17oLg1qaE26shKz4PSW",
+            "creativeUnits": 1,
+            "reason": "Too toy-like; not used or shipped."
+          },
+          "validationScripts": [
+            "tests/player.test.mjs",
+            "scripts/prepare-player-check.mjs"
+          ]
+        },
+        "seed": 290927,
+        "referenceAssetIds": [
+          "asset_QPsNLXJboFPec2ZcRQNs8xtv"
+        ],
+        "scenarioAssetId": "asset_QPsNLXJboFPec2ZcRQNs8xtv",
+        "scenarioJobId": "job_zmTTjkhoJbtptpX7w2mCaW1c",
+        "generatedAt": "2026-09-30T04:40:44.620Z",
+        "optimizationSteps": [
+          "Authored geometry directly within the triangle budget; triangulated broad surfaces and joint support loops.",
+          "Batched all visible parts into one skinned primitive and one shared material.",
+          "Packed original cloth, skin, face and shoe color regions into one 512 x 512 atlas; indexed PNG at 128 colors (8243 bytes), embedded in GLB.",
+          "Used only 17 deform bones, at most two nonzero influences per vertex, normalized weights and zeroed unused joint indices.",
+          "Translation-only rest transforms, inverse bind matrices, floor root, Y-up and -Z forward; omitted empty child arrays and all animation clips.",
+          "Validated final GLB with Khronos glTF Validator 2.0.0-dev.3.10: zero errors, warnings, infos or hints. Measured final runtime hash/bytes."
+        ],
+        "outputNotes": "Scenario generated the concept only. The optimized runtime mesh, texture atlas, skeleton and skin weights were authored locally. No generated mesh job succeeded, and no raw generation, rejected variant or DCC file is shipped."
+      },
+      "license": {
+        "name": "Original local geometry/atlas/rig; Scenario concept under Free-plan evaluation scope",
+        "url": "https://www.scenario.com/terms-and-conditions",
+        "commercialUse": false,
+        "attribution": null,
+        "evidence": "Checked 2026-09-30: Scenario terms v2.1.1 (July 16 2026), section 4.3 grants generated-output use/modification/distribution; https://www.scenario.com/pricing limits Free-plan outputs to personal/evaluation use. This asset is approved for the existing noncommercial evaluation demo; commercial use needs a plan/license review. Only the original Scenario concept guided proportions/palette; runtime geometry, glyphs, texture and rig are new local work with no third-party pixels, marks or real-person likeness."
+      },
+      "runtime": [
+        {
+          "path": "assets/models/player/fictional-player-v1.glb",
+          "format": "glb",
+          "bytes": 523940,
+          "maxBytes": 800000,
+          "sha256": "cad29e39b7b7b5b47278ea974802bb409713eed96f9e4ee7aa306754a84f37e1",
+          "triangles": 3931
+        }
+      ],
+      "validation": {
+        "checks": {
+          "provenance": "pass",
+          "originalIdentity": "pass",
+          "mesh": "pass",
+          "gltfValidator": "pass",
+          "texture": "pass",
+          "bindPose": "pass",
+          "deformation": "pass",
+          "scaleOrientation": "pass",
+          "rootMotion": "pass",
+          "idle": "pass",
+          "move": "pass",
+          "shoot": "pass",
+          "layup": "pass",
+          "dunk": "pass",
+          "handAnchors": "pass",
+          "ballAttachment": "pass",
+          "desktop": "pass",
+          "touch": "pass",
+          "loadFailureFallback": "pass",
+          "invalidRigFallback": "pass",
+          "gameView": "pass",
+          "seam": "not-applicable"
+        },
+        "measured": {
+          "downloadBytes": 523940,
+          "triangles": 3931,
+          "vertices": 8711,
+          "materials": 1,
+          "skinnedMeshes": 1,
+          "bones": 17,
+          "maximumBoneInfluences": 2,
+          "textureAtlases": 1,
+          "atlasWidth": 512,
+          "atlasHeight": 512,
+          "embeddedAtlasBytes": 8243,
+          "animationClips": 0,
+          "bindHeightMeters": 2.069,
+          "root": "0,0,0",
+          "upAxis": "Y",
+          "forwardAxis": "-Z",
+          "maxBindPoseErrorMeters": 5.961109544447982e-8,
+          "maxGatherHandErrorMeters": 6.131407058289218e-16,
+          "maxTwoHandDunkErrorMeters": 0.004895056690173712,
+          "maxFloorPenetrationMeters": 0.0029999074406250603,
+          "sampledPoses": 305,
+          "desktopChecks": 19,
+          "touchChecks": 18,
+          "gltfErrors": 0,
+          "gltfWarnings": 0,
+          "desktopViewport": "1280x800",
+          "touchViewport": "390x844",
+          "rootMotionTracks": 0
+        },
+        "notes": "Inspected the original desktop and touch game first, then bind/idle/gather/dunk close-ups and the loaded in-game asset. Offline tests sample all five actions and compare old/new right-hand world positions: maximum deltas idle .379 m, move .392 m, shoot .779 m, layup .911 m, dunk .816 m. Those intentional presentation changes correct the old free-floating gather: both new hand anchors match main.js's fixed gather ball to numerical precision; finishes remain attached to the right-hand anchor and both score. Root translation and jump remain in main.js. Desktop handler tests cover move/sprint, gather/release, layup/dunk, mouse look/zoom and reset. Touch tests use actual Chromium coarse-pointer emulation, plus hit-tested browser touch events for movement, camera drag, gather/release, finish and reset; they are not a physical-phone performance test. Missing GLB and wrong/non-skinned GLB retain functional visible procedural geometry and stable anchors. Atlas is opaque sRGB; non-tiling packed atlas makes opposite-edge seam/tile checks inapplicable. Original procedural fallback is preserved unmodified in src/player-procedural.js. No gameplay, arena, other asset category or input layout was redesigned."
+      },
+      "integration": {
+        "module": "src/player.js",
+        "fallback": "Unmodified original player in src/player-procedural.js remains active during fetch/decode and on byte-budget, texture, skeleton, scale or load failures. The stable gameplay root and attachment Object3Ds survive the swap; src/player-pose.js drives the accepted skeleton without baked clips."
       }
     }
   ]
