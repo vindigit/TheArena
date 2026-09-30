@@ -1093,6 +1093,167 @@
         "module": "src/player.js",
         "fallback": "Unmodified original player in src/player-procedural.js remains active during fetch/decode and on byte-budget, texture, skeleton, scale or load failures. The stable gameplay root and attachment Object3Ds survive the swap; src/player-pose.js drives the accepted skeleton without baked clips."
       }
+    },
+    {
+      "id": "seating-v1",
+      "category": "texture",
+      "status": "accepted",
+      "source": {
+        "type": "local",
+        "prompt": "One seamless square base-color material swatch for repeated indoor basketball arena seating in an original early-2000s console game. Flat front-on surface of molded seat plastic with a faint fabric-like grain: deep dark indigo and muted violet-purple, broad irregular tonal blocks, softly worn and rubbed areas, very sparse subdued scuffs. Low-resolution PS2-era hand-painted appearance, quiet at gameplay distance and under cool arena fog. Mostly mid-dark color rather than pure black, with enough muted purple variation to keep each seat readable. Only broad low-frequency details; no tiny regular dots, perforations, pinstripes, high-contrast fibers, or sharp repeated patterns that could shimmer on a phone. Opaque sRGB diffuse color under uniform ambient illumination. Seamless in both horizontal and vertical directions with no border. No seat shapes, numbers, venue marks, logos, words, symbols, objects, perspective, directional shadows, folds, cast shadows, strong gradients, bright specular streaks, or photographic glare.",
+        "negativePrompt": null,
+        "modelId": null,
+        "modelVersion": null,
+        "settings": {
+          "scenarioGameAssetsFirst": {
+            "recommendedModelId": "model_scenario-texture",
+            "schemaInspected": true,
+            "dryRunCreativeUnits": 12,
+            "newGenerationResult": "429 PlanLimitReachedError: Free-plan team custom-generation actionLimit 50, actionValue 50; no seating job or asset created.",
+            "traceId": "mcpt_rMfkaJCpZnLoHmBEatdPy4hc"
+          },
+          "donor": {
+            "manifestAssetId": "painted-metal-v1",
+            "scenarioAssetId": "asset_VE7dSe99xaL43fNPLkvV1ShE",
+            "scenarioJobId": "job_TB2LfejS7ngrPt5hfjhhAhHC",
+            "modelId": "model_scenario-texture",
+            "runtimePath": "assets/textures/metal/painted-metal-v1.webp",
+            "runtimeBytes": 9392,
+            "runtimeSha256": "8a3ee897045afe19429895dfd72ae1e02e07c0ab14e104c95afee80caaa92c29",
+            "sourcePrompt": "public/assets/manifest.json asset painted-metal-v1 source.prompt"
+          },
+          "generatorScript": "scripts/build-seating-texture.mjs",
+          "generatorBytes": 4787,
+          "generatorSha256": "2c64ed3466c52aa44c67fa73143652981ca9e1b7d14c1f96bb7a6660f2773b55",
+          "method": "Deterministic periodic indigo-violet color field with broad 3, 7, and 13-cell value noise, sparse soft wear, and a blurred 22-percent luminance contribution from the accepted Scenario painted-metal map; no painted-metal color is copied.",
+          "seed": 30092026,
+          "sourceDimensions": [
+            512,
+            512
+          ],
+          "donorUpscale": "Sharp Lanczos3 to 512 x 512; Gaussian blur radius 1.6 px",
+          "baseRgb": [
+            40,
+            39,
+            67
+          ],
+          "purpleDeltaRgb": [
+            15,
+            6,
+            18
+          ],
+          "wearDeltaRgb": [
+            5,
+            4,
+            6
+          ],
+          "noisePeriods": [
+            3,
+            7,
+            13
+          ],
+          "noiseAmplitudes": [
+            8,
+            3,
+            1.2
+          ],
+          "runtimeDimensions": [
+            256,
+            256
+          ],
+          "downsample": "Sharp Lanczos3",
+          "webpQuality": 90,
+          "webpEffort": 6
+        },
+        "seed": 30092026,
+        "referenceAssetIds": [
+          "asset_VE7dSe99xaL43fNPLkvV1ShE"
+        ],
+        "scenarioAssetId": null,
+        "scenarioJobId": null,
+        "generatedAt": "2026-09-30T05:36:27.279Z",
+        "optimizationSteps": [
+          "Applied scenario-game-assets first, selected Scenario Texture, inspected its schema, and priced the exact 512-square seam-erased request at 12 CU. A generation attempt returned the Free-plan team limit before any new job or asset was created.",
+          "Reused the already accepted Scenario painted-metal color map only as a 22-percent luminance-variation donor. A deterministic local generator supplied distinct dark indigo and muted-purple seating colors, periodic broad wear, and low-frequency material variation.",
+          "Built one opaque 512 x 512 sRGB PNG source in ignored .tmp/seating staging; downsampled with Sharp Lanczos3 to 256 x 256 and encoded an opaque WebP at quality 90 and effort 6.",
+          "Generated and inspected 2 x 2 repeat and 64/32-pixel reduction proofs. Repeated the generator and obtained the same runtime SHA-256. Kept only the optimized WebP and source script in Git; removed source and proof images from the repository after validation."
+        ],
+        "outputNotes": "No new Scenario generation exists for this seating pass because the team Free-plan custom-generation limit rejected the run. The reused donor is Scenario asset asset_VE7dSe99xaL43fNPLkvV1ShE from job job_TB2LfejS7ngrPt5hfjhhAhHC; its exact original prompt and settings are recorded under painted-metal-v1. Local 512-square source PNG: 78,371 bytes, SHA-256 59734d5422d05b9e43d5283aaa5d768ac4fa705f4d8c2cc61e85b0f2b0ee5acf. One opaque sRGB base-color file only; no normal or roughness map."
+      },
+      "license": {
+        "name": "Derivative of Scenario Free Tier output for personal and noncommercial evaluation, with original local color design",
+        "url": "https://www.scenario.com/pricing",
+        "commercialUse": false,
+        "attribution": null,
+        "evidence": "Scenario pricing checked 2026-09-30 states Free plan output is limited to personal and evaluation use; paid plans include commercial use. The donor's generated-output rights remain subject to Scenario Terms v2.1.1: https://www.scenario.com/terms-and-conditions. The indigo-purple color construction and periodic noise are original local work. Recheck rights before commercial release."
+      },
+      "runtime": [
+        {
+          "path": "assets/textures/seating/seating-v1.webp",
+          "format": "webp",
+          "bytes": 1026,
+          "maxBytes": 50000,
+          "sha256": "14f6cdce3c5acfba87f2b9241c67b6045b100a8302c0409a52020bddb46f57d4",
+          "dimensions": {
+            "width": 256,
+            "height": 256
+          },
+          "tiling": {
+            "maxMeanRgbError": 2,
+            "maxPeakRgbError": 8
+          }
+        }
+      ],
+      "validation": {
+        "checks": {
+          "sourceVisual": "pass",
+          "opaqueSrgb": "pass",
+          "sourceSeam": "pass",
+          "optimizedVisual": "pass",
+          "tileProof": "pass",
+          "mobileScalePreview": "pass",
+          "seam": "pass",
+          "compression": "pass",
+          "deterministicRebuild": "pass",
+          "authoredShellSeating": "pass",
+          "instancedSeats": "pass",
+          "proceduralFallback": "pass",
+          "desktopGameView": "pass",
+          "touchPortraitView": "pass",
+          "fogAndRepetition": "pass",
+          "geometryAndGameplayUnchanged": "pass",
+          "assetsCheck": "pass",
+          "productionBuild": "pass"
+        },
+        "measured": {
+          "sourceBytes": 78371,
+          "sourceWidth": 512,
+          "sourceHeight": 512,
+          "sourceEdgeX": 0.4,
+          "sourceEdgeY": 0.44,
+          "sourceEdgeError": 0.42,
+          "sourcePeakRgbEdgeError": 2,
+          "runtimeBytes": 1026,
+          "runtimeWidth": 256,
+          "runtimeHeight": 256,
+          "edgeError": 0.68,
+          "edgeX": 0.62,
+          "edgeY": 0.74,
+          "peakRgbEdgeError": 3,
+          "instancedSeatCount": 240,
+          "instancedSeatDrawCalls": 1,
+          "platformUvRepeat": "8x2",
+          "riserUvRepeat": "8x3",
+          "desktopViewport": "1280x720",
+          "touchViewport": "390x844 emulated",
+          "matchingRuntimeRebuilds": 2
+        },
+        "notes": "Inspected the 512-square source, optimized 256-square WebP, 2 x 2 tile proof, and 64/32-pixel reduction proof. Broad indigo-violet wear repeats without a visible join or fine shimmer pattern. Desktop start and active game at 1280 x 720 and 390 x 844 forced-coarse-pointer start, active, side-camera and reset views were inspected under the existing lights and fog; this is browser emulation, not a physical phone. A browser material probe confirmed seating status ready, textured authored seating platforms and tiered bleachers, an untextured upper wall stripe, 240 instances in one seat mesh, and status fallback with flat seat material when the seating texture load is forced to fail. Geometry, lights, court and hoop gameplay coordinates, and controls were not changed."
+      },
+      "integration": {
+        "module": "src/arena.js",
+        "fallback": "The procedural seat slabs, separate bleacher-riser material, and 240-instanced-seat material keep their original flat colors until the single sRGB WebP loads or if it fails. On success, authored seating platforms and tiered bleachers receive cloned materials with the map; the shared upper wall stripe retains its original material. The existing 240-seat InstancedMesh and crowd instancing remain unchanged."
+      }
     }
   ]
 }

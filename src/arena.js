@@ -117,6 +117,21 @@ export function createArena(THREE) {
     material.color.setHex(0xffffff);
     material.needsUpdate = true;
   };
+  const shellSeatingSurfaces = [];
+  let seatingTexture = null;
+  let seatingPlatformMap = null;
+  let seatingRiserMap = null;
+  const applySeatingMaterial = (material, map, tint) => {
+    material.map = map;
+    material.color.setHex(tint);
+    material.needsUpdate = true;
+  };
+  const applyShellSeatingSurface = (mesh, kind) => {
+    const material = mesh.material.clone();
+    applySeatingMaterial(material, kind === 'platform' ? seatingPlatformMap : seatingRiserMap,
+      kind === 'platform' ? 0xffffff : 0xc8c7dc);
+    mesh.material = material;
+  };
 
   const boardMaterials = [
     new THREE.MeshStandardMaterial({ color: 0x92562e, roughness: 0.5, metalness: 0.04 }),
@@ -519,7 +534,7 @@ export function createArena(THREE) {
   }
 
   // Tiered bleachers on three sides of the court.
-  const standMaterial = materials.trim;
+  const standMaterial = materials.trim.clone();
   for (const sign of [-1, 1]) {
     for (let tier = 0; tier < 4; tier += 1) {
       const height = 0.62 + tier * 0.58;
@@ -686,6 +701,33 @@ export function createArena(THREE) {
   seats.computeBoundingSphere();
   group.add(seats);
 
+  // Keep the original seat, riser, and instanced-seat colors until the single
+  // seating color map loads. The 240 seats remain one instanced draw call.
+  group.userData.seatingStatus = 'loading';
+  new THREE.TextureLoader().load(
+    `${import.meta.env.BASE_URL}assets/textures/seating/seating-v1.webp`,
+    (texture) => {
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      texture.anisotropy = 2;
+      seatingTexture = texture;
+      seatingPlatformMap = texture.clone();
+      seatingPlatformMap.repeat.set(8, 2);
+      seatingPlatformMap.needsUpdate = true;
+      seatingRiserMap = texture.clone();
+      seatingRiserMap.repeat.set(8, 3);
+      seatingRiserMap.needsUpdate = true;
+      applySeatingMaterial(materials.seat, seatingPlatformMap, 0xffffff);
+      applySeatingMaterial(standMaterial, seatingRiserMap, 0xc8c7dc);
+      applySeatingMaterial(seats.material, seatingTexture, 0xffffff);
+      for (const [mesh, kind] of shellSeatingSurfaces) applyShellSeatingSurface(mesh, kind);
+      group.userData.seatingStatus = 'ready';
+    },
+    undefined,
+    () => { group.userData.seatingStatus = 'fallback'; },
+  );
+
   // The GLB is authored in world-space meters with its scene root at 0,0,0.
   // Reject a bad or partial export before switching off the playable fallback.
   group.userData.arenaShellStatus = 'loading';
@@ -725,6 +767,11 @@ export function createArena(THREE) {
         } else if (material?.name === 'trim') {
           shellMetalMaterials.add(material);
           if (metalTexture) applyShellMetalMaterial(material);
+        }
+        if (child.isMesh && (child.name === 'seating_platforms' || child.name === 'tiered_bleachers')) {
+          const kind = child.name === 'seating_platforms' ? 'platform' : 'riser';
+          shellSeatingSurfaces.push([child, kind]);
+          if (seatingTexture) applyShellSeatingSurface(child, kind);
         }
       });
       shell.name = 'authored arena shell';
