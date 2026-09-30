@@ -119,6 +119,13 @@ Use `null` for unavailable generation fields on locally authored assets. A sampl
 - The WebP's left/right and top/bottom mean edge differences are **3.66** and **2.64** RGB levels, below the recorded threshold of 5. A 2×2 tile proof and desktop/touch game views were inspected. `src/arena.js` loads the one shared texture on the existing 16 planks and keeps their color materials until the file loads or if loading fails. Court geometry, lines, lighting, collision data, and controls did not change.
 - [Scenario pricing](https://www.scenario.com/pricing) describes Free plan outputs as personal/evaluation use. The manifest records `commercialUse: false` for this noncommercial evaluation demo. [Scenario's terms](https://www.scenario.com/terms-and-conditions) assign rights in generated outputs but leave use review to the user. Recheck the license before a commercial release; the project rename from “Default Project” to “TheArena” is also pending.
 
+## Accepted arena shell
+
+- `scripts/build-arena-shell.mjs` deterministically authors the original meter-scale GLB and one 512² fictional venue atlas. The runtime files are `public/assets/models/arena/arena-shell-v1.glb` and `public/assets/textures/arena/atlas-v1.png`. The five supplied screenshots were broad era/style references; no pixels, real marks, or copied signs were used.
+- The GLB has 956 triangles, 20 batched meshes, 10 shared materials, an origin pivot, Y up, and no node transforms. One 24-triangle seat mesh is drawn in 240 instances. Open risers, inward wall faces, and an exposed lattice avoid full buried bleacher blocks. The separate spotlights, gameplay court, hoop assembly, player, camera, controls, and audio keep their existing contracts.
+- `src/arena.js` displays the original procedural shell while loading and on any GLB load/validation failure; after a valid load, it removes and disposes the fallback geometry. The decoded board mesh restores the exact name consumed by the existing emissive presentation pulse.
+- The manifest records the exact recipe, original-art rights, optimized bytes and hashes, scale, bounds, geometry checks, viewport inspections, and fallback test. Narrow portrait and landscape views were inspected in a fine-pointer browser viewport; physical touch-device FPS has not been measured.
+
 ## Generation order and ceilings
 
 Budgets are acceptance targets for the **optimized runtime files**. They are ceilings rather than instructions to add detail until a limit is reached. Maintain a target of **under 3 MB total added runtime assets** for the full first pass; load audio after the game starts and keep optional ambience deferred.

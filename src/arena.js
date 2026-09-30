@@ -1,5 +1,8 @@
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+
 /**
- * A compact, asset-free PS2-style basketball arena.
+ * A compact PS2-style basketball arena with an authored shell and fallback.
  *
  * Coordinates use X for court width, Y for height, and Z for court length.
  * The playable half court faces the basket at negative Z.  Keep `group` at
@@ -13,6 +16,10 @@ export function createArena(THREE) {
 
   const group = new THREE.Group();
   group.name = "PS2 Basketball Arena";
+  const shellFallback = new THREE.Group();
+  shellFallback.name = 'procedural arena shell fallback';
+  group.add(shellFallback);
+  let environmentParent = group;
 
   const V = (x, y, z) => new THREE.Vector3(x, y, z);
   const court = {
@@ -95,7 +102,7 @@ export function createArena(THREE) {
     new THREE.MeshStandardMaterial({ color: 0x7e4829, roughness: 0.56, metalness: 0.03 }),
   ];
 
-  function addBox(width, height, depth, material, position, name, parent = group) {
+  function addBox(width, height, depth, material, position, name, parent = environmentParent) {
     const mesh = new THREE.Mesh(new THREE.BoxGeometry(width, height, depth), material);
     mesh.position.copy(position);
     mesh.name = name;
@@ -149,7 +156,7 @@ export function createArena(THREE) {
   }
 
   // Floor, parquet strips, and painted half-court surface.
-  addBox(23, 0.38, 23, materials.concrete, V(0, -0.21, 0), "arena foundation");
+  addBox(23, 0.38, 23, materials.concrete, V(0, -0.21, 0), "arena foundation", shellFallback);
   addBox(court.width + 0.5, 0.075, court.depth + 0.5, materials.courtEdge, V(0, 0, 0), "court edge");
 
   const plankWidth = court.width / 16;
@@ -318,6 +325,8 @@ export function createArena(THREE) {
   hoop.net = netGroup;
   hoop.support = basketGroup;
 
+  // Keep the original shell visible through loading and any asset error.
+  environmentParent = shellFallback;
   // Building shell: deliberately dark, chunky and slightly theatrical.
   addBox(31, 0.42, 31, materials.concrete, V(0, 11.35, 0), "arena ceiling");
   addBox(31, 9.5, 0.32, materials.concrete, V(0, 5.7, 11.5), "far arena wall");
@@ -458,7 +467,100 @@ export function createArena(THREE) {
       addBox(width, height, 0.024, materials.clock, V(x + sx, sy, 0.086), "shot clock digit", shotClock);
     });
   });
-  group.add(shotClock);
+  shellFallback.add(shotClock);
+
+  // Seat backs and cushions reuse one tiny mesh and one draw call. The crowd
+  // remains the established instanced presentation and sits in these rows.
+  const seatPan = new THREE.BoxGeometry(0.46, 0.08, 0.43);
+  seatPan.translate(0, 0.04, 0.04);
+  const seatBack = new THREE.BoxGeometry(0.46, 0.44, 0.09);
+  seatBack.translate(0, 0.27, -0.22);
+  const seatGeometry = mergeGeometries([seatPan, seatBack]);
+  seatPan.dispose();
+  seatBack.dispose();
+  const seats = new THREE.InstancedMesh(
+    seatGeometry,
+    new THREE.MeshBasicMaterial({ color: 0x464064 }),
+    240,
+  );
+  seats.name = 'instanced arena seats';
+  seats.castShadow = false;
+  seats.receiveShadow = false;
+  seats.visible = false;
+  const seatMatrix = new THREE.Matrix4();
+  const seatRotation = new THREE.Quaternion();
+  const seatScale = V(1, 1, 1);
+  let seatIndex = 0;
+  const placeSeat = (x, y, z, yaw) => {
+    seatRotation.setFromAxisAngle(V(0, 1, 0), yaw);
+    seatMatrix.compose(V(x, y, z), seatRotation, seatScale);
+    seats.setMatrixAt(seatIndex, seatMatrix);
+    seatIndex += 1;
+  };
+  for (const sign of [-1, 1]) {
+    for (let row = 0; row < 4; row += 1) {
+      const y = 0.62 + row * 0.58 + 0.075;
+      for (let seat = 0; seat < 20; seat += 1) {
+        placeSeat(sign * (8.18 + row * 1.04), y, -6.35 + seat * 0.67, sign < 0 ? Math.PI / 2 : -Math.PI / 2);
+      }
+    }
+  }
+  for (let row = 0; row < 4; row += 1) {
+    const y = 0.62 + row * 0.58 + 0.075;
+    for (let seat = 0; seat < 20; seat += 1) {
+      placeSeat(-6.6 + seat * 0.695, y, -8.25 - row * 1.03, 0);
+    }
+  }
+  seats.instanceMatrix.needsUpdate = true;
+  seats.computeBoundingSphere();
+  group.add(seats);
+
+  // The GLB is authored in world-space meters with its scene root at 0,0,0.
+  // Reject a bad or partial export before switching off the playable fallback.
+  group.userData.arenaShellStatus = 'loading';
+  new GLTFLoader().load(
+    `${import.meta.env.BASE_URL}assets/models/arena/arena-shell-v1.glb`,
+    ({ scene: shell }) => {
+      shell.updateMatrixWorld(true);
+      const bounds = new THREE.Box3().setFromObject(shell);
+      const size = bounds.getSize(new THREE.Vector3());
+      let triangles = 0;
+      let videoBoards = 0;
+      let clockDigits = 0;
+      shell.traverse((child) => {
+        if (!child.isMesh) return;
+        // GLTFLoader normalizes spaces in node names. Restore the exact name
+        // read by the existing presentation pulse in main.js.
+        if (child.name === 'arena_video_board') child.name = 'arena video board';
+        const geometry = child.geometry;
+        triangles += geometry.index ? geometry.index.count / 3 : geometry.getAttribute('position').count / 3;
+        if (child.name === 'arena video board' && child.material?.emissiveIntensity !== undefined) videoBoards += 1;
+        if (child.name === 'shot_clock_digits') clockDigits += 1;
+        child.castShadow = false;
+        child.receiveShadow = false;
+      });
+      if (triangles > 10000 || videoBoards !== 1 || clockDigits !== 1 ||
+          Math.abs(size.x - 30.7) > 0.5 || Math.abs(size.z - 23.04) > 0.5 ||
+          bounds.min.y < -0.5 || bounds.max.y > 11.5) {
+        console.warn('Arena shell failed validation', JSON.stringify({ triangles, videoBoards, clockDigits, size: size.toArray(), minY: bounds.min.y, maxY: bounds.max.y }));
+        group.userData.arenaShellStatus = 'fallback';
+        return;
+      }
+      shell.name = 'authored arena shell';
+      group.add(shell);
+      seats.visible = true;
+      shellFallback.visible = false;
+      shellFallback.traverse((child) => child.geometry?.dispose());
+      shellFallback.removeFromParent();
+      group.userData.arenaShellStatus = 'ready';
+      group.userData.arenaShellTriangles = triangles;
+    },
+    undefined,
+    (error) => {
+      console.warn('Arena shell could not load; using procedural fallback.', error);
+      group.userData.arenaShellStatus = 'fallback';
+    },
+  );
 
   group.userData.court = court;
   group.userData.hoop = hoop;

@@ -18,7 +18,7 @@ The initial release is a browser-based, third-person solo basketball demo with:
 - Dribbling, jump shots, layups, dunks, a two-minute run, and reset
 - Procedural PS2-era visual treatment, one validated court wood texture, and synthesized gameplay audio
 
-The court wood and basketball are accepted runtime assets. The basketball combines a Scenario-generated leather concept with an original local low-poly mesh; other geometry and all audio remain procedural placeholders. No NBA marks or real-person likenesses are included. See [`docs/ASSET_PIPELINE.md`](docs/ASSET_PIPELINE.md) and `public/assets/manifest.json` for provenance, license scope, measurements, and validation limits.
+The court wood, basketball, and arena shell are accepted runtime assets. The basketball combines a Scenario-generated leather concept with an original local low-poly mesh; the shell and fictional venue atlas are locally authored. The hoop and player geometry and all audio remain procedural placeholders. No NBA marks or real-person likenesses are included. See [`docs/ASSET_PIPELINE.md`](docs/ASSET_PIPELINE.md) and `public/assets/manifest.json` for provenance, license scope, measurements, and validation limits.
 
 ## Project rules
 
@@ -62,8 +62,9 @@ The pipeline now has a style guide, budgets, a machine-readable manifest and sch
 Continue replacing the remaining placeholders in small passes:
 
 1. Basketball replacement completed: centered 0.12 m radius, 352 triangles, one 256² color map, and a narrow renderer in `src/ball.js` with the original fallback. Desktop and emulated touch checks passed. A tested green-timed jumper missed identically in the original and replacement builds; physics remains unchanged. See the manifest for this existing limitation and detailed checks.
-2. Add the remaining tiling materials and short gameplay audio behind `src/arena.js` and `src/audio.js`, one category at a time.
-3. Build a named hoop assembly and arena detail, preserving the fixed gameplay landmarks and mutable net reference.
-4. Rig a generic fictional player last, matching the current hand anchor and action-state API.
+2. Arena shell replacement completed: an 85.7 KB GLB with 956 triangles, one 512² fictional venue atlas, and 240 instanced seats. The original procedural shell is the loading/error fallback. The court wood, hoop landmarks, lights, camera, and controls remain unchanged. Desktop and narrow portrait/landscape game views and a missing-model fallback were checked; physical-phone FPS remains unmeasured.
+3. Add the remaining tiling materials and short gameplay audio behind `src/arena.js` and `src/audio.js`, one category at a time.
+4. Build a named hoop assembly, preserving the fixed gameplay landmarks and mutable net reference.
+5. Rig a generic fictional player last, matching the current hand anchor and action-state API.
 
 `main` remains the deployment branch. Verify each replacement before pushing; the current live build should remain on the last accepted asset set. The Scenario project used for the first texture is still named “Default Project”; renaming it to “TheArena” remains a workspace follow-up.

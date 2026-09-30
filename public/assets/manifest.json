@@ -266,6 +266,129 @@
         "module": "src/ball.js",
         "fallback": "Exact original procedural basketball is visible while loading and on network, decode, or scale validation failure. main.js retains the stable root, all gameplay/physics and userData.shadow; only decoded visual children replace the fallback."
       }
+    },
+    {
+      "id": "arena-shell-v1",
+      "category": "model",
+      "status": "accepted",
+      "source": {
+        "type": "local",
+        "prompt": "Original fictional early-2000s console basketball arena shell: broad charcoal and cool-purple walls, open tiered bleachers, chunky exposed ceiling lattice, warm court-facing light housings, restrained amber edges, four fictional venue video boards and an offset red 24 shot clock. Preserve the existing 15.2 by 14 meter wood court, hoop and lighting landmarks; avoid logos, copied signage and unnecessary buried faces.",
+        "negativePrompt": "No real team, league, sponsor, player likeness, copied sign, photo texture, high-frequency detail, or hidden solid seating blocks.",
+        "modelId": null,
+        "modelVersion": null,
+        "settings": {
+          "generatorScript": "scripts/build-arena-shell.mjs",
+          "generatorBytes": 16194,
+          "generatorSha256": "3b9fcc7aa7dc851770776f4178f778ed7f3cf5c34ede52470a9184db9e411d41",
+          "method": "Deterministic local mesh and SVG atlas authoring; custom indexed glTF 2.0 binary writer",
+          "units": "meters",
+          "upAxis": "Y",
+          "courtWidthAxis": "X",
+          "courtLengthAxis": "Z",
+          "basketDirection": "negative Z",
+          "rootPivot": [0, 0, 0],
+          "materials": 10,
+          "textureAtlas": [512, 512],
+          "seatInstances": 240,
+          "seatGeometryTriangles": 24,
+          "glbTriangleBudget": 10000,
+          "glbByteBudget": 512000
+        },
+        "seed": null,
+        "referenceAssetIds": [],
+        "scenarioAssetId": null,
+        "scenarioJobId": null,
+        "generatedAt": "2026-09-30T03:26:30Z",
+        "optimizationSteps": [
+          "Authored exposed wall, ceiling, foundation, step and truss faces in meter-scale world coordinates; omitted buried bleacher bottoms and wall backs.",
+          "Batched the shell into 20 named meshes and 10 shared materials, with one 512-square PNG atlas for fictional video-board graphics.",
+          "Used one 24-triangle local seat mesh for 240 runtime instances; retained the established instanced crowd and four existing spotlight references.",
+          "Kept the procedural shell visible during loading and on missing or invalid GLB; disposed its geometry after the authored shell passed runtime validation.",
+          "Verified the optimized GLB binary, accessor bounds, triangle areas, unit normals, UV range and identity node transforms independently of the generator."
+        ],
+        "outputNotes": "Original local primitives and SVG lettering. Five user-provided game screenshots informed broad PS2-era seating and architectural direction only; no reference pixels, names, branding or geometry were copied. The generator is committed for reproducibility; no raw image generations or large intermediates are committed."
+      },
+      "license": {
+        "name": "Original locally authored TheArena asset",
+        "url": null,
+        "commercialUse": true,
+        "attribution": null,
+        "evidence": "Mesh recipe, layout, material palette and atlas artwork were authored for this repository from geometric primitives and SVG. User-supplied screenshots served as style references only; the runtime files contain no third-party pixels, marks or copied signage."
+      },
+      "runtime": [
+        {
+          "path": "assets/models/arena/arena-shell-v1.glb",
+          "format": "glb",
+          "bytes": 85696,
+          "maxBytes": 512000,
+          "sha256": "4f60eb9767b06f0d49dc7ef584021edde40d123915a4c9aa5f8c0b32dd5e3330",
+          "triangles": 956
+        },
+        {
+          "path": "assets/textures/arena/atlas-v1.png",
+          "format": "png",
+          "bytes": 8917,
+          "maxBytes": 81920,
+          "sha256": "3595e7e9d36a32036439d4edc69391ab1de5bd1652ccef9f176ca0b15c4d747a",
+          "dimensions": { "width": 512, "height": 512 }
+        }
+      ],
+      "validation": {
+        "checks": {
+          "originalRights": "pass",
+          "gltfStructure": "pass",
+          "meshBudget": "pass",
+          "normalsUvsTriangles": "pass",
+          "scalePivotYUp": "pass",
+          "courtBoundsAndHoopData": "pass",
+          "courtMarkingsAndHoopVisibility": "pass",
+          "boardPresentationName": "pass",
+          "desktopGameView": "pass",
+          "desktopMovement": "pass",
+          "touchPortraitView": "pass",
+          "touchLandscapeView": "pass",
+          "loadingFallback": "pass",
+          "mobileMemoryBudget": "pass",
+          "assetsCheck": "pass",
+          "productionBuild": "pass"
+        },
+        "measured": {
+          "modelBytes": 85696,
+          "atlasBytes": 8917,
+          "totalAddedBytes": 94613,
+          "glbUniqueTriangles": 956,
+          "instancedSeatUniqueTriangles": 24,
+          "addedUniqueTriangles": 980,
+          "renderedSeatTriangles": 5760,
+          "glbMaterials": 10,
+          "glbMeshesAndDrawCalls": 20,
+          "seatDrawCalls": 1,
+          "seatInstances": 240,
+          "estimatedAtlasGpuBytes": 1048576,
+          "estimatedGlbVertexIndexBytes": 66920,
+          "seatInstanceMatrixBytes": 15360,
+          "glbBoundsMinMeters": "-15.43,-0.36,-11.91",
+          "glbBoundsMaxMeters": "15.43,11.15,11.56",
+          "glbDimensionsMeters": "30.86,11.51,23.47",
+          "rootPivotMeters": "0,0,0",
+          "courtWidthMeters": 15.2,
+          "courtDepthMeters": 14,
+          "courtFloorY": 0,
+          "nearestSideTierXMeters": 7.66,
+          "invalidNormals": 0,
+          "invalidUvs": 0,
+          "zeroAreaTriangles": 0,
+          "desktopViewport": "1280x720",
+          "touchPortraitViewport": "390x844",
+          "touchLandscapeViewport": "844x390"
+        },
+        "notes": "Desktop start and gameplay views, forward keyboard movement and court-marking visibility were inspected locally. Portrait and landscape narrow viewports kept the hoop, clock and key in frame; this browser reports a fine pointer, so these are viewport checks rather than physical touch-device or touch-control performance tests. The four-board material retains the exact arena video board name used by main.js for its emissive pulse. With the GLB temporarily absent, the original shell remained visible; restoring it loaded the authored shell. The existing court, hoop, player, camera, controls, physics, lights and gameplay audio were not edited. Shell walls face inward so an outside camera sees through their back faces at extreme court positions. Mobile memory and draw-call checks use shipped geometry/bytes; physical-device FPS remains unmeasured."
+      },
+      "integration": {
+        "module": "src/arena.js",
+        "fallback": "The complete original procedural shell, bleachers, boards and shot clock remain visible during loading and on network, decode or mesh-validation failure; successful GLB loading removes and disposes their geometry."
+      }
     }
   ]
 }
