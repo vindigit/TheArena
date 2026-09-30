@@ -2,7 +2,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { createPlayer as createProceduralPlayer } from './player-procedural.js';
 import { createPoseAdapter } from './player-pose.js';
 
-const MODEL_URL = import.meta.env.BASE_URL + 'assets/models/player/fictional-player-v1.glb';
+const MODEL_URL = import.meta.env.BASE_URL + 'assets/models/player/fictional-player-v2.glb';
 const REQUIRED_BONES = ['root', 'pelvis', 'chest', 'neck', 'head', ...['left', 'right'].flatMap(side =>
   ['upper_arm', 'forearm', 'hand', 'thigh', 'shin', 'foot'].map(part => `${side}_${part}`))];
 

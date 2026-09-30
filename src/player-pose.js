@@ -7,11 +7,18 @@ export function createPoseAdapter(THREE, visual, bones, anchors) {
   const clamp = (v, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, Number(v) || 0));
   const vec = (x, y, z) => new THREE.Vector3(x, y, z);
   const handOffset = vec(0, -.075, -.125);
+  const tPose = visual.getObjectByName('fictional_player_rig')?.userData.game_axes_corrected === true;
   const world = new THREE.Vector3(), inverse = new THREE.Quaternion();
   let walkTime = 0, phase = 0;
   const arms = ['right', 'left'].map((side, i) => {
     const upper = get(`${side}_upper_arm`), lower = get(`${side}_forearm`), hand = get(`${side}_hand`);
-    return { side, sign: i === 0 ? 1 : -1, upper, lower, hand,
+    const sign = i === 0 ? 1 : -1;
+    // This imported T-pose has fingers pointing sideways and palms down.
+    // Map that bind orientation into the gameplay wrist frame before posing.
+    const handBind = tPose ? new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().makeBasis(
+      vec(0, -sign, 0), vec(0, 0, 1), vec(-sign, 0, 0))) : new THREE.Quaternion();
+    return { side, sign, upper, lower, hand, handBind,
+      anchorOffset: handOffset.clone().applyQuaternion(handBind.clone().invert()),
       upperAxis: rest.get(`${side}_forearm`).clone().normalize(),
       lowerAxis: rest.get(`${side}_hand`).clone().normalize(),
       a: rest.get(`${side}_forearm`).length(), b: rest.get(`${side}_hand`).length() };
@@ -44,9 +51,9 @@ export function createPoseAdapter(THREE, visual, bones, anchors) {
     visual.updateWorldMatrix(true, true);
     const lowerQ = new THREE.Quaternion().setFromUnitVectors(arm.lowerAxis, reached.clone().sub(elbow).normalize());
     arm.lower.quaternion.copy(upperQ.clone().invert().multiply(lowerQ));
-    arm.hand.quaternion.copy(lowerQ.clone().invert().multiply(orientation));
+    arm.hand.quaternion.copy(lowerQ.clone().invert().multiply(orientation).multiply(arm.handBind));
     visual.updateWorldMatrix(true, true);
-    const point = arm.hand.localToWorld(handOffset.clone());
+    const point = arm.hand.localToWorld(arm.anchorOffset.clone());
     anchors[`${arm.side}Hand`].position.copy(visual.worldToLocal(point)).add(visual.position);
   }
   function update(dt, state) {
@@ -103,13 +110,13 @@ export function createPoseAdapter(THREE, visual, bones, anchors) {
         if (arm.side === 'left' && follow > 0) target.x -= follow * .22;
       } else if (action === 'layup' || action === 'dunk') {
         const rise = Math.sin(Math.min(p / .58, 1) * Math.PI / 2), isDunk = action === 'dunk';
-        target = vec(isDunk ? .10 : .19, 1.61 + rise * (isDunk ? .67 : .64), -.30 - rise * .10);
+        target = vec(isDunk ? .10 : .19, 1.61 + rise * (tPose ? .60 : (isDunk ? .67 : .64)), -.30 - rise * .10);
         rotation = new THREE.Quaternion().setFromEuler(arm.side === 'left'
           ? new THREE.Euler(1.25, -.55, 0) : new THREE.Euler(Math.PI / 2, 0, 0));
         if (arm.side === 'left' && !isDunk) target = vec(-.34, 1.22 + rise * .12, -.30);
       } else {
-        target = arm.side === 'right' ? vec(.47, .96 + Math.sin(dribble) * .12, -.23)
-          : vec(-.43, .94, -.08 - stride * (moving ? .19 : .015));
+        target = arm.side === 'right' ? vec(.47, (tPose ? 1.12 : .96) + Math.sin(dribble) * .12, -.23)
+          : vec(-.43, tPose ? 1.12 : .94, -.08 - stride * (moving ? .19 : .015));
         rotation = new THREE.Quaternion().setFromEuler(new THREE.Euler(arm.side === 'right' ? -.35 : .05, 0, s * -.08));
       }
       solve(arm, target, rotation, vec(s * .8, 1.20, .13));

@@ -897,148 +897,73 @@
       }
     },
     {
-      "id": "fictional-player-v1",
+      "id": "fictional-player-v2",
       "category": "model",
       "status": "accepted",
       "source": {
-        "type": "local",
-        "prompt": "A 2003 console basketball video game character model screenshot. ONE full-body adult male athlete in a neutral A-pose, front view, empty hands away from body, all feet in frame. Realistic adult human proportions, 7.5 heads tall, long muscular legs, broad deltoids, strong forearms, large anatomically human hands with fingers. Angular realistic generic face, eyes with lids and brows, broad nose, short black buzz cut, warm dark brown skin. Cream sleeveless loose mesh basketball jersey, cream baggy long shorts down to knees, solid dark muted purple side panels and small ochre piping, blank unbranded uniform. White crew socks and chunky charcoal basketball shoes with cream soles. Original fictional face and kit. Flat grey background. Low polygon 3D mesh with hand-painted low-resolution diffuse texture, baked-looking muscle shading, visible angular surfaces, authentic early-2000s sports simulation graphics. Neutral flat lighting. No cartoon, no toy, no plastic, no chibi, no dot eyes, no rounded toy head, no modern stylized mobile-game look, no logos, no text, no ball, no pedestal, no real athlete likeness.",
+        "type": "third-party",
+        "prompt": "Generate exactly ONE complete game-ready basketball player from this single front-view T-pose reference. The input contains one person. Create one body only: no duplicates, extra figures, turnaround board. Preserve the character’s dark brown skin, short black hair, lean long-limbed athletic build, broad shoulders, large hands, and oversized high-top shoes. Use connected natural anatomy with clean shoulders, elbows, wrists, hips, knees, and ankles. Keep a symmetrical T-pose with straight horizontal arms, palms down, separated fingers, straight legs, and parallel feet. Match the original fictional uniform: deep muted-purple loose jersey and baggy knee-length shorts, cream piping, cream angular side panels, small broken-square chest emblem, and cream number 07. Use cream socks and chunky cream shoes with purple panels and dark soles. Style it like a 2004 PS2 basketball-game player: smooth-shaded economical geometry, strong readable silhouette.",
         "negativePrompt": null,
-        "modelId": "model_p-image",
-        "modelVersion": null,
+        "modelId": "Tripo H3.1",
+        "modelVersion": "H3.1",
         "settings": {
-          "concept": {
-            "prompt": "A 2003 console basketball video game character model screenshot. ONE full-body adult male athlete in a neutral A-pose, front view, empty hands away from body, all feet in frame. Realistic adult human proportions, 7.5 heads tall, long muscular legs, broad deltoids, strong forearms, large anatomically human hands with fingers. Angular realistic generic face, eyes with lids and brows, broad nose, short black buzz cut, warm dark brown skin. Cream sleeveless loose mesh basketball jersey, cream baggy long shorts down to knees, solid dark muted purple side panels and small ochre piping, blank unbranded uniform. White crew socks and chunky charcoal basketball shoes with cream soles. Original fictional face and kit. Flat grey background. Low polygon 3D mesh with hand-painted low-resolution diffuse texture, baked-looking muscle shading, visible angular surfaces, authentic early-2000s sports simulation graphics. Neutral flat lighting. No cartoon, no toy, no plastic, no chibi, no dot eyes, no rounded toy head, no modern stylized mobile-game look, no logos, no text, no ball, no pedestal, no real athlete likeness.",
-            "width": 832,
-            "height": 1216,
-            "seed": 290927,
-            "creativeUnits": 1,
-            "widthReturned": 832,
-            "heightReturned": 1216,
-            "sourceBytes": 111114,
-            "collectionId": "col_4tG1aREGNQ38oMVAVk2zzjdp"
+          "observed": {
+            "textureResolution": 2048,
+            "topology": "triangles",
+            "faces": 4704
           },
-          "referenceUse": "Seven supplied game screenshots informed era/proportion only; no reference pixels were uploaded, traced, projected or embedded; no likeness or branding was copied.",
-          "localAuthoring": {
-            "script": "scripts/build-player.mjs",
-            "recipe": "Original ring-profile mesh, sculpted facial features, articulated arm/leg topology and oversized shoes/hands; original cream, muted-purple and ochre number-27 kit. One skinned primitive. Atlas synthesized from original SVG, 512-square indexed PNG with 128-color palette and no alpha. Meter-scale Y-up, forward -Z; 17 identity-axis bones with translation-only bind transforms and inverse bind matrices. At most two normalized influences; rigid hand/finger detail, blended elbows, wrists, knees and waist. No animations or root-motion tracks.",
-            "embeddedAtlasSha256": "7e56d94eae40f997d4d265ea64e61d35e42bf649fb9d279cbe9e57f80933174b"
+          "requested": {
+            "ultraMeshQuality": false,
+            "texture": true,
+            "textureQuality": "2K",
+            "removeLighting": true,
+            "pbr": false,
+            "topology": "triangle",
+            "polycount": 5000
           },
-          "meshRequest": {
-            "modelId": "model_tripo-v3-1-image-to-3d",
-            "parameters": {
-              "image": "asset_QPsNLXJboFPec2ZcRQNs8xtv",
-              "texture": true,
-              "textureQuality": "standard",
-              "textureVersion": "",
-              "delight": true,
-              "textureAlignment": "original_image",
-              "geometryQuality": "standard",
-              "textureSeed": 290927,
-              "orientation": "align_image",
-              "pbr": false,
-              "faceLimit": 5500,
-              "autoSize": true,
-              "quad": false,
-              "smartLowPoly": true,
-              "generateParts": false,
-              "seed": 290927
-            },
-            "dryRunCreativeUnits": 60,
-            "status": "rejected-before-job",
-            "jobId": null,
-            "assetId": null,
-            "reason": "429 PlanLimitReachedError: custom-generation actionLimit 50, actionValue 26, scope team, plan free, nextPlan cu-basic; diagnostics healthy.",
-            "traceId": "mcpt_Fz82ReoNiTfw231MSpy2JSNP"
+          "note": "Requested settings were supplied to user; complete generation-job settings and seed unavailable.",
+          "tripoAssetId": "fb35316e-7853-4934-811f-9236bf0ef04b",
+          "tripoJobId": null,
+          "source": {
+            "bytes": 894440,
+            "sha256": "9974eb81e5c8710384c86de38ab885f202a0d0b08e4bdeaca79c5a0a4f9051a1"
           },
-          "meshLowerCostDryRun": {
-            "parameters": {
-              "image": "asset_QPsNLXJboFPec2ZcRQNs8xtv",
-              "texture": false,
-              "textureQuality": "standard",
-              "textureVersion": "",
-              "delight": true,
-              "textureAlignment": "original_image",
-              "geometryQuality": "standard",
-              "textureSeed": 290927,
-              "orientation": "align_image",
-              "pbr": false,
-              "faceLimit": 5500,
-              "autoSize": true,
-              "quad": false,
-              "smartLowPoly": false,
-              "generateParts": false,
-              "seed": 290927
-            },
-            "creativeUnits": 30,
-            "status": "dry-run-only; not launched"
-          },
-          "riggingDiscovery": {
-            "models": [
-              "model_uthana-character-rigging",
-              "model_meshy-rigging"
-            ],
-            "result": "Both require paid-plan upgrades; neither launched. Blender MCP bridge unavailable. Rig and skin weights authored locally in the deterministic GLB builder."
-          },
-          "rejectedConcept": {
-            "modelId": "model_p-image",
-            "parameters": {
-              "prompt": "Full-body original fictional adult male basketball player, neutral symmetrical A pose, front view, isolated on plain light grey field, feet fully visible apart, open empty hands angled away from thighs. Early 2000s PS2 console character art, chunky low-polygon athletic anatomy, broad rounded shoulders, thick forearms, large expressive hands, oversized unbranded high-top shoes, loose knee-length basketball shorts and sleeveless jersey. Warm medium-brown skin, original angular face with short cropped hair, no resemblance to any real person. Fictional plain cream uniform with muted purple side panels and narrow ochre piping, blank chest, no logos, no lettering, no numbers, no league or team designs. Painted ambient shading and restrained 512 pixel texture detail, realistic athletic proportions with exaggerated silhouette. No basketball, no props, no floor platform, no scene, no watermark. Clean separations at armpits and between legs, suitable for conversion to a skinned 3D game mesh.",
-              "width": 832,
-              "height": 1216,
-              "seed": 290926
-            },
-            "jobId": "job_XHTRBGCboSxEp4FNat2qEUYB",
-            "assetId": "asset_DgRTt17oLg1qaE26shKz4PSW",
-            "creativeUnits": 1,
-            "reason": "Too toy-like; not used or shipped."
-          },
-          "validationScripts": [
-            "tests/player.test.mjs",
-            "scripts/prepare-player-check.mjs"
-          ]
+          "releaseAuthorization": "User requested GitHub Pages publication on 2026-09-30 to play from work after rendered and local in-game previews."
         },
-        "seed": 290927,
-        "referenceAssetIds": [
-          "asset_QPsNLXJboFPec2ZcRQNs8xtv"
-        ],
-        "scenarioAssetId": "asset_QPsNLXJboFPec2ZcRQNs8xtv",
-        "scenarioJobId": "job_zmTTjkhoJbtptpX7w2mCaW1c",
-        "generatedAt": "2026-09-30T04:40:44.620Z",
+        "seed": null,
+        "referenceAssetIds": [],
+        "scenarioAssetId": null,
+        "scenarioJobId": null,
+        "generatedAt": null,
         "optimizationSteps": [
-          "Authored geometry directly within the triangle budget; triangulated broad surfaces and joint support loops.",
-          "Batched all visible parts into one skinned primitive and one shared material.",
-          "Packed original cloth, skin, face and shoe color regions into one 512 x 512 atlas; indexed PNG at 128 colors (8243 bytes), embedded in GLB.",
-          "Used only 17 deform bones, at most two nonzero influences per vertex, normalized weights and zeroed unused joint indices.",
-          "Translation-only rest transforms, inverse bind matrices, floor root, Y-up and -Z forward; omitted empty child arrays and all animation clips.",
-          "Validated final GLB with Khronos glTF Validator 2.0.0-dev.3.10: zero errors, warnings, infos or hints. Measured final runtime hash/bytes."
+          "Live Blender MCP import and silhouette pass; 2.05m scale and floor origin.",
+          "Resize embedded color atlas from 2048 to 512; one rough nonmetal material.",
+          "Rotate forward to game -Z and rebuild all 17 bind axes as translation-only glTF frames.",
+          "Move shoulder/elbow/wrist joints onto actual mesh; revise shoulder, neck and wrist skin weights with two influences maximum.",
+          "Adapt T-pose hand orientation and ball anchors; use candidate-specific reachable idle and finish targets.",
+          "Export selected mesh and rig only from live Blender; retain raw and working files outside runtime assets."
         ],
-        "outputNotes": "Scenario generated the concept only. The optimized runtime mesh, texture atlas, skeleton and skin weights were authored locally. No generated mesh job succeeded, and no raw generation, rejected variant or DCC file is shipped."
+        "outputNotes": "Tripo Studio export optimized and rigged through live Blender MCP. Unknown job/seed/reference IDs remain null or empty. Generated fingers and angular elbows remain visible close-up."
       },
       "license": {
-        "name": "Original local geometry/atlas/rig; Scenario concept under Free-plan evaluation scope",
-        "url": "https://www.scenario.com/terms-and-conditions",
-        "commercialUse": false,
+        "name": "Tripo Studio Pro generated output",
+        "url": "https://www.tripo3d.ai/help/privacy-policy/how-to-use-tripo-models-commercially",
+        "commercialUse": true,
         "attribution": null,
-        "evidence": "Checked 2026-09-30: Scenario terms v2.1.1 (July 16 2026), section 4.3 grants generated-output use/modification/distribution; https://www.scenario.com/pricing limits Free-plan outputs to personal/evaluation use. This asset is approved for the existing noncommercial evaluation demo; commercial use needs a plan/license review. Only the original Scenario concept guided proportions/palette; runtime geometry, glyphs, texture and rig are new local work with no third-party pixels, marks or real-person likeness."
+        "evidence": "User states generation used Tripo Studio Pro; paid output rights include modification, distribution and commercial game use, subject to input rights. Original fictional reference reported in conversation; historical sports screenshots used for general era inspiration only. Checked 2026-09-30."
       },
       "runtime": [
         {
-          "path": "assets/models/player/fictional-player-v1.glb",
+          "path": "assets/models/player/fictional-player-v2.glb",
           "format": "glb",
-          "bytes": 523940,
+          "bytes": 582124,
           "maxBytes": 800000,
-          "sha256": "cad29e39b7b7b5b47278ea974802bb409713eed96f9e4ee7aa306754a84f37e1",
-          "triangles": 3931
+          "sha256": "af5fba2627efdad63d5c7e8e14fd10aad43fc364987e57ddcdf4e910a1368ced",
+          "triangles": 4704
         }
       ],
       "validation": {
         "checks": {
-          "provenance": "pass",
-          "originalIdentity": "pass",
-          "mesh": "pass",
-          "gltfValidator": "pass",
-          "texture": "pass",
           "bindPose": "pass",
           "deformation": "pass",
           "scaleOrientation": "pass",
@@ -1055,43 +980,34 @@
           "loadFailureFallback": "pass",
           "invalidRigFallback": "pass",
           "gameView": "pass",
-          "seam": "not-applicable"
+          "assetsCheck": "pass",
+          "productionBuild": "pass"
         },
         "measured": {
-          "downloadBytes": 523940,
-          "triangles": 3931,
-          "vertices": 8711,
+          "downloadBytes": 582124,
+          "triangles": 4704,
+          "vertices": 3265,
           "materials": 1,
-          "skinnedMeshes": 1,
           "bones": 17,
           "maximumBoneInfluences": 2,
-          "textureAtlases": 1,
           "atlasWidth": 512,
           "atlasHeight": 512,
-          "embeddedAtlasBytes": 8243,
           "animationClips": 0,
-          "bindHeightMeters": 2.069,
-          "root": "0,0,0",
+          "bindHeightMeters": 2.05,
           "upAxis": "Y",
           "forwardAxis": "-Z",
-          "maxBindPoseErrorMeters": 5.961109544447982e-8,
-          "maxGatherHandErrorMeters": 6.131407058289218e-16,
-          "maxTwoHandDunkErrorMeters": 0.004895056690173712,
-          "maxFloorPenetrationMeters": 0.0029999074406250603,
           "sampledPoses": 305,
-          "desktopChecks": 19,
-          "touchChecks": 18,
-          "gltfErrors": 0,
-          "gltfWarnings": 0,
-          "desktopViewport": "1280x800",
-          "touchViewport": "390x844",
-          "rootMotionTracks": 0
+          "maxGatherErrorMeters": 7.28550816809042e-16,
+          "maxDunkGripErrorMeters": 8.627699134216878e-16,
+          "minGameFloorMeters": -0.0035000360134869153,
+          "desktopHandlerChecks": 19,
+          "touchHandlerChecks": 18
         },
-        "notes": "Inspected the original desktop and touch game first, then bind/idle/gather/dunk close-ups and the loaded in-game asset. Offline tests sample all five actions and compare old/new right-hand world positions: maximum deltas idle .379 m, move .392 m, shoot .779 m, layup .911 m, dunk .816 m. Those intentional presentation changes correct the old free-floating gather: both new hand anchors match main.js's fixed gather ball to numerical precision; finishes remain attached to the right-hand anchor and both score. Root translation and jump remain in main.js. Desktop handler tests cover move/sprint, gather/release, layup/dunk, mouse look/zoom and reset. Touch tests use actual Chromium coarse-pointer emulation, plus hit-tested browser touch events for movement, camera drag, gather/release, finish and reset; they are not a physical-phone performance test. Missing GLB and wrong/non-skinned GLB retain functional visible procedural geometry and stable anchors. Atlas is opaque sRGB; non-tiling packed atlas makes opposite-edge seam/tile checks inapplicable. Original procedural fallback is preserved unmodified in src/player-procedural.js. No gameplay, arena, other asset category or input layout was redesigned."
+        "notes": "Rendered Blender action poses and inspected desktop/phone-sized game captures. Browser handler tests use synthetic keyboard/pointer events and forced touch layout at 390x844; physical phone remains untested. User authorized publication for remote play after previews. Scale and action adapter corrected after initial rig failure; final source hash recorded."
       },
       "integration": {
         "module": "src/player.js",
-        "fallback": "Unmodified original player in src/player-procedural.js remains active during fetch/decode and on byte-budget, texture, skeleton, scale or load failures. The stable gameplay root and attachment Object3Ds survive the swap; src/player-pose.js drives the accepted skeleton without baked clips."
+        "fallback": "Original procedural player remains functional during loading and on load, rig or budget validation failure. Game code retains root movement and ball physics."
       }
     },
     {

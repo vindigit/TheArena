@@ -8,7 +8,7 @@ import { createPlayer as createProceduralPlayer } from '../src/player-procedural
 
 // Offline contract/deformation checks on the actual shipped binary. Image
 // decoding is tested separately; remove textures only for Node's scene parser.
-const path = process.argv[2] || 'public/assets/models/player/fictional-player-v1.glb';
+const path = process.argv[2] || 'public/assets/models/player/fictional-player-v2.glb';
 const data = await readFile(path);
 assert.equal(data.toString('ascii',0,4),'glTF');assert.equal(data.readUInt32LE(8),data.length);
 assert.ok(data.length<=800000);
