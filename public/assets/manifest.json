@@ -484,6 +484,112 @@
         "module": "src/arena.js",
         "fallback": "A single sRGB texture is repeated on the procedural concrete material and the authored shell's foundation, wall, and wallShade materials, which include the ceiling. Their original colors remain visible while loading and on texture failure."
       }
+    },
+    {
+      "id": "painted-metal-v1",
+      "category": "texture",
+      "status": "accepted",
+      "source": {
+        "type": "scenario",
+        "prompt": "A single seamless tileable base-color texture swatch for dark painted structural steel in a stylized PS2-era indoor basketball arena. Flat front-on material surface, no object or geometry. Deep charcoal and muted black-purple paint with broad low-frequency eggplant-violet tonal variation, soft baked-looking grime, gentle irregular worn patches and very sparse small chipped paint flecks revealing dark graphite steel. Restrained fine pores; almost no sharp high-frequency speckle. Matte to satin appearance with subdued painted reflections represented only by color, no bright glints. Visually calm at gameplay distance, practical when repeated across basket support arms, structural trim, and metal posts. Seamless in both axes with matching tone and pattern at all edges. Uniform ambient illumination and opaque sRGB color, no directional shading. No logos, text, labels, graffiti, symbols, bolts, rivets, panel seams, welds, objects, scene, perspective, cast shadows, photographic glare, or specular highlights.",
+        "negativePrompt": null,
+        "modelId": "model_scenario-texture",
+        "modelVersion": null,
+        "settings": {
+          "width": 512,
+          "height": 512,
+          "quality": "medium",
+          "eraseSeam": true,
+          "overlap": 64,
+          "featherRadius": 32,
+          "quotedCostCU": 12,
+          "teamId": "team_yNLWgjS1fAtTk5MtpGfW7vRy",
+          "projectId": "proj_A12xiMpm5rjCs8EuszXCaqPh"
+        },
+        "seed": null,
+        "referenceAssetIds": [],
+        "scenarioAssetId": "asset_VE7dSe99xaL43fNPLkvV1ShE",
+        "scenarioJobId": "job_TB2LfejS7ngrPt5hfjhhAhHC",
+        "generatedAt": "2026-09-30T04:33:36.690Z",
+        "optimizationSteps": [
+          "Downloaded the opaque 512 x 512 sRGB PNG source into ignored .tmp/metal staging.",
+          "Downsampled to 256 x 256 with Sharp Lanczos3; no seam repainting or color adjustment.",
+          "Encoded WebP candidates with npm run assets:optimize:texture at qualities 76, 88, and 95 using Sharp effort 6; selected quality 95 to preserve broad wear and keep opposite-edge differences closest to neighboring-pixel variation.",
+          "Copied only the selected WebP into public/assets/textures/metal; kept the raw source, rejected candidates, and 2 x 2 proof images outside the tracked assets."
+        ],
+        "outputNotes": "One opaque sRGB base-color map only; no normal, roughness, metalness, or height map. Scenario source PNG is 353,068 bytes with SHA-256 fa1c0b57bef1b0ca7a652af5364791db39dc193400d4fdc33ceead450cf0cc8c. No reference images or seed were supplied or exposed. Filed in TheArena Scenario collection col_rgcLMCsPgwXnr25W3vjnkpNi."
+      },
+      "license": {
+        "name": "Scenario Free Tier output for personal and noncommercial evaluation",
+        "url": "https://www.scenario.com/pricing",
+        "commercialUse": false,
+        "attribution": null,
+        "evidence": "Scenario pricing checked 2026-09-29 says Free plan outputs are for personal and evaluation use only; paid plans include commercial use. Scenario Terms v2.1.1 sections 4.3 and 4.5 assign generated output rights subject to terms and user review: https://www.scenario.com/terms-and-conditions. Recheck rights before a commercial release."
+      },
+      "runtime": [
+        {
+          "path": "assets/textures/metal/painted-metal-v1.webp",
+          "format": "webp",
+          "bytes": 9392,
+          "maxBytes": 50000,
+          "sha256": "8a3ee897045afe19429895dfd72ae1e02e07c0ab14e104c95afee80caaa92c29",
+          "dimensions": {
+            "width": 256,
+            "height": 256
+          },
+          "tiling": {
+            "maxMeanRgbError": 4,
+            "maxPeakRgbError": 20
+          }
+        }
+      ],
+      "validation": {
+        "checks": {
+          "sourceVisual": "pass",
+          "opaqueSrgb": "pass",
+          "sourceSeam": "pass",
+          "optimizedVisual": "pass",
+          "tileProof": "pass",
+          "seam": "pass",
+          "compression": "pass",
+          "materialFallback": "pass",
+          "authoredHoopSupportArm": "pass",
+          "desktopGameView": "pass",
+          "touchPortraitView": "pass",
+          "geometryAndGameplayUnchanged": "pass",
+          "assetsCheck": "pass",
+          "productionBuild": "pass"
+        },
+        "measured": {
+          "sourceBytes": 353068,
+          "sourceWidth": 512,
+          "sourceHeight": 512,
+          "sourceEdgeX": 2.809,
+          "sourceEdgeY": 3.314,
+          "sourceInteriorX": 2.436,
+          "sourceInteriorY": 2.458,
+          "sourcePeakRgbEdgeError": 20,
+          "runtimeBytes": 9392,
+          "runtimeWidth": 256,
+          "runtimeHeight": 256,
+          "edgeError": 2.758,
+          "edgeX": 2.559,
+          "edgeY": 2.956,
+          "interiorX": 1.698,
+          "interiorY": 1.69,
+          "nearEdgeX": 1.799,
+          "nearEdgeY": 1.507,
+          "peakRgbEdgeError": 15,
+          "desktopViewport": "1280x720",
+          "touchViewport": "390x844",
+          "authoredHoopUvRepeat": "4x2"
+        },
+        "notes": "Inspected the Scenario 512-square source, optimized 256-square WebP, and ignored 2 x 2 proof. Joins were not conspicuous; opposite-edge mean RGB differences remain near ordinary adjacent-pixel differences. Inspected the desktop start and active game at 1280 x 720, and start, active and moved views at 390 x 844 with the existing coarse-pointer layout and input branch forced in an ignored local preview. A temporary material probe reported the new WebP on authored hoop support and arm and on the shell trim; their UV repeat was 4 x 2 on the hoop. No obvious aliasing appeared at the inspected gameplay distance; physical-device motion shimmer was not measured. The preview is browser emulation, not a physical touch-device test. No geometry, gameplay coordinates, collision landmarks, lighting, or controls were changed."
+      },
+      "integration": {
+        "module": "src/arena.js",
+        "fallback": "The original flat procedural trim, dark-metal and painted-metal materials and the authored shell trim remain visible while loading and on texture failure. The authored hoop keeps its original atlas until the color map loads; only its named support and arm receive a cloned material and remapped copy of the same color map. Board, padding, rim, mounts, net and markings keep their atlas."
+      }
     }
   ]
 }

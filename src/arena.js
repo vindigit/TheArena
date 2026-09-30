@@ -110,6 +110,13 @@ export function createArena(THREE) {
     material.color.setHex(tint);
     material.needsUpdate = true;
   };
+  const shellMetalMaterials = new Set();
+  let metalTexture = null;
+  const applyShellMetalMaterial = (material) => {
+    material.map = metalTexture;
+    material.color.setHex(0xffffff);
+    material.needsUpdate = true;
+  };
 
   const boardMaterials = [
     new THREE.MeshStandardMaterial({ color: 0x92562e, roughness: 0.5, metalness: 0.04 }),
@@ -240,6 +247,58 @@ export function createArena(THREE) {
     },
     undefined,
     () => { group.userData.concreteStatus = 'fallback'; },
+  );
+
+  // One painted-steel color map serves the procedural metal and authored trim.
+  // Keep every original flat material until it loads, or if it fails.
+  group.userData.metalStatus = 'loading';
+  new THREE.TextureLoader().load(
+    `${import.meta.env.BASE_URL}assets/textures/metal/painted-metal-v1.webp`,
+    (texture) => {
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      texture.anisotropy = 2;
+      metalTexture = texture;
+      for (const [material, tint] of [
+        [materials.trim, 0xffffff],
+        [materials.darkMetal, 0xd3d4e0],
+        [materials.paintedMetal, 0xffffff],
+      ]) {
+        material.map = texture;
+        material.color.setHex(tint);
+        material.roughness = 0.76;
+        material.metalness = 0.28;
+        material.needsUpdate = true;
+      }
+      for (const material of shellMetalMaterials) applyShellMetalMaterial(material);
+
+      // The optional authored hoop uses a 4 x 2 atlas. Remap only its support
+      // and arm materials; board, padding, rim, net and markings keep the atlas.
+      group.userData.hoopAssetReady?.then((status) => {
+        if (status !== 'ready') return;
+        const support = basketGroup.getObjectByName('support');
+        const arm = basketGroup.getObjectByName('arm');
+        if (!support?.isMesh || !arm?.isMesh) return;
+        const hoopMap = texture.clone();
+        hoopMap.repeat.set(4, 2);
+        hoopMap.flipY = false;
+        hoopMap.needsUpdate = true;
+        const hoopMaterial = support.material.clone();
+        hoopMaterial.map = hoopMap;
+        hoopMaterial.emissiveMap = null;
+        hoopMaterial.color.setHex(0xffffff);
+        hoopMaterial.emissive.setHex(0x0a0812);
+        hoopMaterial.roughness = 0.76;
+        hoopMaterial.metalness = 0.28;
+        hoopMaterial.needsUpdate = true;
+        support.material = hoopMaterial;
+        arm.material = hoopMaterial;
+      });
+      group.userData.metalStatus = 'ready';
+    },
+    undefined,
+    () => { group.userData.metalStatus = 'fallback'; },
   );
 
   const keyCenterZ = court.baselineZ + court.keyLength / 2;
@@ -588,6 +647,9 @@ export function createArena(THREE) {
         if (material && Object.hasOwn(shellConcreteTints, material.name)) {
           shellConcreteMaterials.add(material);
           if (concreteTexture) applyConcreteMaterial(material, shellConcreteTints[material.name]);
+        } else if (material?.name === 'trim') {
+          shellMetalMaterials.add(material);
+          if (metalTexture) applyShellMetalMaterial(material);
         }
       });
       shell.name = 'authored arena shell';
