@@ -590,6 +590,163 @@
         "module": "src/arena.js",
         "fallback": "The original flat procedural trim, dark-metal and painted-metal materials and the authored shell trim remain visible while loading and on texture failure. The authored hoop keeps its original atlas until the color map loads; only its named support and arm receive a cloned material and remapped copy of the same color map. Board, padding, rim, mounts, net and markings keep their atlas."
       }
+    },
+    {
+      "id": "hoop-assembly-v1",
+      "category": "model",
+      "status": "accepted",
+      "source": {
+        "type": "local",
+        "prompt": "Create one original fictional PS2-era basketball hoop assembly in Y-up meters, facing the positive-Z court approach: chunky dark metal base, mast, cantilever arm and braces; broad muted-purple safety padding; pale opaque backboard with a high-contrast target; readable burnt-orange 0.23 m rim; small rear mounting plate and bolts; and an open white rope net. Keep the rim center at (0, 3.05, -5.82), the backboard center at (0, 3.56, -6.25), its dimensions at 1.83 by 1.07 by 0.08 m, and its front at Z -6.21. Make eight named logical parts with an independently animated net, one 256 by 256 color atlas, and at most 2,000 rendered triangles.",
+        "negativePrompt": "No branding, league or team marks, copied designs, photorealism, high-frequency surface noise, transparent net, decorative collision assumptions, or non-meter transforms.",
+        "modelId": null,
+        "modelVersion": null,
+        "settings": {
+          "generatorScript": "scripts/build-hoop-assembly.mjs",
+          "generatorBytes": 13219,
+          "generatorSha256": "165e37d447e2906598904127f94d8b8c68b1ac2f81835ac7953d42b550378471",
+          "method": "Deterministic local primitives, indexed glTF 2.0 binary writer, and original SVG color atlas rasterized to PNG",
+          "scenarioGameAssetsAssessment": "A live Scenario game-asset recommendation identified concept-image models; no generation was run because an image-to-3D result would require rebuilding for the fixed landmarks, named net, and 2,000-triangle cap. Scenario 3D was not used.",
+          "units": "meters",
+          "upAxis": "Y",
+          "frontDirection": "positive Z",
+          "rootPivot": [
+            0,
+            0,
+            0
+          ],
+          "nodeTransforms": "identity",
+          "partNames": [
+            "support",
+            "padding",
+            "arm",
+            "backboard",
+            "target_markings",
+            "rim",
+            "mounts",
+            "net"
+          ],
+          "textureAtlas": [
+            256,
+            256
+          ],
+          "atlasSwatches": 8,
+          "materials": 1,
+          "netMaterial": "opaque three-sided rope geometry; no alpha blending or alpha testing",
+          "rimMajorSegments": 32,
+          "rimTubeSegments": 6,
+          "netStrands": 12,
+          "triangleBudget": 2000,
+          "glbByteBudget": 180000
+        },
+        "seed": null,
+        "referenceAssetIds": [],
+        "scenarioAssetId": null,
+        "scenarioJobId": null,
+        "generatedAt": "2026-09-30T04:34:43Z",
+        "optimizationSteps": [
+          "Authored the support, padding, arm, board, target, rim, mounts and net as eight named meshes in world-space meters with identity node transforms.",
+          "Batched all opaque faces under one atlas material; used three-sided rope tubes to avoid net alpha sorting and overdraw.",
+          "Rendered and inspected close approach and side views; corrected atlas V orientation and changed target markings to dark purple for gameplay contrast.",
+          "Validated the optimized GLB with glTF-Transform inspect and validate; the validator reported zero errors, zero warnings and one informational external-image URI notice.",
+          "Swapped only visual geometry after runtime validation while preserving all four hoop object references and the complete procedural basket fallback."
+        ],
+        "outputNotes": "Original local mesh and atlas. Scenario model discovery was used to evaluate a concept path, but there is no Scenario generation, job or asset for this assembly. The reproducible source script and both optimized runtime files are committed candidates; temporary test views remain ignored under .tmp/."
+      },
+      "license": {
+        "name": "Original locally authored TheArena asset",
+        "url": null,
+        "commercialUse": true,
+        "attribution": null,
+        "evidence": "The mesh layout, low-poly topology, markings and eight atlas swatches were authored for this repository from geometric primitives and SVG. No Scenario output, third-party pixels, brand marks or copied signs are in the runtime files."
+      },
+      "runtime": [
+        {
+          "path": "assets/models/hoop/hoop-assembly-v1.glb",
+          "format": "glb",
+          "bytes": 97812,
+          "maxBytes": 180000,
+          "sha256": "a3c946f94f577dca0f578f236b4a2c93c476a1652552721cc515a88300938060",
+          "triangles": 1242
+        },
+        {
+          "path": "assets/textures/hoop/atlas-v1.png",
+          "format": "png",
+          "bytes": 1102,
+          "maxBytes": 81920,
+          "sha256": "a0194965191d4f24c9341fb71c2c848b4dc5fa3b612e9ed130ac9226ddbf4e82",
+          "dimensions": {
+            "width": 256,
+            "height": 256
+          }
+        }
+      ],
+      "validation": {
+        "checks": {
+          "originalRights": "pass",
+          "gltfStructure": "pass",
+          "triangleAndByteBudgets": "pass",
+          "normalsUvsYUpAndIdentityTransforms": "pass",
+          "exactLandmarksAndApproach": "pass",
+          "separateNamedComponents": "pass",
+          "rimCollision": "pass",
+          "backboardImpact": "pass",
+          "cleanMakeAndNoDuplicateScore": "pass",
+          "layup": "pass",
+          "dunk": "pass",
+          "netAnimation": "pass",
+          "stableHoopReferences": "pass",
+          "loadingAndMissingFileFallback": "pass",
+          "desktopKeyboardAndMouseControls": "pass",
+          "desktopCameraView": "pass",
+          "touchPortraitViewAndControls": "pass",
+          "touchLandscapeView": "pass",
+          "assetsCheck": "pass",
+          "productionBuild": "pass",
+          "pagesBasePath": "pass"
+        },
+        "measured": {
+          "modelBytes": 97812,
+          "atlasBytes": 1102,
+          "totalAddedBytes": 98914,
+          "renderedTriangles": 1242,
+          "supportTriangles": 104,
+          "paddingTriangles": 26,
+          "armTriangles": 112,
+          "backboardTriangles": 12,
+          "targetMarkingTriangles": 16,
+          "rimTriangles": 384,
+          "mountTriangles": 84,
+          "netTriangles": 504,
+          "materials": 1,
+          "drawCalls": 8,
+          "atlasWidth": 256,
+          "atlasHeight": 256,
+          "meshBoundsMinMeters": "-0.92,0,-8.725",
+          "meshBoundsMaxMeters": "0.92,4.72,-5.564",
+          "rimCenterMeters": "0,3.05,-5.82",
+          "rimRadiusMeters": 0.23,
+          "rimHeightMeters": 3.05,
+          "backboardCenterMeters": "0,3.56,-6.25",
+          "backboardDimensionsMeters": "1.83,1.07,0.08",
+          "backboardBottomMeters": 3.025,
+          "backboardFrontZMeters": -6.21,
+          "ballRadiusMeters": 0.12,
+          "rootPivotMeters": "0,0,0",
+          "identityNodeTransforms": true,
+          "gltfErrors": 0,
+          "gltfWarnings": 0,
+          "gltfInfos": 1,
+          "desktopViewport": "1280x720",
+          "touchPortraitViewport": "390x844 emulated",
+          "touchLandscapeViewport": "844x390 emulated"
+        },
+        "notes": "A browser runtime harness loaded the GLB as ready, confirmed every gameplay landmark and positive-Z approach, kept rim/backboard/net/support references stable, and verified the net can rotate and scale independently. With the GLB temporarily absent, the complete procedural basket loaded as fallback and the file was restored. A deterministic harness built from the unchanged src/main.js passed backboard impact (surface -6.09 m, reflected Z velocity 1.36 m/s), rim rebound, clean make and single scoring, layup scoring, dunk scoring, net energy/rotation/scale updates, keyboard movement and mouse-wheel zoom. Desktop Space shooting and R reset showed the expected feedback in the browser. Desktop game view and close approach/side views were inspected. Emulated 390x844 and 844x390 touch frames kept the hoop and controls in view; portrait touch shoot, joystick movement and reset were exercised. Physical-phone FPS and touch behavior remain unmeasured."
+      },
+      "integration": {
+        "module": "src/arena.js",
+        "fallback": "The complete original procedural basket remains visible while the authored GLB loads and on network, decode or landmark-validation failure. On success, the stable rim and backboard meshes adopt authored geometry, and the stable hoop.net group receives the opaque net mesh; collision values remain separate."
+      }
     }
   ]
 }

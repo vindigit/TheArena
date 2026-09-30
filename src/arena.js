@@ -335,16 +335,20 @@ export function createArena(THREE) {
     }
   }
 
-  // Backboard, rim, net, and a chunky support stanchion.
+  // The original basket stays visible until the named hoop asset passes
+  // validation. Its collision dimensions above never depend on either mesh.
   const basketGroup = new THREE.Group();
   basketGroup.name = "basket assembly";
   group.add(basketGroup);
+  const basketFallback = new THREE.Group();
+  basketFallback.name = 'procedural basket assembly fallback';
+  basketGroup.add(basketFallback);
 
-  const base = addBox(1.65, 0.42, 1.75, materials.paintedMetal, V(0, 0.21, -7.85), "basket base", basketGroup);
-  const basePad = addBox(1.82, 0.28, 0.68, materials.paintAccent, V(0, 0.4, -7.12), "basket base pad", basketGroup);
-  addCylinderBetween(V(0, 0.4, -7.82), V(0, 4.72, -7.82), 0.145, materials.darkMetal, "basket stanchion", basketGroup, 10);
-  addCylinderBetween(V(0, 4.55, -7.82), V(0, 4.55, -6.4), 0.105, materials.darkMetal, "backboard arm", basketGroup, 8);
-  addCylinderBetween(V(0, 4.55, -6.4), V(0, 3.84, -6.29), 0.075, materials.darkMetal, "backboard brace", basketGroup, 8);
+  const base = addBox(1.65, 0.42, 1.75, materials.paintedMetal, V(0, 0.21, -7.85), "basket base", basketFallback);
+  addBox(1.82, 0.28, 0.68, materials.paintAccent, V(0, 0.4, -7.12), "basket base pad", basketFallback);
+  addCylinderBetween(V(0, 0.4, -7.82), V(0, 4.72, -7.82), 0.145, materials.darkMetal, "basket stanchion", basketFallback, 10);
+  addCylinderBetween(V(0, 4.55, -7.82), V(0, 4.55, -6.4), 0.105, materials.darkMetal, "backboard arm", basketFallback, 8);
+  addCylinderBetween(V(0, 4.55, -6.4), V(0, 3.84, -6.29), 0.075, materials.darkMetal, "backboard brace", basketFallback, 8);
   base.userData.isBasketSupport = true;
 
   const backboard = addBox(
@@ -354,7 +358,7 @@ export function createArena(THREE) {
     materials.glass,
     hoop.backboardCenter,
     "backboard",
-    basketGroup,
+    basketFallback,
   );
   backboard.castShadow = false;
   backboard.userData.isBackboard = true;
@@ -363,13 +367,13 @@ export function createArena(THREE) {
   const borderThickness = 0.055;
   const boardTop = hoop.backboardCenter.y + hoop.backboardHeight / 2;
   const boardBottom = hoop.backboardCenter.y - hoop.backboardHeight / 2;
-  addBox(hoop.backboardWidth + 0.08, borderThickness, 0.035, materials.white, V(0, boardTop, boardFrontZ), "backboard top border", basketGroup);
-  addBox(hoop.backboardWidth + 0.08, borderThickness, 0.035, materials.white, V(0, boardBottom, boardFrontZ), "backboard bottom border", basketGroup);
-  addBox(borderThickness, hoop.backboardHeight + 0.08, 0.035, materials.white, V(-hoop.backboardWidth / 2, hoop.backboardCenter.y, boardFrontZ), "backboard left border", basketGroup);
-  addBox(borderThickness, hoop.backboardHeight + 0.08, 0.035, materials.white, V(hoop.backboardWidth / 2, hoop.backboardCenter.y, boardFrontZ), "backboard right border", basketGroup);
-  addBox(0.62, 0.045, 0.035, materials.white, V(0, 3.32, boardFrontZ), "backboard target top", basketGroup);
-  addBox(0.045, 0.44, 0.035, materials.white, V(-0.31, 3.11, boardFrontZ), "backboard target left", basketGroup);
-  addBox(0.045, 0.44, 0.035, materials.white, V(0.31, 3.11, boardFrontZ), "backboard target right", basketGroup);
+  addBox(hoop.backboardWidth + 0.08, borderThickness, 0.035, materials.white, V(0, boardTop, boardFrontZ), "backboard top border", basketFallback);
+  addBox(hoop.backboardWidth + 0.08, borderThickness, 0.035, materials.white, V(0, boardBottom, boardFrontZ), "backboard bottom border", basketFallback);
+  addBox(borderThickness, hoop.backboardHeight + 0.08, 0.035, materials.white, V(-hoop.backboardWidth / 2, hoop.backboardCenter.y, boardFrontZ), "backboard left border", basketFallback);
+  addBox(borderThickness, hoop.backboardHeight + 0.08, 0.035, materials.white, V(hoop.backboardWidth / 2, hoop.backboardCenter.y, boardFrontZ), "backboard right border", basketFallback);
+  addBox(0.62, 0.045, 0.035, materials.white, V(0, 3.32, boardFrontZ), "backboard target top", basketFallback);
+  addBox(0.045, 0.44, 0.035, materials.white, V(-0.31, 3.11, boardFrontZ), "backboard target left", basketFallback);
+  addBox(0.045, 0.44, 0.035, materials.white, V(0.31, 3.11, boardFrontZ), "backboard target right", basketFallback);
 
   const rim = new THREE.Mesh(new THREE.TorusGeometry(hoop.rimRadius, 0.026, 7, 24), materials.rim);
   rim.name = "rim";
@@ -378,8 +382,8 @@ export function createArena(THREE) {
   rim.castShadow = true;
   rim.receiveShadow = true;
   rim.userData.isRim = true;
-  basketGroup.add(rim);
-  addCylinderBetween(V(0, 3.05, boardFrontZ), V(0, 3.05, hoop.rimCenter.z), 0.035, materials.rim, "rim mount", basketGroup, 8);
+  basketFallback.add(rim);
+  addCylinderBetween(V(0, 3.05, boardFrontZ), V(0, 3.05, hoop.rimCenter.z), 0.035, materials.rim, "rim mount", basketFallback, 8);
 
   const netGroup = new THREE.Group();
   netGroup.name = "net";
@@ -420,6 +424,77 @@ export function createArena(THREE) {
   hoop.backboard = backboard;
   hoop.net = netGroup;
   hoop.support = basketGroup;
+
+  // Preserve the same hoop.rim, hoop.backboard, hoop.net and hoop.support
+  // object references after loading. Only their presentation geometry changes.
+  group.userData.hoopAssetStatus = 'loading';
+  group.userData.hoopAssetReady = new GLTFLoader().loadAsync(
+    `${import.meta.env.BASE_URL}assets/models/hoop/hoop-assembly-v1.glb`,
+  ).then(({ scene: asset, animations }) => {
+    const required = ['support', 'padding', 'arm', 'backboard', 'target_markings', 'rim', 'mounts', 'net'];
+    const parts = new Map();
+    const assetMaterials = new Set();
+    let triangles = 0;
+    asset.traverse((child) => {
+      if (!child.isMesh) return;
+      if (parts.has(child.name)) throw new Error(`Duplicate hoop part: ${child.name}`);
+      parts.set(child.name, child);
+      const geometry = child.geometry;
+      triangles += geometry.index ? geometry.index.count / 3 : geometry.getAttribute('position').count / 3;
+      assetMaterials.add(child.material);
+    });
+    const boardBounds = new THREE.Box3().setFromObject(parts.get('backboard'));
+    const boardSize = boardBounds.getSize(new THREE.Vector3());
+    const boardCenter = boardBounds.getCenter(new THREE.Vector3());
+    const rimCenter = new THREE.Box3().setFromObject(parts.get('rim')).getCenter(new THREE.Vector3());
+    const netBounds = new THREE.Box3().setFromObject(parts.get('net'));
+    const close = (actual, expected) => Math.abs(actual - expected) < 0.00001;
+    const identity = (object) => object.position.lengthSq() < 1e-12 &&
+      Math.abs(object.rotation.x) + Math.abs(object.rotation.y) + Math.abs(object.rotation.z) < 1e-12 &&
+      object.scale.distanceToSquared(V(1, 1, 1)) < 1e-12;
+    const atlas = parts.get('rim')?.material?.map?.image;
+    if (animations.length || parts.size !== required.length || required.some((name) => !parts.has(name)) ||
+        triangles > 2000 || assetMaterials.size !== 1 || !atlas || atlas.width !== 256 || atlas.height !== 256 ||
+        !identity(asset) || [...parts.values()].some((mesh) => !identity(mesh) || mesh.material.transparent || !mesh.geometry.getAttribute('normal') || !mesh.geometry.getAttribute('uv')) ||
+        !close(boardSize.x, hoop.backboardWidth) || !close(boardSize.y, hoop.backboardHeight) || !close(boardSize.z, hoop.backboardThickness) ||
+        !close(boardCenter.x, hoop.backboardCenter.x) || !close(boardCenter.y, hoop.backboardCenter.y) || !close(boardCenter.z, hoop.backboardCenter.z) ||
+        !close(boardBounds.max.z, hoop.backboardFrontZ) || !close(boardBounds.min.y, hoop.backboardBottom) ||
+        rimCenter.distanceTo(hoop.rimCenter) > 0.00001 || netBounds.min.y < 2.5 || netBounds.max.y > hoop.rimHeight + 0.01) {
+      throw new Error('Hoop assembly failed scale, topology, atlas, transform or landmark validation.');
+    }
+
+    const fallbackNetChildren = [...netGroup.children];
+    const originalRimGeometry = rim.geometry;
+    const originalBoardGeometry = backboard.geometry;
+    rim.geometry = parts.get('rim').geometry;
+    rim.material = parts.get('rim').material;
+    rim.position.set(0, 0, 0);
+    rim.rotation.set(0, 0, 0);
+    backboard.geometry = parts.get('backboard').geometry;
+    backboard.material = parts.get('backboard').material;
+    backboard.position.set(0, 0, 0);
+    backboard.castShadow = true;
+    basketGroup.add(rim, backboard);
+    parts.get('rim').removeFromParent();
+    parts.get('backboard').removeFromParent();
+    netGroup.add(parts.get('net'));
+    for (const child of fallbackNetChildren) {
+      netGroup.remove(child);
+      child.geometry?.dispose();
+    }
+    basketGroup.add(asset);
+    basketFallback.traverse((child) => child.geometry?.dispose());
+    basketFallback.removeFromParent();
+    originalRimGeometry.dispose();
+    originalBoardGeometry.dispose();
+    group.userData.hoopAssetStatus = 'ready';
+    group.userData.hoopTriangles = triangles;
+    return 'ready';
+  }).catch((error) => {
+    console.warn('Hoop asset could not load; using procedural basket.', error);
+    group.userData.hoopAssetStatus = 'fallback';
+    return 'fallback';
+  });
 
   // Keep the original shell visible through loading and any asset error.
   environmentParent = shellFallback;
