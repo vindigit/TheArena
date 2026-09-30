@@ -747,6 +747,138 @@
         "module": "src/arena.js",
         "fallback": "The complete original procedural basket remains visible while the authored GLB loads and on network, decode or landmark-validation failure. On success, the stable rim and backboard meshes adopt authored geometry, and the stable hoop.net group receives the opaque net mesh; collision values remain separate."
       }
+    },
+    {
+      "id": "uniform-fabric-v1",
+      "category": "texture",
+      "status": "accepted",
+      "source": {
+        "type": "scenario",
+        "prompt": "Seamless tileable GAME FABRIC COLOR SWATCH, flat and evenly colored, for a fictional early-2000s basketball uniform. Base is mostly creamy ivory synthetic jersey fabric (at least 90 percent of the area). Very restrained muted purple appears only as a few broad, soft, irregular low-contrast accent patches distributed across the field and continuing naturally through opposite tile edges. Broad simplified color regions like a low-resolution PS2 diffuse texture. Surface should read as fabric through gentle mottling, with virtually no individual mesh holes or threads visible at normal viewing size. Calm and clean at 32-pixel and 64-pixel display sizes. No vertical or horizontal stripes, no central band, no pinstripes, no repetitive dot grid, no high-frequency weave, no checkerboard, no gradient lighting, no shadow. No garment silhouette, folds, collar, sleeves, seams, stitching, badges, logos, words, names, numbers, real teams, leagues, sponsors, or manufacturers. No object, perspective, photographic reflection, border, or transparency. Opaque sRGB albedo under uniform ambient illumination; seamless in both axes.",
+        "negativePrompt": null,
+        "modelId": "model_scenario-texture",
+        "modelVersion": null,
+        "settings": {
+          "width": 512,
+          "height": 512,
+          "quality": "medium",
+          "eraseSeam": true,
+          "overlap": 64,
+          "featherRadius": 32,
+          "quotedCostCU": 12,
+          "teamId": "team_yNLWgjS1fAtTk5MtpGfW7vRy",
+          "projectId": "proj_A12xiMpm5rjCs8EuszXCaqPh",
+          "weaveDonor": {
+            "prompt": "One perfectly seamless square material swatch for a fictional early-2000s console basketball uniform. Opaque cream-white synthetic jersey mesh fabric, broad softly varied ivory and warm white color blocks, a few restrained muted deep-purple woven accent areas that continue cleanly across tile edges. Flat orthographic fabric surface, simple PS2-era baked game-art color map, low-frequency tonal variation and only a very faint coarse weave suggestion; readable and calm when reduced to 32–64 pixels, no fine dot grid, pinstripes, high-contrast micro-pattern, moiré, or shimmer. Even diffuse color with no directional light, shadow, shine, folds, wrinkles, garment silhouette, collar, armhole, stitching, badges, logos, words, names, numbers, team, league, sponsor, or manufacturer marks. No objects, perspective, photographic glare, transparency, or border. Seamless repeat on both horizontal and vertical axes.",
+            "modelId": "model_scenario-texture",
+            "width": 512,
+            "height": 512,
+            "quality": "medium",
+            "eraseSeam": true,
+            "overlap": 64,
+            "featherRadius": 32,
+            "quotedCostCU": 12,
+            "scenarioAssetId": "asset_KtHxME4Dc6uNmvTqqnnzay45",
+            "scenarioJobId": "job_gSXLEvLn5LTYt1KGBSsu5eRd",
+            "generatedAt": "2026-09-30T05:02:13.214Z",
+            "sourceBytes": 423395,
+            "sourceSha256": "d16c35df08068529e2159cfc667993f7571fb3c7630cd35b9b47c7b75cf4315c"
+          },
+          "weaveBlend": {
+            "donorSampleX": "32 + (x modulo 156), from the stripe-free cream region",
+            "donorBlurSigmaPixels": 2.4,
+            "luminanceHighpassStrength": 0.52,
+            "edgeFadePixels": 12,
+            "method": "Add 0.52 times the mean RGB difference between donor and Gaussian-blurred donor to each primary-source channel. Fade that addition linearly to zero within 12 pixels of each outer edge; clamp to 0-255."
+          }
+        },
+        "seed": null,
+        "referenceAssetIds": [],
+        "scenarioAssetId": "asset_RxG8dk18ryagEdrcTdSXWNwS",
+        "scenarioJobId": "job_cmvCmHMp5xngMdbnWKFXpwHe",
+        "generatedAt": "2026-09-30T05:03:42.216Z",
+        "optimizationSteps": [
+          "Downloaded both opaque 512 x 512 sRGB Scenario PNG sources into ignored .tmp/fabric staging.",
+          "Used the primary cream/purple source for its broad color areas. Extracted only faint high-frequency luminance weave from a stripe-free cream region of the first source using a 2.4-pixel Gaussian high-pass; added at strength 0.52 with a 12-pixel outer-edge fade. No stripe color or pattern was carried into the result.",
+          "Downsampled the resulting 512 x 512 RGB image to 256 x 256 with Sharp Lanczos3.",
+          "Encoded one WebP color map at quality 88 and effort 6 with npm run assets:optimize:texture. Kept only the optimized file under public/assets.",
+          "Inspected the source, optimized WebP, 2 x 2 tile proof, and 64- and 32-pixel reduction proof; raw sources and proofs remain outside tracked assets and are removed after acceptance."
+        ],
+        "outputNotes": "Primary Scenario source PNG: 391,387 bytes, SHA-256 c2924dec5c6b8dae82b181adcdea10fc349f8f8056a44773a1e8761b68d6bf44. Weave donor source PNG: 423,395 bytes, SHA-256 d16c35df08068529e2159cfc667993f7571fb3c7630cd35b9b47c7b75cf4315c. Blended 512 x 512 source PNG: 470,857 bytes, SHA-256 36b7fb07ddb70b7c977ecf76fa19fcf6771f0476c54afb74c481b6e0d76c3ffb. Both Scenario assets were filed in TheArena collection col_rgcLMCsPgwXnr25W3vjnkpNi. No seed or reference image was supplied, and no normal/roughness map was produced."
+      },
+      "license": {
+        "name": "Scenario Free Tier output for personal and noncommercial evaluation",
+        "url": "https://www.scenario.com/pricing",
+        "commercialUse": false,
+        "attribution": null,
+        "evidence": "Scenario pricing checked 2026-09-30 states Free plan outputs are for personal and evaluation use; paid plans include commercial use. Scenario Terms v2.1.1 describe generated-output rights subject to their terms and user review: https://www.scenario.com/terms-and-conditions. Recheck rights before commercial release."
+      },
+      "runtime": [
+        {
+          "path": "assets/textures/player/uniform-fabric-v1.webp",
+          "format": "webp",
+          "bytes": 7628,
+          "maxBytes": 50000,
+          "sha256": "e066b9a5e1050801fdf4e77e5c30f0f47127326b8fc7e53ca6ba16fd31705a18",
+          "dimensions": {
+            "width": 256,
+            "height": 256
+          },
+          "tiling": {
+            "maxMeanRgbError": 4,
+            "maxPeakRgbError": 20
+          }
+        }
+      ],
+      "validation": {
+        "checks": {
+          "sourceVisual": "pass",
+          "opaqueSrgb": "pass",
+          "sourceSeam": "pass",
+          "optimizedVisual": "pass",
+          "tileProof": "pass",
+          "mobileScalePreview": "pass",
+          "seam": "pass",
+          "compression": "pass",
+          "playerRigAndApiUnchanged": "pass",
+          "futureAtlasSlotDocumented": "pass",
+          "assetsCheck": "pass",
+          "productionBuild": "pass"
+        },
+        "measured": {
+          "primarySourceBytes": 391387,
+          "primarySourceWidth": 512,
+          "primarySourceHeight": 512,
+          "primarySourceEdgeX": 3.345,
+          "primarySourceEdgeY": 3.801,
+          "primarySourcePeakRgbEdgeError": 18,
+          "donorSourceBytes": 423395,
+          "donorSourceEdgeX": 7.334,
+          "donorSourceEdgeY": 6.031,
+          "blendedSourceBytes": 470857,
+          "blendedSourceEdgeX": 3.345,
+          "blendedSourceEdgeY": 3.801,
+          "blendedSourceInteriorX": 4.053,
+          "blendedSourceInteriorY": 4.006,
+          "runtimeBytes": 7628,
+          "runtimeWidth": 256,
+          "runtimeHeight": 256,
+          "edgeError": 2.825,
+          "edgeX": 2.533,
+          "edgeY": 3.116,
+          "interiorX": 3.142,
+          "interiorY": 2.318,
+          "nearEdgeX": 0.951,
+          "nearEdgeY": 1.617,
+          "peakRgbEdgeError": 13,
+          "smallPreviewPixels": "64,32"
+        },
+        "notes": "The accepted tile shows subdued cream jersey grain and muted purple color areas without names, numbers or logos. Its 2 x 2 repeat has no conspicuous joins. At 64 and 32 pixels, the weave settles into broad tone without an obvious moire pattern; physical-device motion shimmer remains unmeasured. The current procedural jersey material is shared by the torso, sleeves and socks, while the in-progress authored GLB uses a single baked atlas. No player materials, UVs, rig, API, controls or gameplay data were changed."
+      },
+      "integration": {
+        "module": "src/player.js",
+        "fallback": "Accepted asset for future cream jersey and shorts fabric regions in the player's authored texture atlas, separate from skin, trim and markings. There is no runtime binding in this pass. The existing procedural materials and the authored player atlas continue to supply the current appearance."
+      }
     }
   ]
 }
