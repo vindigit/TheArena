@@ -96,6 +96,21 @@ export function createArena(THREE) {
     }),
   };
 
+  // The shell GLB shares these three materials across the foundation, walls,
+  // upper wall, and ceiling. Keep its authored colors until the map is ready.
+  const shellConcreteTints = {
+    foundation: 0xbac4d4,
+    wall: 0x9baac2,
+    wallShade: 0x8998af,
+  };
+  const shellConcreteMaterials = new Set();
+  let concreteTexture = null;
+  const applyConcreteMaterial = (material, tint) => {
+    material.map = concreteTexture;
+    material.color.setHex(tint);
+    material.needsUpdate = true;
+  };
+
   const boardMaterials = [
     new THREE.MeshStandardMaterial({ color: 0x92562e, roughness: 0.5, metalness: 0.04 }),
     new THREE.MeshStandardMaterial({ color: 0xa96737, roughness: 0.48, metalness: 0.04 }),
@@ -203,6 +218,28 @@ export function createArena(THREE) {
     },
     undefined,
     () => { group.userData.courtWoodStatus = 'fallback'; },
+  );
+
+  // One opaque color map serves the concrete surfaces in either arena shell.
+  // Their original flat colors remain the loading and error fallback.
+  group.userData.concreteStatus = 'loading';
+  new THREE.TextureLoader().load(
+    `${import.meta.env.BASE_URL}assets/textures/concrete/concrete-v1.webp`,
+    (texture) => {
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+      texture.repeat.set(4, 4);
+      texture.anisotropy = 2;
+      concreteTexture = texture;
+      applyConcreteMaterial(materials.concrete, 0xaeb8c8);
+      for (const material of shellConcreteMaterials) {
+        applyConcreteMaterial(material, shellConcreteTints[material.name]);
+      }
+      group.userData.concreteStatus = 'ready';
+    },
+    undefined,
+    () => { group.userData.concreteStatus = 'fallback'; },
   );
 
   const keyCenterZ = court.baselineZ + court.keyLength / 2;
@@ -546,6 +583,13 @@ export function createArena(THREE) {
         group.userData.arenaShellStatus = 'fallback';
         return;
       }
+      shell.traverse((child) => {
+        const material = child.isMesh && child.material;
+        if (material && Object.hasOwn(shellConcreteTints, material.name)) {
+          shellConcreteMaterials.add(material);
+          if (concreteTexture) applyConcreteMaterial(material, shellConcreteTints[material.name]);
+        }
+      });
       shell.name = 'authored arena shell';
       group.add(shell);
       seats.visible = true;

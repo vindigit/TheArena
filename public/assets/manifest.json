@@ -389,6 +389,101 @@
         "module": "src/arena.js",
         "fallback": "The complete original procedural shell, bleachers, boards and shot clock remain visible during loading and on network, decode or mesh-validation failure; successful GLB loading removes and disposes their geometry."
       }
+    },
+    {
+      "id": "arena-concrete-v1",
+      "category": "texture",
+      "status": "accepted",
+      "source": {
+        "type": "scenario",
+        "prompt": "Seamless tileable flat color texture of dark charcoal concrete for the foundation, walls, and ceiling of a fictional indoor basketball arena in an early-2000s PS2-style video game. Broad irregular charcoal and cool slate tonal regions, sparse soft scuffs and worn patches, restrained tiny pores, subtle baked-looking grime. Matte, opaque, low-detail hand-painted game material; even ambient illumination across the entire surface. Uniform scale and detail at every edge so left joins right and top joins bottom. Surface only, viewed straight-on with no depth or perspective. No tile borders, panel seams, cracks, signage, graffiti, text, symbols, logos, objects, cast or directional shadows, vignette, gradients, photographic glare, glossy reflections, or strong highlights.",
+        "negativePrompt": null,
+        "modelId": "model_scenario-texture",
+        "modelVersion": null,
+        "settings": {
+          "width": 512,
+          "height": 512,
+          "quality": "medium",
+          "eraseSeam": true,
+          "overlap": 64,
+          "featherRadius": 32,
+          "quotedCostCU": 12,
+          "teamId": "team_yNLWgjS1fAtTk5MtpGfW7vRy",
+          "projectId": "proj_A12xiMpm5rjCs8EuszXCaqPh"
+        },
+        "seed": null,
+        "referenceAssetIds": [],
+        "scenarioAssetId": "asset_eu9ZpKn4UuryCfsFEgtc8SYM",
+        "scenarioJobId": "job_3EZCPNAjXMC8PUkwBzHn4GYy",
+        "generatedAt": "2026-09-30T04:09:13.661Z",
+        "optimizationSteps": [
+          "Downloaded the opaque 512 x 512 sRGB PNG source into ignored .tmp/concrete staging.",
+          "Downsampled to 256 x 256 with Sharp Lanczos3 and no tint or seam repainting.",
+          "Compared WebP effort 6 encodes at qualities 76, 90, and 95; selected quality 95 for neighboring-pixel-like seam detail while staying below the 50 KB ceiling.",
+          "Encoded the 256 x 256 PNG using npm run assets:optimize:texture -- .tmp/concrete/resized-256.png .tmp/concrete/candidate-q95.webp 95, then copied only the accepted WebP into public/assets.",
+          "Inspected the source, optimized WebP, and 2 x 2 proof images locally; kept the source, rejected candidates, and proof images out of Git."
+        ],
+        "outputNotes": "Single opaque sRGB color map; no normal, roughness, or height file. Scenario source PNG is 433,402 bytes with SHA-256 cab2a4f7bde8716d03c041d538c843417d72caf75b67f712f0efe8892206a6f4. No reference images or seed were supplied or exposed. The asset is filed in TheArena collection col_rgcLMCsPgwXnr25W3vjnkpNi; the Scenario project still bears the name Default Project."
+      },
+      "license": {
+        "name": "Scenario Free Tier output for personal and noncommercial evaluation",
+        "url": "https://www.scenario.com/pricing",
+        "commercialUse": false,
+        "attribution": null,
+        "evidence": "Scenario pricing checked 2026-09-29 states Free plan outputs are for personal and evaluation use only; paid plans include commercial use. The current free public browser demo is a noncommercial evaluation. Scenario Terms v2.1.1 sections 4.3 and 4.5 assign generated output rights subject to terms and user review: https://www.scenario.com/terms-and-conditions. Recheck rights before a commercial release."
+      },
+      "runtime": [
+        {
+          "path": "assets/textures/concrete/concrete-v1.webp",
+          "format": "webp",
+          "bytes": 17166,
+          "maxBytes": 51200,
+          "sha256": "1217b81323d5cc2898bc2937160276aa72e5a39696e81015add3833421492974",
+          "dimensions": { "width": 256, "height": 256 },
+          "tiling": { "maxMeanRgbError": 5, "maxPeakRgbError": 25 }
+        }
+      ],
+      "validation": {
+        "checks": {
+          "sourceVisual": "pass",
+          "opaqueSrgb": "pass",
+          "sourceSeam": "pass",
+          "optimizedVisual": "pass",
+          "tileProof": "pass",
+          "seam": "pass",
+          "compression": "pass",
+          "desktopGameView": "pass",
+          "touchPortraitView": "pass",
+          "geometryAndGameplayUnchanged": "pass"
+        },
+        "measured": {
+          "sourceBytes": 433402,
+          "sourceWidth": 512,
+          "sourceHeight": 512,
+          "sourceEdgeX": 5.31,
+          "sourceEdgeY": 4.99,
+          "sourceInteriorX": 4.45,
+          "sourceInteriorY": 4.62,
+          "runtimeBytes": 17166,
+          "runtimeWidth": 256,
+          "runtimeHeight": 256,
+          "edgeError": 4.1,
+          "edgeX": 4.25,
+          "edgeY": 3.95,
+          "interiorX": 3.6,
+          "interiorY": 3.64,
+          "nearEdgeX": 3.3,
+          "nearEdgeY": 3.58,
+          "peakRgbEdgeError": 22,
+          "desktopViewport": "1280x720",
+          "touchViewport": "390x844"
+        },
+        "notes": "The 512-square source, shipped 256-square WebP, and ignored 2 x 2 tile proofs were inspected; the tiled join was not conspicuous. Runtime opposite-edge RGB differences are close to interior adjacent-pixel differences. Desktop gameplay and a 390 x 844 viewport with the existing coarse-pointer CSS and input branch forced in an ignored local preview were inspected. The preview is browser emulation, not a physical touch-device test. Court, hoop, controls, collision data, lights, and geometry were not edited for this texture."
+      },
+      "integration": {
+        "module": "src/arena.js",
+        "fallback": "A single sRGB texture is repeated on the procedural concrete material and the authored shell's foundation, wall, and wallShade materials, which include the ceiling. Their original colors remain visible while loading and on texture failure."
+      }
     }
   ]
 }
