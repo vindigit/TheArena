@@ -11,6 +11,10 @@ The Git repository is the source of truth. Work in this checkout, commit focused
 
 ## Current playable slice
 
+### Player review preview
+
+`https://vindigit.github.io/TheArena/?player=luke` selects the user-supplied Luke player for appearance review and phone testing. The ordinary URL retains the accepted player. This preview preserves the supplied branded uniform at the user's explicit request; it is not original fictional artwork and final appearance approval remains pending. Its provenance and validation are recorded as `preview` in the asset manifest. Only the optimized GLB is published; source generations and Blender files stay ignored.
+
 The initial release is a browser-based, third-person solo basketball demo with:
 
 - One indoor arena, player, basketball, hoop, backboard, and net

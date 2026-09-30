@@ -169,6 +169,9 @@ async function checkManifest() {
     if (ids.has(asset.id)) errors.push(`duplicate asset ID: ${asset.id}`);
     ids.add(asset.id);
     for (const [name, result] of Object.entries(asset.validation.checks)) {
+      // A review preview exists specifically to obtain appearance approval.
+      // Technical pending/failing checks still block publication.
+      if (asset.status === 'preview' && name === 'appearanceApproval' && result === 'pending') continue;
       if (result === 'fail' || result === 'pending') errors.push(`${asset.id}: ${name} check is ${result}`);
     }
     for (const entry of asset.runtime) {
@@ -184,7 +187,7 @@ async function checkManifest() {
   }
 
   if (errors.length) throw new Error(`asset validation failed:\n  ${errors.join('\n  ')}`);
-  console.log(`Assets valid: ${manifest.assets.length} accepted assets, ${fileCount} runtime files, ${totalBytes} bytes.`);
+  console.log(`Assets valid: ${manifest.assets.filter(a => a.status === 'accepted').length} accepted assets, ${manifest.assets.filter(a => a.status === 'preview').length} preview assets, ${fileCount} runtime files, ${totalBytes} bytes.`);
 }
 
 async function main() {

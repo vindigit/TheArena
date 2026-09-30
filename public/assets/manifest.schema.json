@@ -22,7 +22,7 @@
       "properties": {
         "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
         "category": { "enum": ["model", "texture", "audio"] },
-        "status": { "const": "accepted" },
+        "status": { "enum": ["accepted", "preview"] },
         "source": { "$ref": "#/definitions/source" },
         "license": { "$ref": "#/definitions/license" },
         "runtime": {

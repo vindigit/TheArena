@@ -7,7 +7,7 @@ export function createPoseAdapter(THREE, visual, bones, anchors) {
   const clamp = (v, lo = 0, hi = 1) => Math.min(hi, Math.max(lo, Number(v) || 0));
   const vec = (x, y, z) => new THREE.Vector3(x, y, z);
   const handOffset = vec(0, -.075, -.125);
-  const tPose = visual.getObjectByName('fictional_player_rig')?.userData.game_axes_corrected === true;
+  const tPose = get('root').parent?.userData.game_axes_corrected === true;
   const world = new THREE.Vector3(), inverse = new THREE.Quaternion();
   let walkTime = 0, phase = 0;
   const arms = ['right', 'left'].map((side, i) => {

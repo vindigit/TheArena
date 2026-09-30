@@ -2166,6 +2166,98 @@
         "module": "src/audio.js",
         "fallback": "AudioDirector begins the ambience request only inside unlock(), which the existing game-start click/key flow calls after setting game.started. The loop uses its own gain node into the master, bypassing the gameplay compressor so court cues remain dominant; setAmbienceVolume controls this path and setEnabled mutes/unmutes it. Request or decode failure leaves ambience silent and does not alter any synthesized gameplay cue. dispose() stops and disconnects the looping source before releasing buffers and the audio context."
       }
+    },
+    {
+      "id": "luke-player-preview-v1",
+      "category": "model",
+      "status": "preview",
+      "source": {
+        "type": "third-party",
+        "prompt": "basketball player wearing a New Jersey jersey on a basketball court",
+        "modelId": "Tripo Studio H3.1",
+        "modelVersion": "H3.1",
+        "settings": {
+          "provider": "Tripo Studio",
+          "assetId": "2317ab07-d165-42a2-aada-d4542f883a10",
+          "jobId": null,
+          "sourceBytes": 819928,
+          "sourceSha256": "497d3e554a43cba4618a08776af3caf2d0883e2cbe75e74ffe6a486e003409e7",
+          "sourceTextureResolution": 2048,
+          "runtimeTextureResolution": 512,
+          "jpegQuality": 90,
+          "emissionStrength": 0.28,
+          "otherGenerationSettings": null
+        },
+        "seed": null,
+        "scenarioAssetId": null,
+        "scenarioJobId": null,
+        "generatedAt": null,
+        "referenceAssetIds": [
+          "https://studio.tripo3d.ai/3d-model/2317ab07-d165-42a2-aada-d4542f883a10"
+        ],
+        "optimizationSteps": [
+          "All geometry, rig, material, image resizing, rendering and GLB exports performed in connected interactive Blender through MCP.",
+          "Preserved original source mesh datablock and separate scenes for prior player.",
+          "Welded duplicate geometry; removed 196 faces around fused rear hip protrusion; projected boundary depth from opposite hip and filled with 38 triangulated faces.",
+          "Mapped only repaired hip patch to clean black fabric UV swatch. No original texture pixels repainted; uniform lettering, emblem, piping and shoe graphics retained.",
+          "Scaled to 2.05 meters with feet at zero; applied 180 degree Z rotation so Blender +Y exports to game -Z forward.",
+          "Created 17 named bones at measured body joints, uniform rest axes and smoothly blended weights with maximum two influences.",
+          "Copied original 2048 atlas, resized runtime copy to 512 in Blender and exported JPEG quality 90.",
+          "One matte material: roughness 0.85, metallic 0, original color image shared as emission texture with strength 0.28 to preserve readability in arena lighting.",
+          "Exported active scene selection only, Y-up GLB, no baked animation clips; working blend and raw exports remain ignored."
+        ],
+        "outputNotes": "User-supplied GLB. User explicitly requested retention of branded graphics and publication for GitHub phone testing before final appearance approval. Unknown generation fields remain null."
+      },
+      "license": {
+        "name": "User-supplied Tripo output; branded graphics retained by explicit request",
+        "url": null,
+        "commercialUse": false,
+        "attribution": null,
+        "evidence": "User supplied GLB and explicitly directed retention of branded uniform graphics. Tripo Pro membership is user-reported. No claim of trademark ownership or separate branding clearance is made. User authorized public GitHub review preview. Commercial rights and separate branding rights are not asserted."
+      },
+      "runtime": [
+        {
+          "path": "assets/models/player/luke-player-preview-v1.glb",
+          "format": "glb",
+          "bytes": 244360,
+          "maxBytes": 800000,
+          "sha256": "9eedd88b85386084bc1b19ab70d000376d2ab750dfb6d129bb5dd264767a9135",
+          "triangles": 4754
+        }
+      ],
+      "validation": {
+        "checks": {
+          "bindPose": "pass",
+          "deformation": "pass",
+          "scaleOrientation": "pass",
+          "handAnchors": "pass",
+          "desktop": "pass",
+          "mobile": "pass",
+          "fallback": "pass",
+          "build": "pass",
+          "appearanceApproval": "pending"
+        },
+        "measured": {
+          "triangles": 4754,
+          "vertices": 3286,
+          "bones": 17,
+          "materials": 1,
+          "textureAtlases": 1,
+          "textureWidth": 512,
+          "textureHeight": 512,
+          "maxInfluences": 2,
+          "animationClips": 0,
+          "posesTested": 305,
+          "maxGatherErrorMeters": 5.775561153410717e-16,
+          "maxDunkGripErrorMeters": 0.01270945676843412,
+          "minGameFloorMeters": -0.004892017140153579
+        },
+        "notes": "Opt-in public review preview, not default player. 19 desktop and 18 emulated touch checks passed; physical phone review pending. Original branded graphics preserved. Final appearance approval pending."
+      },
+      "integration": {
+        "module": "src/player.js",
+        "fallback": "Procedural player on loading/error. Only ?player=luke selects this preview; ordinary URL retains fictional-player-v2."
+      }
     }
   ]
 }
