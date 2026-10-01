@@ -17,6 +17,12 @@ const meterTrack = shotMeter.querySelector('.shot-meter__track');
 const meterFill = shotMeter.querySelector('i');
 const meterNeedle = shotMeter.querySelector('b');
 const meterDebug = new URLSearchParams(window.location.search).has('meterDebug');
+const motionCredits = document.querySelector('#motionCredits');
+if (new URLSearchParams(window.location.search).get('animation') === 'hybrid' &&
+    new URLSearchParams(window.location.search).get('player') !== 'luke') {
+  motionCredits.href = import.meta.env.BASE_URL + 'assets/models/player/cmu-motion-terms.txt';
+  motionCredits.hidden = false;
+}
 let meterTrackWidth = 0;
 
 const renderer = new THREE.WebGLRenderer({
@@ -697,6 +703,7 @@ function updatePlayer(dt, now) {
     facing: p.yaw,
     jump: clamp(p.jumpY / 0.9, 0, 1),
     dribblePhase: game.ball.dribblePhase,
+    ballMode: game.ball.mode,
     action: p.action,
     shotProgress: p.actionProgress,
   });
@@ -746,6 +753,14 @@ function update(dt, now) {
   updatePlayer(dt, now);
   player.group.updateMatrixWorld(true);
   updateBall(dt);
+  // Current-frame ball state guides presentation only; it never follows this
+  // dribble hand. Gather and finish keep their existing attachment ordering.
+  player.updateDribbleContact?.({
+    ballPosition: game.ball.position,
+    ballRadius: BALL_RADIUS,
+    dribblePhase: game.ball.dribblePhase,
+    ballMode: game.ball.mode,
+  });
   updateNet(dt);
   updateArenaPresentation();
   updateCamera(dt);

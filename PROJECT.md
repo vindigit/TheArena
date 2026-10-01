@@ -15,6 +15,10 @@ The Git repository is the source of truth. Work in this checkout, commit focused
 
 `https://vindigit.github.io/TheArena/?player=luke` selects the user-supplied Luke player for appearance review and phone testing. The ordinary URL retains the accepted player. This preview preserves the supplied branded uniform at the user's explicit request; it is not original fictional artwork and final appearance approval remains pending. Its provenance and validation are recorded as `preview` in the asset manifest. Only the optimized GLB is published; source generations and Blender files stay ignored.
 
+### Hybrid dribble preview
+
+`https://vindigit.github.io/TheArena/?animation=hybrid` opts the accepted fictional v2 player into one Blender-retargeted CMU forward-dribble cycle. Movement, possession, ball position, and bounce timing remain game-owned. The ordinary URL and Luke preview retain procedural animation, and companion failures retain the accepted skeletal player. This movement/dribble experiment is recorded as `preview`; it does not apply `NEXT_FIXES.md`. See [`docs/HYBRID_DRIBBLE.md`](docs/HYBRID_DRIBBLE.md) for source terms, reproduction, gameplay parity, desktop/touch evidence, performance, screenshots, and visual limitations. Source FBXs and Blender files remain ignored.
+
 The initial release is a browser-based, third-person solo basketball demo with:
 
 - One indoor arena, player, basketball, hoop, backboard, and net
@@ -37,7 +41,8 @@ The court wood, basketball, and arena shell are accepted runtime assets. The bas
 | --- | --- |
 | `src/main.js` | Game loop, input, camera, ball interactions, shooting state, HUD |
 | `src/ball.js` | Replaceable basketball GLB visual, procedural loading/error fallback, contact-shadow reference |
-| `src/player.js` | Player model, animation state, dribble attachment points |
+| `src/player.js` | Player model, animation readiness/state, stable dribble attachment points |
+| `src/player-pose.js`, `src/player-hybrid.js` | Procedural skeletal pose, opt-in sampled dribble rhythm, presentation-only leg and palm correction |
 | `src/arena.js` | Court, arena, basket, net, lighting, collision references |
 | `src/audio.js` | Sample-backed basketball bounces, rim/backboard/dunk impacts, and shoe squeaks with synthesized fallback; guarded-loop arena ambience on an independent gain path; synthesized swish and crowd/game feedback |
 | `src/styles.css` | HUD, start screen, and responsive touch controls |

@@ -1,0 +1,1428 @@
+{
+  "scope": "Opt-in fictional-v2 forward movement/dribble preview; browser emulation, not physical-phone or multiplayer performance.",
+  "motion": {
+    "blenderVersion": "5.2.1 LTS",
+    "revision": "d18e9d3d14c08318eaa6c0602a6ead7fac40e58c",
+    "sources": [
+      {
+        "clip": "06_02",
+        "description": "basketball - forward dribble",
+        "sha256": "13db9d5409a19621b8fa4ab60826f1a9c9bcda1104871986afcb8c86d4278380",
+        "url": "https://huggingface.co/datasets/gbionics/cmu-fbx/resolve/d18e9d3d14c08318eaa6c0602a6ead7fac40e58c/animations/06_02.fbx"
+      },
+      {
+        "clip": "06_03",
+        "description": "basketball - forward dribble",
+        "sha256": "b484069d167e4050ebee1656fd11d8a3b569e98ef8c0c315c43cfb050c89d43d",
+        "url": "https://huggingface.co/datasets/gbionics/cmu-fbx/resolve/d18e9d3d14c08318eaa6c0602a6ead7fac40e58c/animations/06_03.fbx"
+      },
+      {
+        "clip": "06_08",
+        "description": "basketball - sideways dribble",
+        "sha256": "093c9cf7304ef32515fcc0525085c8a62ce3626ea5a652b26632d9fe4ab6bf7d",
+        "url": "https://huggingface.co/datasets/gbionics/cmu-fbx/resolve/d18e9d3d14c08318eaa6c0602a6ead7fac40e58c/animations/06_08.fbx"
+      }
+    ],
+    "evaluations": [
+      {
+        "clip": "06_02",
+        "description": "basketball - forward dribble",
+        "startFrame": 110,
+        "endFrame": 140,
+        "duration": 1,
+        "scoreDegrees": 7.290340606792067,
+        "maxRawSeamDegrees": 20.393436117991914,
+        "sourceStrideDistance": 1.3554789815522523,
+        "handHeightSeamMeters": 0.0025407075881958008
+      },
+      {
+        "clip": "06_03",
+        "description": "basketball - forward dribble",
+        "startFrame": 97,
+        "endFrame": 128,
+        "duration": 1.0333333333333334,
+        "scoreDegrees": 10.101015277072978,
+        "maxRawSeamDegrees": 23.471745184783632,
+        "sourceStrideDistance": 1.2911674945346332,
+        "handHeightSeamMeters": 0.005004286766052246
+      },
+      {
+        "clip": "06_08",
+        "description": "basketball - sideways dribble",
+        "startFrame": 58,
+        "endFrame": 85,
+        "duration": 0.9,
+        "scoreDegrees": 27.04164238575281,
+        "maxRawSeamDegrees": 73.2546797328895,
+        "sourceStrideDistance": 1.185757238481254,
+        "handHeightSeamMeters": 0.002796173095703125
+      }
+    ],
+    "selected": {
+      "clip": "06_02",
+      "startBlenderFrame": 110,
+      "endBlenderFrame": 140,
+      "sourceStartSeconds": 3.6333333333333333,
+      "sourceEndSeconds": 4.633333333333334,
+      "reason": "Lowest settled-forward seam score; one full alternating gait and one dribble apex.",
+      "maxRawLocalSeamDegrees": 19.489197961037142
+    },
+    "processing": [
+      "FBX scale corrected by 0.01 after import",
+      "180-degree source facing alignment",
+      "global rest-relative quaternion retarget; abdomen/chest chain folded into chest",
+      "exact shipped-v2 bind translations; root fixed; rotation-only channels",
+      "distributed endpoint drift correction; circular three-tap quaternion filter",
+      "30 Hz LINEAR quaternion samples with identical first/last pose"
+    ],
+    "markerDerivation": {
+      "contacts": "Five-frame smoothed right wrist height maxima before root removal",
+      "plants": "Ankle <= cycle minimum +0.04m and centered planar speed <0.45m/s"
+    },
+    "asset": {
+      "path": "public\\assets\\models\\player\\forward-dribble-v1.glb",
+      "bytes": 13532,
+      "sha256": "c4d784a62fe3a44003997600226efab750228a88bc896edead8cec76b8fab7ab",
+      "nodes": 17,
+      "channels": 16,
+      "samples": 31,
+      "duration": 1,
+      "firstLastSeamDegrees": 0,
+      "metadata": {
+        "version": 1,
+        "strideDistance": 1.3554789815522523,
+        "contacts": [
+          0.5333333333333333
+        ],
+        "plants": {
+          "left": [
+            [
+              0.36666666666666664,
+              0.7666666666666667
+            ]
+          ],
+          "right": [
+            [
+              0,
+              0.26666666666666666
+            ],
+            [
+              0.8666666666666667,
+              1
+            ]
+          ]
+        }
+      }
+    },
+    "licenseEvidence": {
+      "verifiedOn": "2026-09-30",
+      "license": "CMU Motion Capture custom terms",
+      "recipientNotice": "public/assets/models/player/cmu-motion-terms.txt",
+      "records": [
+        {
+          "name": "CMU original terms",
+          "url": "http://mocap.cs.cmu.edu/",
+          "httpStatus": 200,
+          "htmlSha256": "4ac0024566573a10c87b668c826c2c44014b032ae57cbc5fbef2794b80c21cbc",
+          "witnessMatched": "may not resell",
+          "verifiedTerms": "Product inclusion is permitted, including commercial products; direct resale of motion data, even converted, is prohibited."
+        },
+        {
+          "name": "CMU original FAQ",
+          "url": "http://mocap.cs.cmu.edu/faqs.php",
+          "httpStatus": 200,
+          "htmlSha256": "518f04f07d7b0e0e8b605089f1033320d3ad5aa092f9d164f2c76c484a3f4f4e",
+          "witnessMatched": "may be copied",
+          "verifiedTerms": "Copying, modification, and redistribution do not require permission."
+        },
+        {
+          "name": "CMU subject 6 index",
+          "url": "http://mocap.cs.cmu.edu/search.php?subjectnumber=6",
+          "httpStatus": 200,
+          "htmlSha256": "6727c422bc36a115ff288831c031322a3b6ef17a8810a02cfdeba876b408cad6",
+          "witnessMatched": "sideways dribble",
+          "verifiedTerms": "06_02 and06_03 forward dribble;06_08 sideways dribble; original motion sampling120Hz."
+        },
+        {
+          "name": "cgspeed BVH conversion",
+          "url": "https://sites.google.com/a/cgspeed.com/cgspeed/motion-capture/the-motionbuilder-friendly-bvh-conversion-release-of-cmus-motion-capture-database/readme-file-for-the-bvh-conversion-release",
+          "httpStatus": 200,
+          "htmlSha256": "20f0406fc65b86145b3530c1f89c0f81102cdb6c9f145344ce24fee4f59bec43",
+          "witnessMatched": "additional restrictions",
+          "verifiedTerms": "Bruce Hahne adds no restrictions to his BVH conversion."
+        },
+        {
+          "name": "RancidMilk FBX conversion",
+          "url": "https://rancidmilk.itch.io/free-character-animations",
+          "httpStatus": 200,
+          "htmlSha256": "3bd5eb2a4ba625422ff8afb85922cf23316c4a5ce279a5e2275b66e1ebc36ec0",
+          "witnessMatched": "conversions and modifications",
+          "verifiedTerms": "Animation copying, modification, and redistribution permitted; standalone resale prohibited; redistributors must make same terms apparent."
+        },
+        {
+          "name": "gbionics FBX mirror",
+          "url": "https://huggingface.co/datasets/gbionics/cmu-fbx",
+          "httpStatus": 200,
+          "htmlSha256": "20ab1b22f2b38a100f1dce4026e93c452d6134c485b09cff6ffd0cf3dbddc1f8",
+          "witnessMatched": "cmu-mocap",
+          "verifiedTerms": "Custom CMU motion license; claims CMU to cgspeedBVH to RancidMilkFBX chain, bones-only mirror."
+        }
+      ],
+      "acknowledgement": "The data used in this project was obtained from mocap.cs.cmu.edu. The database was created with funding from NSF EIA-0196217."
+    },
+    "visualReview": {
+      "sourceComparisonImage": ".tmp/hybrid/source-comparison.png",
+      "targetPoseImage": ".tmp/hybrid/target-poses.png",
+      "sourceObjectRotations": {
+        "06_02": {
+          "matrixWorld": [
+            [
+              0.009999999776482582,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0.009999999776482582,
+              1.6292066584711051e-9,
+              0
+            ],
+            [
+              0,
+              -1.6292066584711051e-9,
+              0.009999999776482582,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              1
+            ]
+          ],
+          "rotationDegrees": 0
+        },
+        "06_03": {
+          "matrixWorld": [
+            [
+              0.009999999776482582,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0.009999999776482582,
+              1.6292066584711051e-9,
+              0
+            ],
+            [
+              0,
+              -1.6292066584711051e-9,
+              0.009999999776482582,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              1
+            ]
+          ],
+          "rotationDegrees": 0
+        },
+        "06_08": {
+          "matrixWorld": [
+            [
+              0.009999999776482582,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0.009999999776482582,
+              1.6292066584711051e-9,
+              0
+            ],
+            [
+              0,
+              -1.6292066584711051e-9,
+              0.009999999776482582,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              1
+            ]
+          ],
+          "rotationDegrees": 0
+        }
+      },
+      "maxBlenderVsExportedWorldQuaternionDegrees": 0.05595291023658669,
+      "lowestMeshHeightRangeMeters": [
+        -0.03512104973196983,
+        0.044277604669332504
+      ],
+      "notes": [
+        "Source comparison inspected:06_02 has readable upright forward rhythm;06_03 comparable but larger raw seam;06_08 visibly crouched/lateral and excluded.",
+        "Four target quarter-cycle poses inspected in Eevee; coherent limbs and hand rhythm, original mesh contract preserved.",
+        "Standalone clip still has small shoe grounding variation and imperfect palm orientation; runtime presentation correction is required."
+      ],
+      "imageOrder": {
+        "sourceRowsTopToBottom": [
+          "06_02",
+          "06_03",
+          "06_08"
+        ],
+        "sourcePhasesLeftToRight": [
+          0.75,
+          0.5,
+          0.25,
+          0
+        ],
+        "targetFramesLeftToRight": [
+          23,
+          15,
+          7,
+          0
+        ]
+      }
+    },
+    "limitations": [
+      "Old capture contains wrist/toe noise; fingers and helper channels omitted",
+      "One forward cycle cannot depict lateral shuffles or pivots faithfully",
+      "Source gait and dribble rhythms differ; runtime must independently phase arms",
+      "Fixed translations remove pelvis bob; runtime adds presentation bob and planted-foot correction",
+      "Contact/plant markers are kinematic estimates; no captured basketball trajectory"
+    ]
+  },
+  "pose": {
+    "pass": true,
+    "animation": "public/assets/models/player/forward-dribble-v1.glb",
+    "bytes": 13532,
+    "sha256": "c4d784a62fe3a44003997600226efab750228a88bc896edead8cec76b8fab7ab",
+    "duration": 1,
+    "tracks": 16,
+    "keyframes": 496,
+    "maxEndpointDegrees": 0.05510320467256929,
+    "maxPlantDrift": 0.0013666624815189161,
+    "minFloor": -4.934861383514624e-15,
+    "maxContactError": 7.113229329843195e-15,
+    "maxSurfaceError": 4.440892098500626e-16,
+    "plantedFrames": 503,
+    "contactFrames": 82,
+    "frames": 1450,
+    "turnReplants": {
+      "turn90": {
+        "rootStep": [
+          0.05633333333333333,
+          0,
+          0
+        ],
+        "targetChange": 0.2763095580888971,
+        "soleReplantDistance": 0.27601484876964993,
+        "soleToOldTarget": 0.2763095580888971,
+        "soleToFreshTarget": 2.7755575615628914e-17,
+        "visualYaw": 0
+      },
+      "turn180": {
+        "rootStep": [
+          0,
+          0,
+          0.056333333333333346
+        ],
+        "targetChange": 0.3018587560191706,
+        "soleReplantDistance": 0.30164524065039927,
+        "soleToOldTarget": 0.3018587560191706,
+        "soleToFreshTarget": 8.777083671441753e-17,
+        "visualYaw": 0
+      }
+    },
+    "nodePoseCpuMs": {
+      "mean": 0.07606496551724172,
+      "p95": 0.16849999999999454,
+      "max": 3.311800000000005,
+      "note": "Whole pose plus contact on Node; excludes test assertions, skin-vertex checks, rendering, and asset parsing."
+    },
+    "scenarios": {
+      "walk": {
+        "plants": 30,
+        "contactFrames": 41
+      },
+      "sprint": {
+        "plants": 48,
+        "contactFrames": 41
+      },
+      "boundaryClamp": true,
+      "stop": true,
+      "turn90": true,
+      "turn180": true,
+      "reset": true,
+      "variableFrames": true,
+      "sharpTurnOldPlantRelease": true,
+      "nonDribbleContactIsolation": true
+    }
+  },
+  "browser": {
+    "pass": true,
+    "checks": [
+      {
+        "name": "procedural default",
+        "pass": true,
+        "details": "procedural"
+      },
+      {
+        "name": "hybrid clip ready",
+        "pass": true,
+        "details": "ready"
+      },
+      {
+        "name": "identical simulation traces",
+        "pass": true,
+        "details": {
+          "frames": 950,
+          "maxDelta": 0
+        }
+      },
+      {
+        "name": "immediate direction changes",
+        "pass": true,
+        "details": [
+          {
+            "label": "right turn",
+            "pass": true,
+            "delta": [
+              0.04373626606666952,
+              0,
+              0
+            ]
+          },
+          {
+            "label": "reverse",
+            "pass": true,
+            "delta": [
+              -0.02833962929250311,
+              0,
+              0
+            ]
+          },
+          {
+            "label": "away from boundary",
+            "pass": true,
+            "delta": [
+              0,
+              0,
+              0.02816666666666645
+            ]
+          }
+        ]
+      },
+      {
+        "name": "contact during game turns and reversals",
+        "pass": true,
+        "details": {
+          "walk": {
+            "samples": 8,
+            "maxError": 7.447602459741819e-16
+          },
+          "sprint": {
+            "samples": 8,
+            "maxError": 3.188872858294072e-16
+          },
+          "right turn": {
+            "samples": 7,
+            "maxError": 4.577566798522237e-16
+          },
+          "reverse": {
+            "samples": 7,
+            "maxError": 4.611102534756203e-16
+          },
+          "boundary": {
+            "samples": 28,
+            "maxError": 1.0057327710640516e-15
+          },
+          "away from boundary": {
+            "samples": 7,
+            "maxError": 1.7798229048217483e-15
+          }
+        }
+      },
+      {
+        "name": "published motion terms accessible",
+        "pass": true,
+        "details": {
+          "status": 200,
+          "valid": true
+        }
+      },
+      {
+        "name": "existing desktop player checks",
+        "pass": true,
+        "details": [
+          {
+            "name": "runtime GLB ready",
+            "pass": true,
+            "details": {
+              "triangles": 4704,
+              "materials": 1,
+              "bones": 17,
+              "bytes": 582124
+            }
+          },
+          {
+            "name": "stable interface",
+            "pass": true
+          },
+          {
+            "name": "movement",
+            "pass": true,
+            "details": {
+              "z": 3.30948414254963,
+              "speed": 3.2117197089166205
+            }
+          },
+          {
+            "name": "sprint",
+            "pass": true,
+            "details": 5.338562586121389
+          },
+          {
+            "name": "gather ball contact",
+            "pass": true,
+            "details": {
+              "mode": "gather",
+              "error": 1.1102230246251565e-16
+            }
+          },
+          {
+            "name": "shoot release",
+            "pass": true,
+            "details": {
+              "ballMode": "flight",
+              "action": "shoot"
+            }
+          },
+          {
+            "name": "layup selected",
+            "pass": true,
+            "details": "layup"
+          },
+          {
+            "name": "layup ball contact",
+            "pass": true,
+            "details": {
+              "error": 0,
+              "mode": "finish"
+            }
+          },
+          {
+            "name": "layup jump owned by game",
+            "pass": true
+          },
+          {
+            "name": "layup release and score",
+            "pass": true,
+            "details": {
+              "score": 2,
+              "finish": "LAYUP"
+            }
+          },
+          {
+            "name": "dunk selected",
+            "pass": true,
+            "details": "dunk"
+          },
+          {
+            "name": "dunk ball contact",
+            "pass": true,
+            "details": {
+              "error": 0,
+              "mode": "finish"
+            }
+          },
+          {
+            "name": "dunk jump owned by game",
+            "pass": true
+          },
+          {
+            "name": "dunk release and score",
+            "pass": true,
+            "details": {
+              "score": 2,
+              "finish": "DUNK"
+            }
+          },
+          {
+            "name": "mouse zoom",
+            "pass": true
+          },
+          {
+            "name": "mouse look handler",
+            "pass": true
+          },
+          {
+            "name": "reset",
+            "pass": true
+          },
+          {
+            "name": "HTTP failure retains procedural player",
+            "pass": true
+          },
+          {
+            "name": "invalid rig retains procedural player",
+            "pass": true
+          }
+        ]
+      },
+      {
+        "name": "animation failure isolation",
+        "pass": true,
+        "details": [
+          {
+            "name": "missing animation retains skeletal procedural player",
+            "pass": true
+          },
+          {
+            "name": "invalid animation retains skeletal procedural player",
+            "pass": true
+          }
+        ]
+      },
+      {
+        "name": "actual keyboard movement",
+        "pass": true,
+        "details": [
+          0.06212107132718204,
+          0,
+          3.05633787075859
+        ]
+      },
+      {
+        "name": "coarse pointer 320x568",
+        "pass": true
+      },
+      {
+        "name": "touch hit targets fit 320x568",
+        "pass": true,
+        "details": [
+          {
+            "id": "touchStick",
+            "rect": {
+              "x": 14,
+              "y": 466,
+              "width": 92,
+              "height": 92,
+              "top": 466,
+              "right": 106,
+              "bottom": 558,
+              "left": 14
+            }
+          },
+          {
+            "id": "touchSprint",
+            "rect": {
+              "x": 118,
+              "y": 501,
+              "width": 57,
+              "height": 57,
+              "top": 501,
+              "right": 175,
+              "bottom": 558,
+              "left": 118
+            }
+          },
+          {
+            "id": "touchFinish",
+            "rect": {
+              "x": 180,
+              "y": 501,
+              "width": 57,
+              "height": 57,
+              "top": 501,
+              "right": 237,
+              "bottom": 558,
+              "left": 180
+            }
+          },
+          {
+            "id": "touchShoot",
+            "rect": {
+              "x": 242,
+              "y": 488,
+              "width": 70,
+              "height": 70,
+              "top": 488,
+              "right": 312,
+              "bottom": 558,
+              "left": 242
+            }
+          }
+        ]
+      },
+      {
+        "name": "touch player checks 320x568",
+        "pass": true,
+        "details": [
+          {
+            "name": "runtime GLB ready",
+            "pass": true,
+            "details": {
+              "triangles": 4704,
+              "materials": 1,
+              "bones": 17,
+              "bytes": 582124
+            }
+          },
+          {
+            "name": "stable interface",
+            "pass": true
+          },
+          {
+            "name": "movement",
+            "pass": true,
+            "details": {
+              "z": 3.30948414254963,
+              "speed": 3.2117197089166205
+            }
+          },
+          {
+            "name": "sprint",
+            "pass": true,
+            "details": 5.338562586121389
+          },
+          {
+            "name": "gather ball contact",
+            "pass": true,
+            "details": {
+              "mode": "gather",
+              "error": 5.23691153334427e-16
+            }
+          },
+          {
+            "name": "shoot release",
+            "pass": true,
+            "details": {
+              "ballMode": "flight",
+              "action": "shoot"
+            }
+          },
+          {
+            "name": "layup selected",
+            "pass": true,
+            "details": "layup"
+          },
+          {
+            "name": "layup ball contact",
+            "pass": true,
+            "details": {
+              "error": 0,
+              "mode": "finish"
+            }
+          },
+          {
+            "name": "layup jump owned by game",
+            "pass": true
+          },
+          {
+            "name": "layup release and score",
+            "pass": true,
+            "details": {
+              "score": 2,
+              "finish": "LAYUP"
+            }
+          },
+          {
+            "name": "dunk selected",
+            "pass": true,
+            "details": "dunk"
+          },
+          {
+            "name": "dunk ball contact",
+            "pass": true,
+            "details": {
+              "error": 0,
+              "mode": "finish"
+            }
+          },
+          {
+            "name": "dunk jump owned by game",
+            "pass": true
+          },
+          {
+            "name": "dunk release and score",
+            "pass": true,
+            "details": {
+              "score": 2,
+              "finish": "DUNK"
+            }
+          },
+          {
+            "name": "touch camera drag",
+            "pass": true
+          },
+          {
+            "name": "reset",
+            "pass": true
+          },
+          {
+            "name": "HTTP failure retains procedural player",
+            "pass": true
+          },
+          {
+            "name": "invalid rig retains procedural player",
+            "pass": true
+          }
+        ]
+      },
+      {
+        "name": "actual joystick plus RUN 320x568",
+        "pass": true,
+        "details": {
+          "position": [
+            0.6583781331936494,
+            0,
+            1.2096313987123146
+          ],
+          "speed": 5.445034217501779
+        }
+      },
+      {
+        "name": "touch cancellation stops displacement 320x568",
+        "pass": true,
+        "details": {
+          "before": [
+            0.8523668226811114,
+            0,
+            0.4169242098049522
+          ],
+          "after": [
+            0.8523668226811114,
+            0,
+            0.4169242098049522
+          ]
+        }
+      },
+      {
+        "name": "actual touch camera 320x568",
+        "pass": true
+      },
+      {
+        "name": "coarse pointer 390x844",
+        "pass": true
+      },
+      {
+        "name": "touch hit targets fit 390x844",
+        "pass": true,
+        "details": [
+          {
+            "id": "touchStick",
+            "rect": {
+              "x": 14,
+              "y": 742,
+              "width": 92,
+              "height": 92,
+              "top": 742,
+              "right": 106,
+              "bottom": 834,
+              "left": 14
+            }
+          },
+          {
+            "id": "touchSprint",
+            "rect": {
+              "x": 182,
+              "y": 777,
+              "width": 57,
+              "height": 57,
+              "top": 777,
+              "right": 239,
+              "bottom": 834,
+              "left": 182
+            }
+          },
+          {
+            "id": "touchFinish",
+            "rect": {
+              "x": 244,
+              "y": 777,
+              "width": 57,
+              "height": 57,
+              "top": 777,
+              "right": 301,
+              "bottom": 834,
+              "left": 244
+            }
+          },
+          {
+            "id": "touchShoot",
+            "rect": {
+              "x": 306,
+              "y": 764,
+              "width": 70,
+              "height": 70,
+              "top": 764,
+              "right": 376,
+              "bottom": 834,
+              "left": 306
+            }
+          }
+        ]
+      },
+      {
+        "name": "touch player checks 390x844",
+        "pass": true,
+        "details": [
+          {
+            "name": "runtime GLB ready",
+            "pass": true,
+            "details": {
+              "triangles": 4704,
+              "materials": 1,
+              "bones": 17,
+              "bytes": 582124
+            }
+          },
+          {
+            "name": "stable interface",
+            "pass": true
+          },
+          {
+            "name": "movement",
+            "pass": true,
+            "details": {
+              "z": 3.30948414254963,
+              "speed": 3.2117197089166205
+            }
+          },
+          {
+            "name": "sprint",
+            "pass": true,
+            "details": 5.338562586121389
+          },
+          {
+            "name": "gather ball contact",
+            "pass": true,
+            "details": {
+              "mode": "gather",
+              "error": 5.23691153334427e-16
+            }
+          },
+          {
+            "name": "shoot release",
+            "pass": true,
+            "details": {
+              "ballMode": "flight",
+              "action": "shoot"
+            }
+          },
+          {
+            "name": "layup selected",
+            "pass": true,
+            "details": "layup"
+          },
+          {
+            "name": "layup ball contact",
+            "pass": true,
+            "details": {
+              "error": 0,
+              "mode": "finish"
+            }
+          },
+          {
+            "name": "layup jump owned by game",
+            "pass": true
+          },
+          {
+            "name": "layup release and score",
+            "pass": true,
+            "details": {
+              "score": 2,
+              "finish": "LAYUP"
+            }
+          },
+          {
+            "name": "dunk selected",
+            "pass": true,
+            "details": "dunk"
+          },
+          {
+            "name": "dunk ball contact",
+            "pass": true,
+            "details": {
+              "error": 0,
+              "mode": "finish"
+            }
+          },
+          {
+            "name": "dunk jump owned by game",
+            "pass": true
+          },
+          {
+            "name": "dunk release and score",
+            "pass": true,
+            "details": {
+              "score": 2,
+              "finish": "DUNK"
+            }
+          },
+          {
+            "name": "touch camera drag",
+            "pass": true
+          },
+          {
+            "name": "reset",
+            "pass": true
+          },
+          {
+            "name": "HTTP failure retains procedural player",
+            "pass": true
+          },
+          {
+            "name": "invalid rig retains procedural player",
+            "pass": true
+          }
+        ]
+      },
+      {
+        "name": "actual joystick plus RUN 390x844",
+        "pass": true,
+        "details": {
+          "position": [
+            0.6559024605627048,
+            0,
+            1.2197478828079396
+          ],
+          "speed": 5.444925789797322
+        }
+      },
+      {
+        "name": "touch cancellation stops displacement 390x844",
+        "pass": true,
+        "details": {
+          "before": [
+            0.9151748716139393,
+            0,
+            0.1602680509235045
+          ],
+          "after": [
+            0.9151748716139393,
+            0,
+            0.1602680509235045
+          ]
+        }
+      },
+      {
+        "name": "actual touch camera 390x844",
+        "pass": true
+      },
+      {
+        "name": "coarse pointer 844x390",
+        "pass": true
+      },
+      {
+        "name": "touch hit targets fit 844x390",
+        "pass": true,
+        "details": [
+          {
+            "id": "touchStick",
+            "rect": {
+              "x": 14,
+              "y": 268,
+              "width": 112,
+              "height": 112,
+              "top": 268,
+              "right": 126,
+              "bottom": 380,
+              "left": 14
+            }
+          },
+          {
+            "id": "touchSprint",
+            "rect": {
+              "x": 592,
+              "y": 312,
+              "width": 68,
+              "height": 68,
+              "top": 312,
+              "right": 660,
+              "bottom": 380,
+              "left": 592
+            }
+          },
+          {
+            "id": "touchFinish",
+            "rect": {
+              "x": 669,
+              "y": 312,
+              "width": 68,
+              "height": 68,
+              "top": 312,
+              "right": 737,
+              "bottom": 380,
+              "left": 669
+            }
+          },
+          {
+            "id": "touchShoot",
+            "rect": {
+              "x": 746,
+              "y": 296,
+              "width": 84,
+              "height": 84,
+              "top": 296,
+              "right": 830,
+              "bottom": 380,
+              "left": 746
+            }
+          }
+        ]
+      },
+      {
+        "name": "touch player checks 844x390",
+        "pass": true,
+        "details": [
+          {
+            "name": "runtime GLB ready",
+            "pass": true,
+            "details": {
+              "triangles": 4704,
+              "materials": 1,
+              "bones": 17,
+              "bytes": 582124
+            }
+          },
+          {
+            "name": "stable interface",
+            "pass": true
+          },
+          {
+            "name": "movement",
+            "pass": true,
+            "details": {
+              "z": 3.30948414254963,
+              "speed": 3.2117197089166205
+            }
+          },
+          {
+            "name": "sprint",
+            "pass": true,
+            "details": 5.338562586121389
+          },
+          {
+            "name": "gather ball contact",
+            "pass": true,
+            "details": {
+              "mode": "gather",
+              "error": 4.965068306494546e-16
+            }
+          },
+          {
+            "name": "shoot release",
+            "pass": true,
+            "details": {
+              "ballMode": "flight",
+              "action": "shoot"
+            }
+          },
+          {
+            "name": "layup selected",
+            "pass": true,
+            "details": "layup"
+          },
+          {
+            "name": "layup ball contact",
+            "pass": true,
+            "details": {
+              "error": 0,
+              "mode": "finish"
+            }
+          },
+          {
+            "name": "layup jump owned by game",
+            "pass": true
+          },
+          {
+            "name": "layup release and score",
+            "pass": true,
+            "details": {
+              "score": 2,
+              "finish": "LAYUP"
+            }
+          },
+          {
+            "name": "dunk selected",
+            "pass": true,
+            "details": "dunk"
+          },
+          {
+            "name": "dunk ball contact",
+            "pass": true,
+            "details": {
+              "error": 0,
+              "mode": "finish"
+            }
+          },
+          {
+            "name": "dunk jump owned by game",
+            "pass": true
+          },
+          {
+            "name": "dunk release and score",
+            "pass": true,
+            "details": {
+              "score": 2,
+              "finish": "DUNK"
+            }
+          },
+          {
+            "name": "touch camera drag",
+            "pass": true
+          },
+          {
+            "name": "reset",
+            "pass": true
+          },
+          {
+            "name": "HTTP failure retains procedural player",
+            "pass": true
+          },
+          {
+            "name": "invalid rig retains procedural player",
+            "pass": true
+          }
+        ]
+      },
+      {
+        "name": "actual joystick plus RUN 844x390",
+        "pass": true,
+        "details": {
+          "position": [
+            0.6586202208003045,
+            0,
+            1.2086421421394296
+          ],
+          "speed": 5.44504612109259
+        }
+      },
+      {
+        "name": "touch cancellation stops displacement 844x390",
+        "pass": true,
+        "details": {
+          "before": [
+            0.9602541049195846,
+            0,
+            -0.023941824436919168
+          ],
+          "after": [
+            0.9602541049195846,
+            0,
+            -0.023941824436919168
+          ]
+        }
+      },
+      {
+        "name": "actual touch camera 844x390",
+        "pass": true
+      },
+      {
+        "name": "Luke stays procedural",
+        "pass": true
+      },
+      {
+        "name": "no added draw calls",
+        "pass": true,
+        "details": {
+          "baseline": 98,
+          "hybrid": 98
+        }
+      }
+    ],
+    "benchmarks": [
+      {
+        "mode": "procedural",
+        "animationStatus": "procedural",
+        "frames": 180,
+        "poseCpuMs": {
+          "median": 0.30000001192092896,
+          "p95": 0.5
+        },
+        "frameCpuMs": {
+          "median": 3.800000011920929,
+          "p95": 5.5999999940395355
+        },
+        "frameIntervalMs": {
+          "median": 16.699999999999818,
+          "p95": 16.899999999999636
+        },
+        "drawCalls": 98,
+        "triangles": 29638,
+        "viewport": [
+          1280,
+          800
+        ],
+        "coarsePointer": false
+      },
+      {
+        "mode": "hybrid",
+        "animationStatus": "ready",
+        "frames": 180,
+        "poseCpuMs": {
+          "median": 0.5999999940395355,
+          "p95": 1.600000023841858
+        },
+        "frameCpuMs": {
+          "median": 4.4000000059604645,
+          "p95": 7.5999999940395355
+        },
+        "frameIntervalMs": {
+          "median": 16.699999999999818,
+          "p95": 16.800000000000182
+        },
+        "drawCalls": 98,
+        "triangles": 29638,
+        "viewport": [
+          1280,
+          800
+        ],
+        "coarsePointer": false
+      },
+      {
+        "mode": "hybrid touch emulation",
+        "animationStatus": "ready",
+        "frames": 180,
+        "poseCpuMs": {
+          "median": 0.4000000059604645,
+          "p95": 0.6000000238418579
+        },
+        "frameCpuMs": {
+          "median": 3.899999976158142,
+          "p95": 6.0999999940395355
+        },
+        "frameIntervalMs": {
+          "median": 16.699999999999818,
+          "p95": 16.800000000000182
+        },
+        "drawCalls": 78,
+        "triangles": 28646,
+        "viewport": [
+          390,
+          844
+        ],
+        "coarsePointer": true
+      }
+    ]
+  },
+  "production": {
+    "base": "http://127.0.0.1:5176/TheArena/",
+    "checks": [
+      {
+        "name": "production  animation request",
+        "pass": true,
+        "details": []
+      },
+      {
+        "name": "production  credits",
+        "pass": true,
+        "details": {
+          "visible": false,
+          "href": ""
+        }
+      },
+      {
+        "name": "production  no errors or fallback warnings",
+        "pass": true,
+        "details": []
+      },
+      {
+        "name": "production ?animation=hybrid animation request",
+        "pass": true,
+        "details": [
+          {
+            "url": "http://127.0.0.1:5176/TheArena/assets/models/player/forward-dribble-v1.glb",
+            "status": 200
+          }
+        ]
+      },
+      {
+        "name": "production ?animation=hybrid credits",
+        "pass": true,
+        "details": {
+          "visible": true,
+          "href": "http://127.0.0.1:5176/TheArena/assets/models/player/cmu-motion-terms.txt"
+        }
+      },
+      {
+        "name": "production ?animation=hybrid no errors or fallback warnings",
+        "pass": true,
+        "details": []
+      },
+      {
+        "name": "production BASE_URL terms",
+        "pass": true,
+        "details": {
+          "status": 200,
+          "valid": true
+        }
+      },
+      {
+        "name": "production ?player=luke&animation=hybrid animation request",
+        "pass": true,
+        "details": []
+      },
+      {
+        "name": "production ?player=luke&animation=hybrid credits",
+        "pass": true,
+        "details": {
+          "visible": false,
+          "href": ""
+        }
+      },
+      {
+        "name": "production ?player=luke&animation=hybrid no errors or fallback warnings",
+        "pass": true,
+        "details": []
+      }
+    ],
+    "pass": true
+  },
+  "gltf": {
+    "numErrors": 0,
+    "numWarnings": 0,
+    "messages": [
+      {
+        "code": "NODE_EMPTY",
+        "message": "Empty node encountered.",
+        "severity": 2,
+        "pointer": "/nodes/5"
+      },
+      {
+        "code": "NODE_EMPTY",
+        "message": "Empty node encountered.",
+        "severity": 2,
+        "pointer": "/nodes/7"
+      },
+      {
+        "code": "NODE_EMPTY",
+        "message": "Empty node encountered.",
+        "severity": 2,
+        "pointer": "/nodes/10"
+      },
+      {
+        "code": "NODE_EMPTY",
+        "message": "Empty node encountered.",
+        "severity": 2,
+        "pointer": "/nodes/13"
+      },
+      {
+        "code": "NODE_EMPTY",
+        "message": "Empty node encountered.",
+        "severity": 2,
+        "pointer": "/nodes/16"
+      }
+    ]
+  }
+}

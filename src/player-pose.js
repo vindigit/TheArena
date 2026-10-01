@@ -1,6 +1,8 @@
 // Presentation-only skeletal pose adapter. Gameplay owns root translation,
 // facing, jump height, shot timing and ball physics in main.js.
-export function createPoseAdapter(THREE, visual, bones, anchors) {
+import { createHybridPose } from './player-hybrid.js';
+
+export function createPoseAdapter(THREE, visual, bones, anchors, { hybrid = null } = {}) {
   const get = name => bones.get(name);
   const rest = new Map([...bones].map(([name, b]) => [name, b.position.clone()]));
   const pelvis = get('pelvis'), chest = get('chest'), head = get('head');
@@ -10,6 +12,7 @@ export function createPoseAdapter(THREE, visual, bones, anchors) {
   const tPose = get('root').parent?.userData.game_axes_corrected === true;
   const world = new THREE.Vector3(), inverse = new THREE.Quaternion();
   let walkTime = 0, phase = 0;
+  let contact = { active: false, weight: 0, error: null };
   const arms = ['right', 'left'].map((side, i) => {
     const upper = get(`${side}_upper_arm`), lower = get(`${side}_forearm`), hand = get(`${side}_hand`);
     const sign = i === 0 ? 1 : -1;
@@ -30,6 +33,10 @@ export function createPoseAdapter(THREE, visual, bones, anchors) {
   function localRotation(bone) {
     visual.getWorldQuaternion(inverse).invert();
     return bone.getWorldQuaternion(new THREE.Quaternion()).premultiply(inverse);
+  }
+  function refreshArmAnchor(arm) {
+    const point = arm.hand.localToWorld(arm.anchorOffset.clone());
+    anchors[`${arm.side}Hand`].position.copy(visual.worldToLocal(point)).add(visual.position);
   }
   // Analytical two-bone IK, in asset-local coordinates. The pole keeps elbows
   // outside the torso; independent wrists support and guide the ball.
@@ -53,10 +60,10 @@ export function createPoseAdapter(THREE, visual, bones, anchors) {
     arm.lower.quaternion.copy(upperQ.clone().invert().multiply(lowerQ));
     arm.hand.quaternion.copy(lowerQ.clone().invert().multiply(orientation).multiply(arm.handBind));
     visual.updateWorldMatrix(true, true);
-    const point = arm.hand.localToWorld(arm.anchorOffset.clone());
-    anchors[`${arm.side}Hand`].position.copy(visual.worldToLocal(point)).add(visual.position);
+    refreshArmAnchor(arm);
   }
   function update(dt, state) {
+    contact = { active: false, weight: 0, error: null };
     const safeDt = clamp(dt, 0, .1), speed = Math.max(0, Number(state.speed) || 0);
     const moving = speed > .08, action = state.action || (moving ? 'move' : 'idle');
     const p = clamp(state.shotProgress);
@@ -121,9 +128,39 @@ export function createPoseAdapter(THREE, visual, bones, anchors) {
       }
       solve(arm, target, rotation, vec(s * .8, 1.20, .13));
     }
+    // Overlay a source rhythm only after the complete procedural pose. A
+    // separate sampler avoids mixer state fighting the per-frame rest reset.
+    if (hybrid?.update(dt, state)) {
+      visual.updateWorldMatrix(true, true);
+      for (const arm of arms) refreshArmAnchor(arm);
+    }
     visual.updateWorldMatrix(true, true);
     anchors.chest.position.copy(localPosition(chest)).add(vec(0, .035, -.18));
     anchors.head.position.copy(localPosition(head));
   }
-  return { update };
+  function updateDribbleContact({ ballPosition, ballRadius = .12, dribblePhase, ballMode } = {}) {
+    contact = { active: false, weight: 0, error: null };
+    if (!hybrid?.active || ballMode !== 'dribble' || !Number.isFinite(dribblePhase) ||
+        !ballPosition || ![ballPosition.x, ballPosition.y, ballPosition.z].every(Number.isFinite) ||
+        !Number.isFinite(ballRadius) || ballRadius <= 0) return;
+    const offset = dribblePhase - Math.PI / 2;
+    const angle = Math.abs(Math.atan2(Math.sin(offset), Math.cos(offset)));
+    if (angle >= .9) return;
+    const t = clamp((.9 - angle) / (.9 - .35)), blend = t * t * (3 - 2 * t);
+    const arm = arms[0], ballTop = vec(ballPosition.x, ballPosition.y + ballRadius, ballPosition.z);
+    const target = anchors.rightHand.getWorldPosition(new THREE.Vector3()).lerp(ballTop, blend);
+    visual.worldToLocal(target);
+    const orientation = localRotation(arm.hand).multiply(arm.handBind.clone().invert());
+    orientation.slerp(new THREE.Quaternion().setFromEuler(new THREE.Euler(.08, 0, -.05)), blend);
+    solve(arm, target, orientation, vec(.8, 1.20, .13));
+    const error = anchors.rightHand.getWorldPosition(new THREE.Vector3()).distanceTo(ballTop);
+    contact = { active: true, weight: blend, error };
+  }
+  return {
+    update, updateDribbleContact,
+    setHybridAnimation(clip, metadata) {
+      hybrid = createHybridPose(THREE, visual, bones, clip, metadata, { restPositions: rest });
+    },
+    getHybridDiagnostics() { return hybrid ? { ...hybrid.diagnostics(), contact: { ...contact } } : null; },
+  };
 }

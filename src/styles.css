@@ -75,6 +75,8 @@ kbd { padding: 2px 4px; border: 1px solid #718697; border-bottom-width: 2px; bor
 .start-card.is-hidden { display: none; }
 
 .touch-controls { display: none; }
+.motion-credits { position: fixed; z-index: 5; top: 94px; left: 16px; color: #c6bdb1; font: 10px/1.2 "DM Mono", monospace; }
+.motion-credits[hidden] { display: none; }
 
 @media (any-pointer: coarse) {
   .touch-controls {
@@ -161,6 +163,7 @@ kbd { padding: 2px 4px; border: 1px solid #718697; border-bottom-width: 2px; bor
 }
 
 @media (max-width: 720px) {
+  .motion-credits { top: 62px; }
   .hud--bottom { grid-template-columns: 1fr auto; gap: 10px; }
   .shot-meter { grid-column: 1 / -1; grid-row: 1; width: min(330px, 75vw); }
   .controls { display: none; }

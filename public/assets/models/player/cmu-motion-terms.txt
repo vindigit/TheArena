@@ -1,0 +1,39 @@
+TheArena forward-dribble-v1.glb — motion source terms and credits
+
+This animation is a modified, retargeted excerpt of CMU subject 06, trial 02.
+It is supplied inside TheArena under the CMU motion data terms, not under a
+CC0, MIT, or other unrestricted license for standalone animation assets.
+
+You may copy, modify, and redistribute the motion data and include it in
+commercially sold products. You may not resell the motion data directly,
+including converted or modified animations. When redistributing this motion
+or a derivative, keep these same terms apparent to recipients.
+
+The data used in this project was obtained from mocap.cs.cmu.edu.
+The database was created with funding from NSF EIA-0196217.
+
+Provenance and credits:
+* CMU Graphics Lab: original optical motion capture, subject 06 / trial 02.
+  http://mocap.cs.cmu.edu/
+  http://mocap.cs.cmu.edu/faqs.php
+  http://mocap.cs.cmu.edu/search.php?subjectnumber=6
+* Bruce Hahne / cgspeed: CMU ASF/AMC to BVH conversion; no additional
+  restrictions were imposed on that conversion.
+  https://sites.google.com/a/cgspeed.com/cgspeed/motion-capture/the-motionbuilder-friendly-bvh-conversion-release-of-cmus-motion-capture-database/readme-file-for-the-bvh-conversion-release
+* RancidMilk: BVH to FBX conversion, using Blender and Auto-Rig Pro.
+  Its animation terms apply to conversions and modifications as stated above.
+  https://rancidmilk.itch.io/free-character-animations
+* Quaternius: CC0 reference character used by the FBX converter.
+  No Quaternius character mesh is included in TheArena's companion animation.
+  https://quaternius.com/
+* Generative Bionics / gbionics: Hugging Face bones-only FBX mirror.
+  https://huggingface.co/datasets/gbionics/cmu-fbx
+  Pinned revision: d18e9d3d14c08318eaa6c0602a6ead7fac40e58c
+  Source: animations/06_02.fbx
+  Source SHA-256: 13db9d5409a19621b8fa4ab60826f1a9c9bcda1104871986afcb8c86d4278380
+* TheArena: independently authored Blender retarget and compact glTF bake,
+  trimmed to Blender frames 110–140, with gameplay root motion removed.
+
+None of the above source parties necessarily endorses TheArena or this use.
+The motion data has no guarantee of quality. The playable basketball state,
+movement, possession, and bounce timing are controlled by TheArena's game.
