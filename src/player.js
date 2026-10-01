@@ -6,12 +6,60 @@ import handShapes from '../art/animation/hand-shapes.json' with {type:'json'};
 import { validateLukeRig } from './luke-rig-contract.js';
 
 export const LUKE_MODEL_URL = (import.meta.env?.BASE_URL || '/') + 'assets/models/player/luke-player-v1.glb';
+export const LEGACY_LUKE_RIG_CONTRACT = 'legacy-luke-v1';
+export const STAGED_PLAYER_RIG_CONTRACT = 'game-humanoid-v2';
+export const REQUIRED_BONES = Object.freeze([
+  'Hips', 'Spine', 'Spine1', 'Spine2', 'Neck', 'Head',
+  'LeftShoulder', 'LeftArm', 'LeftForeArm', 'LeftHand',
+  'RightShoulder', 'RightArm', 'RightForeArm', 'RightHand',
+  'LeftUpLeg', 'LeftLeg', 'LeftFoot', 'LeftToeBase',
+  'RightUpLeg', 'RightLeg', 'RightFoot', 'RightToeBase',
+]);
+const REQUIRED_BONE_SET = new Set(REQUIRED_BONES);
+const STAGED_LIMITS = Object.freeze({ maxBytes: 1_500_000, maxTriangles: 8_000, minHeight: 1.9, maxHeight: 2.2 });
+
+export function normalizePlayerBoneName(name) {
+  return name.startsWith('mixamorig:') ? name.slice('mixamorig:'.length) : name;
+}
+
+// This validates the versioned v2 contract without enabling it for production.
+// Tests use the same function with small fixtures; the opt-in loader path below
+// supplies measurements from an actual parsed GLB.
+export function validateStagedPlayerRigContract({
+  boneNames, bytes, triangles, height, meshCount, skinCount,
+}) {
+  if (bytes > STAGED_LIMITS.maxBytes) throw new Error('game-humanoid-v2 GLB exceeds 1.5 MB');
+  if (triangles <= 0 || triangles > STAGED_LIMITS.maxTriangles)
+    throw new Error('game-humanoid-v2 triangle count must be 1-8000');
+  if (height < STAGED_LIMITS.minHeight || height > STAGED_LIMITS.maxHeight)
+    throw new Error('game-humanoid-v2 height must be 1.9-2.2 m');
+  if (meshCount !== 1) throw new Error('game-humanoid-v2 requires exactly one skinned mesh');
+  if (skinCount !== 1) throw new Error('game-humanoid-v2 requires exactly one skin');
+  const normalized = boneNames.map(normalizePlayerBoneName);
+  if (new Set(normalized).size !== normalized.length)
+    throw new Error('game-humanoid-v2 contains duplicate normalized bone names');
+  for (const group of [
+    ['three-spine chain', ['Spine', 'Spine1', 'Spine2']],
+    ['shoulders', ['LeftShoulder', 'RightShoulder']],
+    ['toe bases', ['LeftToeBase', 'RightToeBase']],
+  ]) {
+    const absent = group[1].filter(name => !normalized.includes(name));
+    if (absent.length) throw new Error(`game-humanoid-v2 ${group[0]} missing: ${absent.join(', ')}`);
+  }
+  const missing = REQUIRED_BONES.filter(name => !normalized.includes(name));
+  const extra = normalized.filter(name => !REQUIRED_BONE_SET.has(name));
+  if (missing.length || extra.length) {
+    throw new Error(`game-humanoid-v2 requires exactly 22 bones; missing [${missing.join(', ')}]; extra [${extra.join(', ')}]`);
+  }
+  return { contract: STAGED_PLAYER_RIG_CONTRACT, bones: normalized, ...STAGED_LIMITS };
+}
 const requestedAnimation = new URLSearchParams(globalThis.location?.search || '').get('animation');
 
 // Stable collision/facing root and attachment references are independent of
 // Luke's asynchronous visual. The old GLB and old-rig clips have no load path.
 export function createPlayer(THREE, {
   modelUrl = LUKE_MODEL_URL,
+  rigContract = LEGACY_LUKE_RIG_CONTRACT,
   animationMode = requestedAnimation === 'hybrid' ? 'hybrid' : 'luke-motion',
   fetchAsset = (...args) => fetch(...args),
   parseModel = data => new GLTFLoader().parseAsync(data, ''),
@@ -30,6 +78,7 @@ export function createPlayer(THREE, {
     rig?.update(dt, state);
   };
   group.userData.character = 'Luke';
+  group.userData.rigContract = rigContract;
   group.userData.assetStatus = 'loading';
   group.userData.animationStatus = animationMode === 'hybrid' ? 'superseded' : 'luke-motion';
   group.userData.animationReady = Promise.resolve(group.userData.animationStatus);
@@ -41,10 +90,10 @@ export function createPlayer(THREE, {
       const response = await fetchAsset(modelUrl);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const data = await response.arrayBuffer();
-      if (data.byteLength > 800000) throw new Error('Luke GLB exceeds 800 KB');
+      if (data.byteLength > STAGED_LIMITS.maxBytes) throw new Error('Player GLB exceeds 1.5 MB');
       const gltf = await parseModel(data);
       visual = gltf.scene;
-      const bones = new Map(), meshes = [], materials = new Set(), textures = new Set();
+      const bones = new Map(), meshes = [], skins = new Set(), materials = new Set(), textures = new Set();
       let triangles = 0;
       visual.traverse(node => {
         if (node.isBone) {
@@ -54,6 +103,7 @@ export function createPlayer(THREE, {
         if (!node.isMesh) return;
         if (!node.isSkinnedMesh) throw new Error('Luke geometry must be skinned');
         meshes.push(node);
+        skins.add(node.skeleton);
         const geometry = node.geometry;
         triangles += (geometry.index?.count ?? geometry.attributes.position.count) / 3;
         const skin = geometry.attributes.skinWeight, indices = geometry.attributes.skinIndex;
@@ -82,21 +132,37 @@ export function createPlayer(THREE, {
         node.frustumCulled = false;
       });
       const bounds = new THREE.Box3().setFromObject(visual), size = bounds.getSize(new THREE.Vector3());
-      if (triangles > 6000 || triangles === 0 || materials.size !== 1 || textures.size !== 1 ||
-          gltf.animations.length || meshes.length !== 1 || Math.abs(bounds.min.y) > .005 || size.y < 1.9 || size.y > 2.2)
-        throw new Error('Luke asset contract validation failed');
-      validateLukeRig(THREE, visual, bones, meshes);
+      if (materials.size !== 1 || textures.size !== 1 || gltf.animations.length || Math.abs(bounds.min.y) > .005)
+        throw new Error('Player GLB requires one material/texture, no embedded clips, and floor-aligned bounds');
+      let runtimeBones = bones;
+      if (rigContract === STAGED_PLAYER_RIG_CONTRACT) {
+        validateStagedPlayerRigContract({ boneNames: [...bones.keys()], bytes: data.byteLength, triangles,
+          height: size.y, meshCount: meshes.length, skinCount: skins.size });
+        runtimeBones = new Map();
+        for (const [name, bone] of bones) {
+          const normalized = normalizePlayerBoneName(name);
+          bone.name = normalized;
+          runtimeBones.set(normalized, bone);
+        }
+      } else if (rigContract === LEGACY_LUKE_RIG_CONTRACT) {
+        if (triangles > 8000 || triangles === 0 || meshes.length !== 1 || skins.size !== 1 || size.y < 1.9 || size.y > 2.2)
+          throw new Error('legacy-luke-v1 requires one mesh/skin, 1-8000 triangles, and 1.9-2.2 m height');
+        validateLukeRig(THREE, visual, bones, meshes);
+      } else {
+        throw new Error(`Unknown player rig contract: ${rigContract}`);
+      }
       handShapesAdapter=createHandShapeAdapter(THREE,meshes[0],handShapes);
       handShapesAdapter.installMorphs();
       // Polished plants/contact use the authoritative root during the first pose.
       group.add(visual);
-      const candidate = createPoseAdapter(THREE, visual, bones, anchors);
-      candidate.update(0, lastState);
-      rig = candidate; rigVisual = visual; rigBones = bones;
+      const candidate = rigContract === LEGACY_LUKE_RIG_CONTRACT
+        ? createPoseAdapter(THREE, visual, runtimeBones, anchors) : null;
+      candidate?.update(0, lastState);
+      rig = candidate; rigVisual = visual; rigBones = runtimeBones;
       root.shadow.visible = true;
       group.userData.assetStatus = 'ready';
-      group.userData.playerAsset = { character: 'Luke', url: modelUrl, triangles,
-        materials: materials.size, bones: bones.size, bytes: data.byteLength };
+      group.userData.playerAsset = { character: 'Luke', url: modelUrl, rigContract, triangles,
+        materials: materials.size, bones: runtimeBones.size, bytes: data.byteLength };
       return 'ready';
     } catch (error) {
       if (visual) {
