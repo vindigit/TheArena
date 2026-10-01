@@ -74,7 +74,7 @@ test('obsolete hybrid option never requests an old-rig clip', async () => {
   assert.equal(await player.group.userData.assetReady, 'ready');
   assert.equal(await player.group.userData.animationReady, 'superseded');
   assert.deepEqual(urls, [LUKE_MODEL_URL]);
-  assert.equal(player.getAnimationDiagnostics().mode, 'procedural');
+  assert.equal(player.getAnimationDiagnostics().mode, 'luke-authored-parametric');
   assert.equal(player.getAnimationDiagnostics().weight, 0);
   assert.match(player.getAnimationDiagnostics().superseded, /Part 2/);
 });

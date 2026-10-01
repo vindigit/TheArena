@@ -4,6 +4,8 @@ import { AudioDirector } from './audio.js';
 import { createArena } from './arena.js';
 import { createPlayer } from './player.js';
 import { createBasketball } from './ball.js';
+import { samplePolished, POLISHED_PACK } from './polished-motion-data.js';
+import { PICKUP_SECONDS, dribbleBallLocal, pickupBallLocal, gatherBallLocal } from './player-ball-presentation.js';
 import { SHOT_GRAVITY, meterProgress, greenWindow, gradeShot, shotTarget, solveShotArc, sampleShotArc, crossesHoop } from './shooting.js';
 
 const canvas = document.querySelector('#game');
@@ -110,6 +112,16 @@ const game = {
     actionProgress: 0,
     jumpY: 0,
     finishReleased: false,
+    shotPending: null,
+    shotReleaseCount: 0,
+    motionDirection: new THREE.Vector3(0, 0, -1),
+    stopElapsed: null,
+    stopInitialSpeed: 0,
+    stopMovingLastFrame: false,
+    presentationPickup: null,
+    presentationGather: null,
+    presentationReleaseLocal: null,
+    presentationFinish: null,
   },
   charge: {
     active: false,
@@ -261,6 +273,9 @@ function updateHud(now) {
   actionLabel.textContent = action;
 
   if (game.charge.active) {
+    const hoopDirection = temp.toHoop.copy(arena.hoop.rimCenter).sub(p.position);
+    hoopDirection.y = 0;
+    if (hoopDirection.lengthSq() > .01) p.desiredYaw = Math.atan2(-hoopDirection.x, -hoopDirection.z);
     game.charge.value = chargeProgress(now);
     shotMeter.classList.add('is-charging');
   } else {
@@ -309,6 +324,15 @@ function resetPossession(keepScore = true) {
   game.player.actionProgress = 0;
   game.player.jumpY = 0;
   game.player.finishReleased = false;
+  game.player.shotPending = null;
+  game.player.shotReleaseCount = 0;
+  game.player.stopElapsed = null;
+  game.player.stopInitialSpeed = 0;
+  game.player.stopMovingLastFrame = false;
+  game.player.presentationPickup = null;
+  game.player.presentationGather = null;
+  game.player.presentationReleaseLocal = null;
+  game.player.presentationFinish = null;
 
   game.ball.mode = 'dribble';
   game.ball.velocity.set(0, 0, 0);
@@ -322,6 +346,18 @@ function resetPossession(keepScore = true) {
   game.ball.dribblePhase = 0;
   game.ball.dribbleBob = 0;
 
+  // Reset can occur after this frame's pose update (automatic possession
+  // recovery). Seed the visible ready pose and ball in the same transaction
+  // so the canonical neutral rig cannot flash for one rendered frame.
+  player.group.position.copy(game.player.position);
+  player.group.rotation.y = game.player.yaw;
+  const readyBall = getDribblePresentationLocal(0);
+  player.update(0, { motionPack: 'authored', action: 'idle', speed: 0,
+    facing: game.player.yaw, jump: 0, shotProgress: 0, dribblePhase: 0,
+    ballMode: 'dribble', ballLocal: readyBall, ballRadius: BALL_RADIUS });
+  setBallPosition(localPlayerPoint(...readyBall, temp.ballAnchor));
+  game.ball.previous.copy(game.ball.position);
+
   if (!keepScore) {
     game.score = 0;
     game.remaining = 120;
@@ -330,8 +366,18 @@ function resetPossession(keepScore = true) {
 }
 
 function getShotAnchor(charge = 0, target = temp.ballAnchor) {
-  const lift = clamp(charge, 0, 1);
-  return localPlayerPoint(0.22, 1.24 + lift * 0.48, -0.37, target);
+  const gather = game.player.presentationGather;
+  const lift=clamp(charge*1.3/.5,0,1), e=lift*lift*(3-2*lift);
+  let point = [.28,1.20+.55*e,-.23];
+  const blend=clamp(charge*1.3/.16,0,1);
+  if(gather?.origin)point=point.map((v,i)=>gather.origin[i]+(v-gather.origin[i])*blend*blend*(3-2*blend));
+  const shot = game.player.shotPending;
+  if (shot && !shot.released) {
+    const t = clamp(game.player.actionTime / .200, 0, 1), a = t * t * (3 - 2 * t);
+    const authored=samplePolished(THREE,'shoot',Math.min(.2,game.player.actionTime)).ballLocal || POLISHED_PACK.clips.shoot.samples[6].ballLocal;
+    point = shot.startLocal.map((v, i) => v + (authored[i] - v) * a);
+  }
+  return localPlayerPoint(...point, target);
 }
 
 function launchBall(start, target, time, options = {}) {
@@ -352,39 +398,54 @@ function launchBall(start, target, time, options = {}) {
   ball.perfectShot = options.perfectShot ?? false;
 }
 
+// Input release commits the jump, then the physical release
+// occurs once, at the 200 ms apex. Charge grading remains the original system.
 function releaseJumpShot(releaseTime = performance.now()) {
-  if (!game.charge.active) return;
-
+  if (!game.charge.active || game.player.shotPending) return;
   const charge = chargeProgress(releaseTime);
   game.charge.value = charge;
   const grade = gradeShot(charge, game.charge.window);
-  const start = getShotAnchor(charge, new THREE.Vector3()).clone();
-  const rim = arena.hoop.rimCenter;
-  const distance = horizontalDistance(start, rim);
-  const target = shotTarget(start, rim, grade, charge, game.charge.window);
-  const arc = solveShotArc(start, target);
-  const isThree = distance > 6.45;
-  launchBall(start, target, arc.time, {
-    canScore: grade === 'ON TIME' || Math.abs(charge - (grade === 'EARLY' ? game.charge.window.start : game.charge.window.end)) < 0.03,
-    points: isThree ? 3 : 2,
-    shotArc: arc,
-    perfectShot: grade === 'ON TIME',
-  });
-
+  player.group.updateWorldMatrix(true, false);
+  game.player.shotPending = {
+    charge, grade, released: false, releaseInputTime: releaseTime,
+    startLocal: player.group.worldToLocal(game.ball.position.clone()).toArray(),
+  };
+  game.player.presentationPickup = null;
   game.charge.active = false;
   game.player.action = 'shoot';
   game.player.actionTime = 0;
-  game.player.actionDuration = 0.44;
-  game.player.actionProgress = 0.57;
+  game.player.actionDuration = POLISHED_PACK.clips.shoot.duration;
+  game.player.actionProgress = .57;
   game.player.currentSpeed = 0;
-
   setFeedback(grade, grade === 'ON TIME' ? 'good' : 'bad', 1.1);
+}
+
+function detachJumpShot() {
+  const shot = game.player.shotPending;
+  if (!shot || shot.released) return false;
+  const {charge, grade} = shot;
+  const start = getShotAnchor(charge, new THREE.Vector3()).clone();
+  game.player.presentationReleaseLocal = player.group.worldToLocal(start.clone()).toArray();
+  const rim = arena.hoop.rimCenter;
+  const target = shotTarget(start, rim, grade, charge, game.charge.window);
+  const arc = solveShotArc(start, target);
+  shot.released = true;
+  shot.detachedAt = game.player.actionTime;
+  shot.detachRootY = game.player.jumpY;
+  shot.detachWorld = start.toArray();
+  game.player.shotReleaseCount++;
+  launchBall(start, target, arc.time, {
+    canScore: grade === 'ON TIME' || Math.abs(charge - (grade === 'EARLY' ? game.charge.window.start : game.charge.window.end)) < .03,
+    points: horizontalDistance(start, rim) > 6.45 ? 3 : 2,
+    shotArc: arc, perfectShot: grade === 'ON TIME',
+  });
+  return true;
 }
 
 function releaseFinish() {
   const action = game.player.action;
   const isDunk = action === 'dunk';
-  const start = player.getRightHandWorldPosition(new THREE.Vector3());
+  const start = player.getHeldBallWorldPosition(new THREE.Vector3());
   const target = arena.hoop.rimCenter.clone();
   target.y += isDunk ? -0.12 : 0.035;
   target.z += isDunk ? 0.015 : 0.055;
@@ -408,6 +469,12 @@ function releaseFinish() {
 function startCharge(pressTime = performance.now()) {
   if (!game.started || game.charge.active || game.ball.mode !== 'dribble') return;
   if (game.player.action !== 'idle' && game.player.action !== 'move') return;
+  player.group.updateWorldMatrix(true, false);
+  game.player.shotPending = null;
+  game.player.presentationGather = { origin: player.group.worldToLocal(game.ball.position.clone()).toArray() };
+  game.player.presentationPickup = null;
+  game.player.presentationReleaseLocal = null;
+  game.player.presentationFinish = null;
   game.charge.active = true;
   game.charge.value = 0;
   game.charge.pressTime = pressTime;
@@ -434,11 +501,21 @@ function startFinish() {
   }
 
   const dunk = distance < 2.35 && game.player.currentSpeed > 1.6;
+  player.group.updateWorldMatrix(true, false);
+  game.player.presentationFinish = { origin: player.group.worldToLocal(game.ball.position.clone()).toArray() };
+  game.player.presentationPickup = null;
+  game.player.presentationGather = null;
+  game.player.presentationReleaseLocal = null;
   game.player.action = dunk ? 'dunk' : 'layup';
   game.player.actionTime = 0;
   game.player.actionDuration = dunk ? 0.76 : 0.84;
   game.player.actionProgress = 0;
   game.player.finishReleased = false;
+  game.player.shotPending = null;
+  game.player.shotReleaseCount = 0;
+  game.player.stopElapsed = null;
+  game.player.stopInitialSpeed = 0;
+  game.player.stopMovingLastFrame = false;
   game.ball.mode = 'finish';
   game.ball.finishKind = dunk ? 'DUNK' : 'LAYUP';
   setFeedback(dunk ? 'RISE UP' : 'ATTACK THE RIM', '', 0.95);
@@ -511,18 +588,23 @@ function resolveRimCollision() {
 
 function updateDribble(dt) {
   const ball = game.ball;
-  ball.dribblePhase += dt * (game.player.currentSpeed > 0.2 ? 11.3 : 7.0);
+  ball.dribblePhase += dt * (Math.PI*2/.8) * (game.player.currentSpeed > .2 ? clamp(game.player.currentSpeed/1.6,.65,1.55) : 1);
   const bob = 0.5 + Math.sin(ball.dribblePhase) * 0.5;
-  const side = getPlayerRight().clone().multiplyScalar(0.42);
-  const front = getPlayerForward().clone().multiplyScalar(0.16);
-  const desired = game.player.position.clone().add(side).add(front);
-  desired.y = BALL_RADIUS + bob * (game.player.currentSpeed > 0.2 ? 0.8 : 0.68);
-  setBallPosition(desired);
+  const local = getDribblePresentationLocal(ball.dribblePhase);
+  setBallPosition(localPlayerPoint(...local, temp.ballAnchor));
 
   if (bob < 0.11 && ball.dribbleBob >= 0.11) {
     audio.bounce(game.player.currentSpeed > 0.2 ? 0.72 : 0.48);
   }
   ball.dribbleBob = bob;
+}
+
+function getDribblePresentationLocal(phase) {
+  const u=((phase/(Math.PI*2)+.25)%1+1)%1;
+  const moving=game.player.currentSpeed>.2, height=moving?1.30:1.16;
+  const dribble = [moving?.50:.48, BALL_RADIUS+4*(height-BALL_RADIUS)*u*(1-u), -.20];
+  const pickup = game.player.presentationPickup;
+  return pickup ? pickupBallLocal(pickup.origin, pickup.elapsed / PICKUP_SECONDS, dribble) : dribble;
 }
 
 function updateGatherBall() {
@@ -532,7 +614,7 @@ function updateGatherBall() {
 
 function updateFinishBall() {
   player.group.updateMatrixWorld(true);
-  const hand = player.getRightHandWorldPosition(temp.ballAnchor);
+  const hand = player.getHeldBallWorldPosition(temp.ballAnchor);
   setBallPosition(hand);
 }
 
@@ -607,6 +689,10 @@ function updateLooseBall(dt) {
   }
 
   if (horizontalDistance(ball.position, game.player.position) < 0.78 && ball.position.y < 0.82) {
+    player.group.updateWorldMatrix(true, false);
+    game.player.presentationPickup = { elapsed: 0, origin: player.group.worldToLocal(ball.position.clone()).toArray() };
+    game.player.presentationGather = null;
+    game.player.presentationReleaseLocal = null;
     ball.mode = 'dribble';
     ball.velocity.set(0, 0, 0);
     ball.scored = false;
@@ -617,7 +703,9 @@ function updateLooseBall(dt) {
 
 function updateBall(dt) {
   const ball = game.ball;
-  if (ball.mode === 'dribble') updateDribble(dt);
+  const justDetached = game.player.shotPending && !game.player.shotPending.released && game.player.actionTime >= .200 - 1e-8 && detachJumpShot();
+  if (justDetached) { /* Render the exact apex release before any free-flight step. */ }
+  else if (ball.mode === 'dribble') updateDribble(dt);
   else if (ball.mode === 'gather') updateGatherBall();
   else if (ball.mode === 'finish') updateFinishBall();
   else if (ball.mode === 'flight') updateFlightBall(dt);
@@ -652,8 +740,16 @@ function updatePlayer(dt, now) {
     move.copy(worldMove).normalize();
   }
 
+  // Intentional movement may cancel cosmetic recovery once both feet land.
+  // It never waits for a make/miss or ball pickup.
+  if (p.action === 'shoot' && !game.charge.active && p.actionTime >= .4 - 1e-8 && move.lengthSq() > 0) {
+    p.action = 'idle'; p.actionProgress = 0;
+  }
   p.jumpY = 0;
   if (game.charge.active) {
+    const hoopDirection = temp.toHoop.copy(arena.hoop.rimCenter).sub(p.position);
+    hoopDirection.y = 0;
+    if (hoopDirection.lengthSq() > .01) p.desiredYaw = Math.atan2(-hoopDirection.x, -hoopDirection.z);
     game.charge.value = chargeProgress(now);
     p.action = 'shoot';
     p.actionProgress = game.charge.value * 0.58;
@@ -662,6 +758,11 @@ function updatePlayer(dt, now) {
   } else if (p.action === 'shoot') {
     p.actionTime += dt;
     p.actionProgress = clamp(0.57 + p.actionTime / Math.max(0.01, p.actionDuration) * 0.43, 0, 1);
+    if (p.shotPending) {
+      const t = p.actionTime;
+      p.jumpY = t <= .2 ? .3048 * (1 - (1 - t / .2) ** 2)
+        : t < .4 - 1e-8 ? .3048 * (1 - ((t - .2) / .2) ** 2) : 0;
+    }
     p.currentSpeed = damp(p.currentSpeed, 0, 13, dt);
     if (p.actionTime >= p.actionDuration) {
       p.action = 'idle';
@@ -694,11 +795,21 @@ function updatePlayer(dt, now) {
     const targetSpeed = hasMove ? (input.sprint ? 5.45 : 3.38) : 0;
     p.currentSpeed = damp(p.currentSpeed, targetSpeed, hasMove ? 12 : 15, dt);
     if (hasMove) {
+      p.motionDirection.copy(move); p.stopElapsed = null; p.stopMovingLastFrame = true;
       p.position.addScaledVector(move, p.currentSpeed * dt);
       p.desiredYaw = Math.atan2(-move.x, -move.z);
       p.action = 'move';
       if (p.currentSpeed > 1.25) audio.shoe(clamp(p.currentSpeed / 5.5, 0.2, 0.72));
     } else {
+      if (p.stopMovingLastFrame) { p.stopElapsed = 0; p.stopInitialSpeed = p.currentSpeed / Math.exp(-15 * dt); }
+      p.stopMovingLastFrame = false;
+      if (p.stopElapsed !== null) {
+        const oldSpeed = p.stopInitialSpeed * (1 - clamp(p.stopElapsed / .30, 0, 1)) ** 2;
+        p.stopElapsed += dt;
+        p.currentSpeed = p.stopInitialSpeed * (1 - clamp(p.stopElapsed / .30, 0, 1)) ** 2;
+        p.position.addScaledVector(p.motionDirection, (oldSpeed + p.currentSpeed) * .5 * dt);
+        if (p.stopElapsed >= .30) p.currentSpeed = 0;
+      }
       p.action = 'idle';
       const hoopDirection = temp.toHoop.copy(arena.hoop.rimCenter).sub(p.position);
       hoopDirection.y = 0;
@@ -709,14 +820,40 @@ function updatePlayer(dt, now) {
   constrainPlayerToCourt();
   p.yaw = dampAngle(p.yaw, p.desiredYaw, p.currentSpeed > 0.2 ? 16 : 7, dt);
   player.group.position.set(p.position.x, p.jumpY, p.position.z);
+  player.group.rotation.y = p.yaw;
+  if (p.presentationPickup && game.ball.mode === 'dribble') {
+    p.presentationPickup.elapsed += dt;
+    if (p.presentationPickup.elapsed >= PICKUP_SECONDS) p.presentationPickup = null;
+  }
+  // Predict this frame's attached ball before the sole pose writer runs. The
+  // ball update consumes the identical path; no second arm writer follows it.
+  const nextDribblePhase = game.ball.dribblePhase + dt * (Math.PI*2/.8) * (p.currentSpeed > .2 ? clamp(p.currentSpeed/1.6,.65,1.55) : 1);
+  const ballLocal = game.ball.mode === 'dribble' ? getDribblePresentationLocal(nextDribblePhase)
+    : game.ball.mode === 'gather' ? player.group.worldToLocal(getShotAnchor(game.charge.value, new THREE.Vector3())).toArray()
+      : null;
   player.update(dt, {
+    motionPack: 'authored',
     speed: p.currentSpeed,
     facing: p.yaw,
     jump: clamp(p.jumpY / 0.9, 0, 1),
-    dribblePhase: game.ball.dribblePhase,
+    dribblePhase: nextDribblePhase,
     ballMode: game.ball.mode,
     action: p.action,
     shotProgress: p.actionProgress,
+    ballLocal,
+    ballRadius: BALL_RADIUS,
+    pickupProgress: p.presentationPickup ? p.presentationPickup.elapsed / PICKUP_SECONDS : null,
+    gatherElapsed: game.charge.active ? game.charge.value * 1.3 : null,
+    releaseProgress: p.action === 'shoot' && !game.charge.active ? clamp(p.actionTime / POLISHED_PACK.clips.shoot.duration, 0, 1) : null,
+    shootElapsed: p.shotPending && p.action==='shoot' ? p.actionTime : null,
+    shotReleased: !!p.shotPending?.released,
+    stopElapsed: p.stopElapsed,
+    stopInitialSpeed: p.stopInitialSpeed,
+    rootWorld: player.group.position.toArray(),
+    charging: game.charge.active,
+    releaseLocal: p.presentationReleaseLocal,
+    finishOriginLocal: p.presentationFinish?.origin,
+    finishElapsed: p.actionTime,
   });
 }
 
@@ -755,6 +892,16 @@ function updateCamera(dt) {
 }
 
 function update(dt, now) {
+  // Resolve the release and landing at their real event times even when a
+  // rendered frame straddles them. The remainder advances normal physics.
+  if (game.player.action === 'shoot' && !game.charge.active && game.player.shotPending) {
+    const time = game.player.actionTime;
+    const boundary = !game.player.shotPending.released ? .2 : time < .4 - 1e-8 ? .4 : null;
+    if (boundary !== null && time < boundary - 1e-8 && time + dt > boundary + 1e-8) {
+      const before = boundary - time, after = dt - before;
+      update(before, now - after * 1000); update(after, now); return;
+    }
+  }
   game.elapsed += dt;
   if (game.started && game.remaining > 0) game.remaining = Math.max(0, game.remaining - dt);
   if (game.remaining <= 0 && game.started) {
@@ -764,14 +911,7 @@ function update(dt, now) {
   updatePlayer(dt, now);
   player.group.updateMatrixWorld(true);
   updateBall(dt);
-  // Current-frame ball state guides presentation only; it never follows this
-  // dribble hand. Gather and finish keep their existing attachment ordering.
-  player.updateDribbleContact?.({
-    ballPosition: game.ball.position,
-    ballRadius: BALL_RADIUS,
-    dribblePhase: game.ball.dribblePhase,
-    ballMode: game.ball.mode,
-  });
+  player.updateHandShapes(dt,game.ball.position,game.ball.mode);
   updateNet(dt);
   updateArenaPresentation();
   updateCamera(dt);

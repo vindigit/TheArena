@@ -6,7 +6,9 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { createPoseAdapter } from '../src/player-pose.js';
 import { validateLukeRig } from '../src/luke-rig-contract.js';
 
-// Offline contract/deformation checks on the actual shipped binary. Image
+// Offline contract/deformation checks on the actual shipped binary and retained
+// no-ball-context procedural baseline. Part 2 primary ball-surface/contact and
+// source-sampled motion checks are in luke-motion.test.mjs. Image
 // decoding is tested separately; remove textures only for Node's scene parser.
 const path = process.argv[2] || 'public/assets/models/player/luke-player-v1.glb';
 const data = await readFile(path);
@@ -71,4 +73,4 @@ for(const action of ['idle','move','shoot','layup','dunk'])for(let f=0;f<=60;f++
 assert.ok(maxGatherError<.006,`gather error ${maxGatherError}`);
 assert.ok(minGameFloorY>-.005,`floor penetration ${minGameFloorY}`);
 assert.ok(maxDunkGripError<.015,`dunk grip ${maxDunkGripError}`);
-console.log(JSON.stringify({pass:true,character:'Luke',bytes:data.length,triangles:geometry.index.count/3,vertices:pos.count,bones:bones.size,materials:1,maxInfluences,maxBindError,maxGatherError,maxDunkGripError,minGameFloorY,minPoseY,minYByAction,maxPoseRadius,poses:305},null,2));
+console.log(JSON.stringify({pass:true,character:'Luke',path:'retained-no-ball-context-procedural-baseline',bytes:data.length,triangles:geometry.index.count/3,vertices:pos.count,bones:bones.size,materials:1,maxInfluences,maxBindError,maxGatherError,maxDunkGripError,minGameFloorY,minPoseY,minYByAction,maxPoseRadius,poses:305},null,2));

@@ -29,11 +29,13 @@ test('production player directory and manifest contain only canonical Luke', asy
   assert.equal(players[0].runtime[0].sha256, contract.asset.sha256);
 });
 
-test('retarget configuration pins Luke and makes no claim of migrated clips', async () => {
+test('motion configuration pins Luke and makes no claim of migrated clips', async () => {
   const config = JSON.parse(await readFile(new URL('../scripts/luke-retarget-config.json', import.meta.url), 'utf8'));
   assert.equal(config.targetAsset, contract.asset.path);
   assert.equal(config.targetSha256, contract.asset.sha256);
-  assert.equal(config.status, 'target-validated-clips-pending-part-2');
+  assert.equal(config.status, 'luke-authored-motion-part-2');
+  assert.equal(config.motionSource, 'art/animation/luke-motion-v1.json');
+  assert.equal(config.clipInventory.length, 11);
   assert.equal(config.rootMotion, 'none-gameplay-owned');
   const names = new Set(LUKE_BONES.map(bone => bone.name));
   assert.ok(Object.values(config.sourceToTarget).every(name => names.has(name)));

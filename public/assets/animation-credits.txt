@@ -1,0 +1,34 @@
+TheArena — animation sources and usage notices
+
+This game integrates retargeted and modified motion into Luke's existing rig. The source animations are not released under an unrestricted software or asset license. Each source's terms continue to apply to its motion and derivatives.
+
+Running motion
+Creator: ManNeko
+Product: PSOne Style - Action Heroine - Animated
+Source clip: running
+https://manneko.itch.io/psone-act-heroine
+
+The running motion was retargeted and adjusted for this game's rig and gameplay. ManNeko permits licensed purchasers to use and modify the animations in their projects, including retargeting to owned models. Separate redistribution, resale, or giving away of the animation/model assets is prohibited. Obtain the source asset and its full license from the creator for independent use. No ManNeko character mesh, texture, or standalone animation library is included.
+
+Basketball motion
+Original data: Carnegie Mellon University Graphics Lab Motion Capture Database
+Clips: subject 06, trial 02 (forward dribble); subject 124, trial 05 (basketball jump shot)
+https://mocap.cs.cmu.edu/
+https://mocap.cs.cmu.edu/search.php?subjectnumber=6
+https://mocap.cs.cmu.edu/search.php?subjectnumber=124
+
+CMU motion-capture data, supported by NSF EIA-0196217, underlies the basketball movement used here. These motions may be copied, modified, redistributed, and included in commercial products, but the motion data itself may not be sold directly, including converted or modified versions. Recipients who redistribute the data or derivatives must keep these same restrictions apparent and pass them along.
+
+Conversion provenance: Bruce Hahne / cgspeed (BVH conversion), RancidMilk (FBX conversion), and Generative Bionics / gbionics (bones-only mirror).
+https://sites.google.com/a/cgspeed.com/cgspeed/motion-capture
+https://rancidmilk.itch.io/free-character-animations
+https://huggingface.co/datasets/gbionics/cmu-fbx
+
+Pinned mirror revision:
+d18e9d3d14c08318eaa6c0602a6ead7fac40e58c
+Source hashes (SHA-256):
+06_02.fbx: 13db9d5409a19621b8fa4ab60826f1a9c9bcda1104871986afcb8c86d4278380
+124_05.fbx: 95c5594ca3ae37c35e6b978da18c62e81ded9a769dc85655b6e118c5ce80c408
+
+Game-authored work
+TheArena adds rig-specific retargeting, cleanup, transitions, foot/contact solving, jump/release timing, and ball presentation. The reversible hand shapes are original game-authored deformations of Luke's existing geometry; the source motion capture does not provide these finger shapes. Luke's supplied model and its existing rights are unchanged. Existing model, texture, audio, and software notices remain applicable. None of the source parties necessarily endorses this game.

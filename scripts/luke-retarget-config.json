@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "status": "target-validated-clips-pending-part-2",
+  "status": "luke-authored-motion-part-2",
   "targetAsset": "public/assets/models/player/luke-player-v1.glb",
   "rigContract": "docs/rig/luke-rig-contract.json",
   "targetSha256": "9eedd88b85386084bc1b19ab70d000376d2ab750dfb6d129bb5dd264767a9135",
@@ -8,6 +8,10 @@
   "upAxis": "+Y",
   "forwardAxis": "-Z",
   "rootMotion": "none-gameplay-owned",
+  "motionSource": "art/animation/luke-motion-v1.json",
+  "runtimeModule": "src/luke-motion.js",
+  "clipInventory": ["idle-ready", "locomotion", "locomotion-start", "locomotion-stop", "stationary-dribble", "moving-dribble", "pickup", "gather", "release-follow-through", "layup", "dunk"],
+  "method": "Original in-place Luke-local pose channels and anatomical arm IK; no imported source clips or old-rig retargets",
   "requiredValidation": ["exact hierarchy", "exact local rest transforms", "exact inverse bind matrices", "normalized skin weights", "in-place root", "visual pose and transition review"],
   "sourceToTarget": {
     "hip": "pelvis", "chest": "chest", "neck": "neck", "head": "head",
@@ -16,5 +20,5 @@
     "lThigh": "left_thigh", "lShin": "left_shin", "lFoot": "left_foot",
     "rThigh": "right_thigh", "rShin": "right_shin", "rFoot": "right_foot"
   },
-  "notes": "Mapping is a starting vocabulary only; it is not a retargeted clip. The old identity-rest-delta bake is superseded. Part 2 must evaluate source world-rest orientation and construct absolute target-local rotations using Luke's exact rest transforms. No clip export occurs in Part 1."
+  "notes": "sourceToTarget remains a vocabulary for possible future retargets, not a claim that CMU or another source was migrated. Part 2 authors the listed source-bundled motion pack directly against the unchanged canonical Luke glTF frames. The single pose writer combines sampled rotations/arm targets with gameplay ball anchors, preserves gameplay root ownership and resets from exact rest every frame. Dedicated pickup, gather and release transitions are tested and reviewed separately from static rig compatibility."
 }

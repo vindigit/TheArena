@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { createPoseAdapter } from '../src/player-pose.js';
 import { captureRest, resetRest, applyStressPose, INSPECTION_POSES } from '../dev/rig-poses.js';
+import { dribbleBallLocal, gatherBallLocal } from '../src/player-ball-presentation.js';
 async function fixture(){
   const data=await readFile('public/assets/models/player/luke-player-v1.glb');
   const length=data.readUInt32LE(12),doc=JSON.parse(data.toString('utf8',20,20+length));
@@ -20,19 +21,24 @@ async function fixture(){
   const positions=()=>{visual.updateWorldMatrix(true,true);return Object.fromEntries([...bones].map(([n,b])=>[n,b.getWorldPosition(new THREE.Vector3())]));};
   return{root,visual,bones,mesh,anchors,pose,positions};
 }
-test('Luke moving gather preserves lower-body continuity and exact hand anchors',async()=>{
+test('Luke moving gather preserves lower-body continuity and settles palms onto the ball surface',async()=>{
   let maxFootStep=0,maxPelvisStep=0,maxKneeAngle=0;
   for(const walkFrames of [12,42,83,120]){
     const f=await fixture();
-    for(let i=0;i<walkFrames;i++)f.pose.update(1/120,{action:'move',speed:3.38,ballMode:'dribble',dribblePhase:i*.1});
+    for(let i=0;i<walkFrames;i++)f.pose.update(1/120,{action:'move',speed:3.38,ballMode:'dribble',dribblePhase:i*.1,ballLocal:dribbleBallLocal(i*.1,3.38)});
     const before=f.positions(),q=f.bones.get('left_shin').quaternion.clone();
-    f.pose.update(1/120,{action:'shoot',speed:3.38,ballMode:'gather',shotProgress:.006});
+    const origin=dribbleBallLocal((walkFrames-1)*.1,3.38);
+    f.pose.update(1/120,{action:'shoot',speed:3.38,ballMode:'gather',shotProgress:.006,gatherElapsed:1/120,ballLocal:gatherBallLocal(origin,.006/.58,1/120),ballRadius:.12});
     const after=f.positions();
     for(const side of ['left','right'])maxFootStep=Math.max(maxFootStep,before[`${side}_foot`].distanceTo(after[`${side}_foot`]));
     maxPelvisStep=Math.max(maxPelvisStep,before.pelvis.distanceTo(after.pelvis));
     maxKneeAngle=Math.max(maxKneeAngle,q.angleTo(f.bones.get('left_shin').quaternion));
-    const ball=new THREE.Vector3(.22,1.24+.006/.58*.48,-.37);
-    for(const hand of ['rightHand','leftHand'])assert.ok(f.anchors[hand].position.distanceTo(ball)<.006);
+    for(let frame=2;frame<=42;frame++)f.pose.update(1/120,{action:'shoot',speed:0,ballMode:'gather',shotProgress:frame/120/1.3*.58,gatherElapsed:frame/120,ballLocal:gatherBallLocal(origin,frame/120/1.3,frame/120),ballRadius:.12});
+    const ball=new THREE.Vector3(...gatherBallLocal(origin,42/120/1.3,42/120));
+    const palms=Object.fromEntries(['right','left'].map(side=>[side,new THREE.Vector3(...f.pose.diagnostics().contact[side].actual)]));
+    for(const palm of Object.values(palms))assert.ok(Math.abs(palm.distanceTo(ball)-.12)<.01,'physical palm rests on ball surface');
+    const separation=palms.right.distanceTo(palms.left);
+    assert.ok(separation>.14,`physical supporting palm spacing ${separation}`);
     assert.equal(f.pose.diagnostics().hybridWeight,0);assert.equal(f.pose.diagnostics().footCorrection,false);
   }
   assert.ok(maxFootStep<.025,`gather first-frame ankle step ${maxFootStep}`);
@@ -42,7 +48,8 @@ test('Luke moving gather preserves lower-body continuity and exact hand anchors'
 });
 test('Luke crouch knees flex toward -Z, pose rest reset never accumulates, pickup keeps joint ownership',async()=>{
   const f=await fixture();
-  f.pose.update(0,{action:'shoot',speed:0,shotProgress:.29,ballMode:'gather'});
+  const gatherState={action:'shoot',speed:0,shotProgress:.29,ballMode:'gather',gatherElapsed:.65,ballLocal:[.22,1.48,-.37],ballRadius:.12};
+  f.pose.update(0,gatherState);
   const expected=new Map([...f.bones].map(([n,b])=>[n,{p:b.position.clone(),q:b.quaternion.clone()}]));
   const points=f.positions();
   for(const side of ['left','right']){
@@ -50,12 +57,12 @@ test('Luke crouch knees flex toward -Z, pose rest reset never accumulates, picku
     assert.ok(points[`${side}_shin`].z<points[`${side}_foot`].z,'knee bends behind ankle');
     assert.ok(Math.sign(points[`${side}_shin`].x)===Math.sign(points[`${side}_thigh`].x),'knee crosses center');
   }
-  for(let i=0;i<500;i++)f.pose.update(0,{action:'shoot',speed:0,shotProgress:.29,ballMode:'gather'});
+  for(let i=0;i<500;i++)f.pose.update(0,gatherState);
   for(const[n,b]of f.bones){assert.ok(b.position.distanceTo(expected.get(n).p)<1e-12);assert.ok(b.quaternion.angleTo(expected.get(n).q)<1e-7);}
-  f.pose.reset();f.pose.update(0,{action:'move',speed:3.38,ballMode:'loose',dribblePhase:0});
+  f.pose.reset();f.pose.update(0,{action:'move',speed:3.38,ballMode:'loose',dribblePhase:0,ballLocal:dribbleBallLocal(0,3.38)});
   const loose=new Map([...f.bones].map(([n,b])=>[n,b.quaternion.clone()]));
-  f.pose.update(0,{action:'move',speed:3.38,ballMode:'dribble',dribblePhase:0});
-  for(const[n,b]of f.bones)assert.ok(b.quaternion.angleTo(loose.get(n))<1e-7,'pickup swaps lower writer');
+  f.pose.update(0,{action:'move',speed:3.38,ballMode:'dribble',dribblePhase:0,ballLocal:dribbleBallLocal(0,3.38)});
+  for(const n of ['root','pelvis','left_thigh','left_shin','left_foot','right_thigh','right_shin','right_foot'])assert.ok(f.bones.get(n).quaternion.angleTo(loose.get(n))<1e-7,'possession cannot enable a competing lower writer');
   assert.deepEqual(f.root.position.toArray(),[0,0,0]);
 });
 test('repeatable isolated stress poses keep valid skin and uncrossed knees',async()=>{

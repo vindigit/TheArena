@@ -1,6 +1,8 @@
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { createPlayerRoot } from './player-root.js';
-import { createPoseAdapter } from './player-pose.js';
+import { createPolishedPoseAdapter as createPoseAdapter } from './polished-pose.js';
+import {createHandShapeAdapter} from './hand-clearance.js';
+import handShapes from '../art/animation/hand-shapes.json' with {type:'json'};
 import { validateLukeRig } from './luke-rig-contract.js';
 
 export const LUKE_MODEL_URL = (import.meta.env?.BASE_URL || '/') + 'assets/models/player/luke-player-v1.glb';
@@ -10,7 +12,7 @@ const requestedAnimation = new URLSearchParams(globalThis.location?.search || ''
 // Luke's asynchronous visual. The old GLB and old-rig clips have no load path.
 export function createPlayer(THREE, {
   modelUrl = LUKE_MODEL_URL,
-  animationMode = requestedAnimation === 'hybrid' ? 'hybrid' : 'procedural',
+  animationMode = requestedAnimation === 'hybrid' ? 'hybrid' : 'luke-motion',
   fetchAsset = (...args) => fetch(...args),
   parseModel = data => new GLTFLoader().parseAsync(data, ''),
 } = {}) {
@@ -21,7 +23,7 @@ export function createPlayer(THREE, {
     anchors[name].name = `player-${name}-attachment`;
     group.add(anchors[name]);
   }
-  let rig = null, rigVisual = null, rigBones = null, lastState = {};
+  let rig = null, rigVisual = null, rigBones = null, lastState = {}, handShapesAdapter = null, handWeights = [0,0,0,0], handDiagnostics = null;
   const update = (dt = 1 / 60, state = {}) => {
     lastState = state;
     root.update(dt, state);
@@ -29,7 +31,7 @@ export function createPlayer(THREE, {
   };
   group.userData.character = 'Luke';
   group.userData.assetStatus = 'loading';
-  group.userData.animationStatus = animationMode === 'hybrid' ? 'superseded' : 'procedural';
+  group.userData.animationStatus = animationMode === 'hybrid' ? 'superseded' : 'luke-motion';
   group.userData.animationReady = Promise.resolve(group.userData.animationStatus);
   group.userData.assetReady = loadRig();
 
@@ -84,9 +86,12 @@ export function createPlayer(THREE, {
           gltf.animations.length || meshes.length !== 1 || Math.abs(bounds.min.y) > .005 || size.y < 1.9 || size.y > 2.2)
         throw new Error('Luke asset contract validation failed');
       validateLukeRig(THREE, visual, bones, meshes);
+      handShapesAdapter=createHandShapeAdapter(THREE,meshes[0],handShapes);
+      handShapesAdapter.installMorphs();
+      // Polished plants/contact use the authoritative root during the first pose.
+      group.add(visual);
       const candidate = createPoseAdapter(THREE, visual, bones, anchors);
       candidate.update(0, lastState);
-      group.add(visual);
       rig = candidate; rigVisual = visual; rigBones = bones;
       root.shadow.visible = true;
       group.userData.assetStatus = 'ready';
@@ -95,6 +100,7 @@ export function createPlayer(THREE, {
       return 'ready';
     } catch (error) {
       if (visual) {
+        visual.removeFromParent();
         const materials = new Set();
         visual.traverse(node => {
           if (node.isMesh) { node.geometry.dispose(); [node.material].flat().forEach(m => materials.add(m)); }
@@ -110,19 +116,36 @@ export function createPlayer(THREE, {
 
   return {
     group, ...anchors, update,
-    resetPose() { rig?.reset(); },
+    resetPose() { rig?.reset(); handWeights.fill(0); handShapesAdapter?.applyWeights(handWeights); },
+    updateHandShapes(dt, ballWorld, ballMode) {
+      if (!handShapesAdapter) return;
+      rig?.resolveBallClearance?.(dt,ballWorld,.12);
+      const diag=rig?.diagnostics(), clip=diag?.clip;
+      const desired=clip==='gather'||(clip==='shoot'&&ballMode==='gather')?[.7,0,.65,0]
+        : clip==='shoot'?[0,.8,0,0]
+          : ballMode==='dribble'&&diag?.contact?.right?.required?[.6,0,0,0]:[0,0,0,0];
+      const a=1-Math.exp(-24*Math.max(0,dt));
+      handWeights=handWeights.map((v,i)=>v+(desired[i]-v)*a);
+      handDiagnostics=handShapesAdapter.limitWeights(handWeights,ballWorld,.12);
+      handShapesAdapter.applyWeights(handDiagnostics.applied);
+      rig?.recordDisplayedHandClearance?.(ballWorld,.12);
+    },
     // The superseded hybrid palm writer has no authority over Luke.
     updateDribbleContact() {},
     getAnimationDiagnostics() {
-      return { mode: 'procedural', status: group.userData.animationStatus, requestedMode: animationMode,
-        active: false, weight: 0, ...(rig?.diagnostics() || {}),
-        ...(animationMode === 'hybrid' ? { superseded: 'Old-rig dribble retired; Luke clips pending Part 2.' } : {}) };
+      return { mode: 'luke-authored-parametric', status: group.userData.animationStatus, requestedMode: animationMode,
+        active: false, weight: 0, ...(rig?.diagnostics() || {}), handShapes:handDiagnostics,
+        ...(animationMode === 'hybrid' ? { superseded: 'Old-rig dribble retired; Part 2 uses only Luke-authored motion.' } : {}) };
     },
     getRigInspection() {
       return import.meta.env?.DEV ? { visual: rigVisual, bones: rigBones } : null;
     },
     getRightHandWorldPosition(target = new THREE.Vector3()) { return anchors.rightHand.getWorldPosition(target); },
     getLeftHandWorldPosition(target = new THREE.Vector3()) { return anchors.leftHand.getWorldPosition(target); },
+    getHeldBallWorldPosition(target = new THREE.Vector3()) {
+      const local = rig?.getHeldBallLocal?.();
+      return local ? group.localToWorld(target.copy(local)) : anchors.rightHand.getWorldPosition(target);
+    },
   };
 }
 export default createPlayer;

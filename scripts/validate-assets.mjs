@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import Ajv from 'ajv';
 import sharp from 'sharp';
 import { checkLukeRig } from './validate-luke-rig.mjs';
+import { checkLukeMotion } from './validate-luke-motion.mjs';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const publicRoot = path.join(projectRoot, 'public');
@@ -197,6 +198,7 @@ async function checkManifest() {
     throw new Error('Luke must be the only player model in the production inventory');
   }
   await checkLukeRig();
+  await checkLukeMotion();
   console.log(`Assets valid: ${manifest.assets.filter(a => a.status === 'accepted').length} accepted assets, ${manifest.assets.filter(a => a.status === 'preview').length} preview assets, ${fileCount} runtime files, ${totalBytes} bytes.`);
 }
 
