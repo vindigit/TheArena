@@ -273,9 +273,6 @@ function updateHud(now) {
   actionLabel.textContent = action;
 
   if (game.charge.active) {
-    const hoopDirection = temp.toHoop.copy(arena.hoop.rimCenter).sub(p.position);
-    hoopDirection.y = 0;
-    if (hoopDirection.lengthSq() > .01) p.desiredYaw = Math.atan2(-hoopDirection.x, -hoopDirection.z);
     game.charge.value = chargeProgress(now);
     shotMeter.classList.add('is-charging');
   } else {
