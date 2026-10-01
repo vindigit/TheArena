@@ -1,0 +1,5114 @@
+{
+  "checks": [
+    {
+      "name": "ordinary URL requests only Luke",
+      "pass": true,
+      "details": [
+        "http://127.0.0.1:5177/assets/models/hoop/hoop-assembly-v1.glb",
+        "http://127.0.0.1:5177/assets/models/arena/arena-shell-v1.glb",
+        "http://127.0.0.1:5177/assets/models/player/luke-player-v1.glb",
+        "http://127.0.0.1:5177/assets/models/ball/basketball-v1.glb"
+      ]
+    },
+    {
+      "name": "ordinary reload succeeds",
+      "pass": true
+    },
+    {
+      "name": "desktop gameplay",
+      "pass": true,
+      "details": [
+        {
+          "name": "Luke ready",
+          "pass": true,
+          "details": {
+            "character": "Luke",
+            "url": "/assets/models/player/luke-player-v1.glb",
+            "triangles": 4754,
+            "materials": 1,
+            "bones": 17,
+            "bytes": 244360
+          }
+        },
+        {
+          "name": "stable interface",
+          "pass": true
+        },
+        {
+          "name": "movement",
+          "pass": true,
+          "details": 3.371621817642868
+        },
+        {
+          "name": "sprint",
+          "pass": true
+        },
+        {
+          "name": "gather anchor",
+          "pass": true,
+          "details": 5.214799211354908e-16
+        },
+        {
+          "name": "shot release",
+          "pass": true
+        },
+        {
+          "name": "select layup",
+          "pass": true
+        },
+        {
+          "name": "attach layup",
+          "pass": true
+        },
+        {
+          "name": "score layup",
+          "pass": true,
+          "details": {
+            "score": 2
+          }
+        },
+        {
+          "name": "select dunk",
+          "pass": true
+        },
+        {
+          "name": "attach dunk",
+          "pass": true
+        },
+        {
+          "name": "score dunk",
+          "pass": true,
+          "details": {
+            "score": 2
+          }
+        },
+        {
+          "name": "mouse look",
+          "pass": true
+        },
+        {
+          "name": "mouse zoom",
+          "pass": true
+        },
+        {
+          "name": "reset",
+          "pass": true
+        },
+        {
+          "name": "missing clear error without substitute",
+          "pass": true
+        },
+        {
+          "name": "invalid clear error without substitute",
+          "pass": true
+        },
+        {
+          "name": "repeated pickup/gather",
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "gather ankle continuity 0",
+      "pass": true,
+      "details": {
+        "left": 0.004535722867320774,
+        "right": 0.0009427810107557313
+      }
+    },
+    {
+      "name": "gather ankle continuity 1",
+      "pass": true,
+      "details": {
+        "left": 0.0017222009191446392,
+        "right": 0.005689153682723067
+      }
+    },
+    {
+      "name": "gather ankle continuity 2",
+      "pass": true,
+      "details": {
+        "left": 0.014384987295081674,
+        "right": 0.00482360414650765
+      }
+    },
+    {
+      "name": "gather ankle continuity 3",
+      "pass": true,
+      "details": {
+        "left": 0.005581460881819787,
+        "right": 0.016280716840917548
+      }
+    },
+    {
+      "name": "actual loose-ball possession path",
+      "pass": true,
+      "details": {
+        "status": "ready",
+        "asset": {
+          "character": "Luke",
+          "url": "/assets/models/player/luke-player-v1.glb",
+          "triangles": 4754,
+          "materials": 1,
+          "bones": 17,
+          "bytes": 244360
+        },
+        "animation": {
+          "mode": "procedural",
+          "status": "procedural",
+          "requestedMode": "procedural",
+          "active": false,
+          "weight": 0,
+          "owner": "luke-procedural",
+          "action": "move",
+          "handoffRemaining": 0,
+          "hybridWeight": 0,
+          "footCorrection": false
+        },
+        "action": "move",
+        "charge": false,
+        "progress": 0,
+        "position": [
+          0.06954056570483459,
+          0,
+          2.9555742121349797
+        ],
+        "speed": 3.3341382705387614,
+        "ballMode": "dribble",
+        "ball": [
+          0.36750024422706656,
+          0.12,
+          2.9832836821343736
+        ],
+        "hand": [
+          0.5548870084547105,
+          1.0281459741972983,
+          2.760026697422975
+        ],
+        "score": 0,
+        "yaw": -0.0735,
+        "pitch": -0.178,
+        "coarsePointer": false,
+        "bones": {
+          "root": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0,
+              0
+            ],
+            "world": [
+              0.06954056570483459,
+              0,
+              2.9555742121349797
+            ]
+          },
+          "pelvis": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              1.0678149107179555,
+              0
+            ],
+            "world": [
+              0.06954056570483459,
+              1.0678149107179555,
+              2.9555742121349797
+            ]
+          },
+          "chest": {
+            "q": [
+              0.02999463441858243,
+              0.007594393635115994,
+              0.00022790018321099806,
+              0.9995211829435717
+            ],
+            "p": [
+              0,
+              0.36999988555908203,
+              0.014999999664723873
+            ],
+            "world": [
+              0.06846008636898723,
+              1.4378147962770376,
+              2.970535246669614
+            ]
+          },
+          "left_upper_arm": {
+            "q": [
+              -0.025199633590841115,
+              0.0137927152364885,
+              0.1911479014009854,
+              0.9811407744372317
+            ],
+            "p": [
+              -0.23999999463558197,
+              0.20500004291534424,
+              0.03500000014901161
+            ],
+            "world": [
+              -0.17402234906307487,
+              1.6401287724596778,
+              3.00402164060669
+            ]
+          },
+          "left_forearm": {
+            "q": [
+              -0.12868682391901273,
+              0.09327695168550783,
+              0.6282642899092944,
+              0.7615924721651774
+            ],
+            "p": [
+              -0.3100000023841858,
+              -0.009999990463256836,
+              0.009999997913837433
+            ],
+            "world": [
+              -0.4575580834983004,
+              1.5140174927737289,
+              3.0021686214522303
+            ]
+          },
+          "left_hand": {
+            "q": [
+              0.7160436009516483,
+              -0.16333080126466437,
+              0.0784234988432544,
+              0.6741323058002943
+            ],
+            "p": [
+              -0.3349999785423279,
+              -0.019999980926513672,
+              -0.054999999701976776
+            ],
+            "world": [
+              -0.37476180749819543,
+              1.1884193011210566,
+              3.054899818107178
+            ]
+          },
+          "neck": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0.3200000524520874,
+              -0.009999999776482582
+            ],
+            "world": [
+              0.06764528544076207,
+              1.7578385922348498,
+              2.979708015339337
+            ]
+          },
+          "head": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0.059999942779541016,
+              -0.009999999776482582
+            ],
+            "world": [
+              0.06795350942287452,
+              1.818330138334314,
+              2.9733306351914157
+            ]
+          },
+          "right_upper_arm": {
+            "q": [
+              -0.012612180899974762,
+              0.002893623716519642,
+              -0.36716206233496207,
+              0.9300669759843484
+            ],
+            "p": [
+              0.23999999463558197,
+              0.20500004291534424,
+              0.03500000014901161
+            ],
+            "world": [
+              0.3051999156322328,
+              1.640566131286477,
+              3.0313313355495946
+            ]
+          },
+          "right_forearm": {
+            "q": [
+              -0.18964803050913698,
+              0.2845659597959067,
+              -0.2127433375342397,
+              0.9153120295201153
+            ],
+            "p": [
+              0.3100000023841858,
+              -0.009999990463256836,
+              0.009999997913837433
+            ],
+            "world": [
+              0.5248704925665966,
+              1.4216424966160297,
+              3.0421609734817454
+            ]
+          },
+          "right_hand": {
+            "q": [
+              -0.8020210059839364,
+              0.4294807277633631,
+              -0.06730779351512581,
+              -0.40960746010356264
+            ],
+            "p": [
+              0.3349999785423279,
+              -0.019999980926513672,
+              -0.054999999701976776
+            ],
+            "world": [
+              0.5542534794478822,
+              1.1412358243557588,
+              2.8520065019027325
+            ]
+          },
+          "left_thigh": {
+            "q": [
+              0.07880111525930186,
+              0,
+              0,
+              0.996890357177704
+            ],
+            "p": [
+              -0.15000000596046448,
+              -0.019999980926513672,
+              0
+            ],
+            "world": [
+              -0.08006978893054241,
+              1.0478149297914419,
+              2.9447694181056563
+            ]
+          },
+          "left_shin": {
+            "q": [
+              -0.10832822262744722,
+              0,
+              0,
+              0.9941151825529968
+            ],
+            "p": [
+              -0.04499998688697815,
+              -0.4299999475479126,
+              0.014999999664723873
+            ],
+            "world": [
+              -0.12115359071018175,
+              0.6207985690455396,
+              2.8889204916376006
+            ]
+          },
+          "left_foot": {
+            "q": [
+              0.029653975466121085,
+              0,
+              0,
+              0.9995602241681362
+            ],
+            "p": [
+              -0.050000011920928955,
+              -0.4399999976158142,
+              0.030000001192092896
+            ],
+            "world": [
+              -0.17505976028912248,
+              0.18335086282769725,
+              2.9412046036756743
+            ]
+          },
+          "right_thigh": {
+            "q": [
+              -0.07880111525930186,
+              0,
+              0,
+              0.996890357177704
+            ],
+            "p": [
+              0.15000000596046448,
+              -0.019999980926513672,
+              0
+            ],
+            "world": [
+              0.2191509203402116,
+              1.0478149297914419,
+              2.966379006164303
+            ]
+          },
+          "right_shin": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0.04499998688697815,
+              -0.4299999475479126,
+              0.014999999664723873
+            ],
+            "world": [
+              0.2581006008942316,
+              0.6255119332563985,
+              3.0517783925979334
+            ]
+          },
+          "right_foot": {
+            "q": [
+              0.07880111525930186,
+              0,
+              0,
+              0.996890357177704
+            ],
+            "p": [
+              0.050000011920928955,
+              -0.4399999976158142,
+              0.030000001192092896
+            ],
+            "world": [
+              0.3008570857758085,
+              0.19568976198865423,
+              3.1538802204600658
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "touch gameplay 320x568",
+      "pass": true,
+      "details": [
+        {
+          "name": "Luke ready",
+          "pass": true,
+          "details": {
+            "character": "Luke",
+            "url": "/assets/models/player/luke-player-v1.glb",
+            "triangles": 4754,
+            "materials": 1,
+            "bones": 17,
+            "bytes": 244360
+          }
+        },
+        {
+          "name": "stable interface",
+          "pass": true
+        },
+        {
+          "name": "movement",
+          "pass": true,
+          "details": 3.371621817642868
+        },
+        {
+          "name": "sprint",
+          "pass": true
+        },
+        {
+          "name": "gather anchor",
+          "pass": true,
+          "details": 5.33167196845001e-16
+        },
+        {
+          "name": "shot release",
+          "pass": true
+        },
+        {
+          "name": "select layup",
+          "pass": true
+        },
+        {
+          "name": "attach layup",
+          "pass": true
+        },
+        {
+          "name": "score layup",
+          "pass": true,
+          "details": {
+            "score": 2
+          }
+        },
+        {
+          "name": "select dunk",
+          "pass": true
+        },
+        {
+          "name": "attach dunk",
+          "pass": true
+        },
+        {
+          "name": "score dunk",
+          "pass": true,
+          "details": {
+            "score": 2
+          }
+        },
+        {
+          "name": "touch look",
+          "pass": true
+        },
+        {
+          "name": "reset",
+          "pass": true
+        },
+        {
+          "name": "missing clear error without substitute",
+          "pass": true
+        },
+        {
+          "name": "invalid clear error without substitute",
+          "pass": true
+        },
+        {
+          "name": "repeated pickup/gather",
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "touch layout 320x568",
+      "pass": true,
+      "details": [
+        {
+          "id": "touchStick",
+          "rect": {
+            "x": 14,
+            "y": 466,
+            "width": 92,
+            "height": 92,
+            "top": 466,
+            "right": 106,
+            "bottom": 558,
+            "left": 14
+          }
+        },
+        {
+          "id": "touchSprint",
+          "rect": {
+            "x": 118,
+            "y": 501,
+            "width": 57,
+            "height": 57,
+            "top": 501,
+            "right": 175,
+            "bottom": 558,
+            "left": 118
+          }
+        },
+        {
+          "id": "touchFinish",
+          "rect": {
+            "x": 180,
+            "y": 501,
+            "width": 57,
+            "height": 57,
+            "top": 501,
+            "right": 237,
+            "bottom": 558,
+            "left": 180
+          }
+        },
+        {
+          "id": "touchShoot",
+          "rect": {
+            "x": 242,
+            "y": 488,
+            "width": 70,
+            "height": 70,
+            "top": 488,
+            "right": 312,
+            "bottom": 558,
+            "left": 242
+          }
+        }
+      ]
+    },
+    {
+      "name": "real touch movement 320x568",
+      "pass": true,
+      "details": [
+        0.3222960126784551,
+        0,
+        2.582983183806175
+      ]
+    },
+    {
+      "name": "touch gameplay 390x844",
+      "pass": true,
+      "details": [
+        {
+          "name": "Luke ready",
+          "pass": true,
+          "details": {
+            "character": "Luke",
+            "url": "/assets/models/player/luke-player-v1.glb",
+            "triangles": 4754,
+            "materials": 1,
+            "bones": 17,
+            "bytes": 244360
+          }
+        },
+        {
+          "name": "stable interface",
+          "pass": true
+        },
+        {
+          "name": "movement",
+          "pass": true,
+          "details": 3.371621817642868
+        },
+        {
+          "name": "sprint",
+          "pass": true
+        },
+        {
+          "name": "gather anchor",
+          "pass": true,
+          "details": 2.9504581591051765e-16
+        },
+        {
+          "name": "shot release",
+          "pass": true
+        },
+        {
+          "name": "select layup",
+          "pass": true
+        },
+        {
+          "name": "attach layup",
+          "pass": true
+        },
+        {
+          "name": "score layup",
+          "pass": true,
+          "details": {
+            "score": 2
+          }
+        },
+        {
+          "name": "select dunk",
+          "pass": true
+        },
+        {
+          "name": "attach dunk",
+          "pass": true
+        },
+        {
+          "name": "score dunk",
+          "pass": true,
+          "details": {
+            "score": 2
+          }
+        },
+        {
+          "name": "touch look",
+          "pass": true
+        },
+        {
+          "name": "reset",
+          "pass": true
+        },
+        {
+          "name": "missing clear error without substitute",
+          "pass": true
+        },
+        {
+          "name": "invalid clear error without substitute",
+          "pass": true
+        },
+        {
+          "name": "repeated pickup/gather",
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "touch layout 390x844",
+      "pass": true,
+      "details": [
+        {
+          "id": "touchStick",
+          "rect": {
+            "x": 14,
+            "y": 742,
+            "width": 92,
+            "height": 92,
+            "top": 742,
+            "right": 106,
+            "bottom": 834,
+            "left": 14
+          }
+        },
+        {
+          "id": "touchSprint",
+          "rect": {
+            "x": 182,
+            "y": 777,
+            "width": 57,
+            "height": 57,
+            "top": 777,
+            "right": 239,
+            "bottom": 834,
+            "left": 182
+          }
+        },
+        {
+          "id": "touchFinish",
+          "rect": {
+            "x": 244,
+            "y": 777,
+            "width": 57,
+            "height": 57,
+            "top": 777,
+            "right": 301,
+            "bottom": 834,
+            "left": 244
+          }
+        },
+        {
+          "id": "touchShoot",
+          "rect": {
+            "x": 306,
+            "y": 764,
+            "width": 70,
+            "height": 70,
+            "top": 764,
+            "right": 376,
+            "bottom": 834,
+            "left": 306
+          }
+        }
+      ]
+    },
+    {
+      "name": "real touch movement 390x844",
+      "pass": true,
+      "details": [
+        0.3907807077151131,
+        0,
+        2.303130218001198
+      ]
+    },
+    {
+      "name": "touch gameplay 844x390",
+      "pass": true,
+      "details": [
+        {
+          "name": "Luke ready",
+          "pass": true,
+          "details": {
+            "character": "Luke",
+            "url": "/assets/models/player/luke-player-v1.glb",
+            "triangles": 4754,
+            "materials": 1,
+            "bones": 17,
+            "bytes": 244360
+          }
+        },
+        {
+          "name": "stable interface",
+          "pass": true
+        },
+        {
+          "name": "movement",
+          "pass": true,
+          "details": 3.371621817642868
+        },
+        {
+          "name": "sprint",
+          "pass": true
+        },
+        {
+          "name": "gather anchor",
+          "pass": true,
+          "details": 8.326672684688674e-17
+        },
+        {
+          "name": "shot release",
+          "pass": true
+        },
+        {
+          "name": "select layup",
+          "pass": true
+        },
+        {
+          "name": "attach layup",
+          "pass": true
+        },
+        {
+          "name": "score layup",
+          "pass": true,
+          "details": {
+            "score": 2
+          }
+        },
+        {
+          "name": "select dunk",
+          "pass": true
+        },
+        {
+          "name": "attach dunk",
+          "pass": true
+        },
+        {
+          "name": "score dunk",
+          "pass": true,
+          "details": {
+            "score": 2
+          }
+        },
+        {
+          "name": "touch look",
+          "pass": true
+        },
+        {
+          "name": "reset",
+          "pass": true
+        },
+        {
+          "name": "missing clear error without substitute",
+          "pass": true
+        },
+        {
+          "name": "invalid clear error without substitute",
+          "pass": true
+        },
+        {
+          "name": "repeated pickup/gather",
+          "pass": true
+        }
+      ]
+    },
+    {
+      "name": "touch layout 844x390",
+      "pass": true,
+      "details": [
+        {
+          "id": "touchStick",
+          "rect": {
+            "x": 14,
+            "y": 268,
+            "width": 112,
+            "height": 112,
+            "top": 268,
+            "right": 126,
+            "bottom": 380,
+            "left": 14
+          }
+        },
+        {
+          "id": "touchSprint",
+          "rect": {
+            "x": 592,
+            "y": 312,
+            "width": 68,
+            "height": 68,
+            "top": 312,
+            "right": 660,
+            "bottom": 380,
+            "left": 592
+          }
+        },
+        {
+          "id": "touchFinish",
+          "rect": {
+            "x": 669,
+            "y": 312,
+            "width": 68,
+            "height": 68,
+            "top": 312,
+            "right": 737,
+            "bottom": 380,
+            "left": 669
+          }
+        },
+        {
+          "id": "touchShoot",
+          "rect": {
+            "x": 746,
+            "y": 296,
+            "width": 84,
+            "height": 84,
+            "top": 296,
+            "right": 830,
+            "bottom": 380,
+            "left": 746
+          }
+        }
+      ]
+    },
+    {
+      "name": "real touch movement 844x390",
+      "pass": true,
+      "details": [
+        0.3446473874070277,
+        0,
+        2.4916474699760816
+      ]
+    },
+    {
+      "name": "old hybrid request superseded",
+      "pass": true,
+      "details": {
+        "mode": "procedural",
+        "status": "superseded",
+        "requestedMode": "hybrid",
+        "active": false,
+        "weight": 0,
+        "owner": "luke-procedural",
+        "action": "idle",
+        "handoffRemaining": 0,
+        "hybridWeight": 0,
+        "footCorrection": false,
+        "superseded": "Old-rig dribble retired; Luke clips pending Part 2."
+      }
+    },
+    {
+      "name": "ordinary URL Luke failure stays blocked",
+      "pass": true,
+      "details": {
+        "text": "\n        CHARACTER LOAD FAILED\n        LUKE UNAVAILABLE\n        Luke could not be loaded. Reload to try again.\n      ",
+        "disabled": true
+      }
+    },
+    {
+      "name": "failure requests no old fallback",
+      "pass": true,
+      "details": [
+        "http://127.0.0.1:5177/assets/models/hoop/hoop-assembly-v1.glb",
+        "http://127.0.0.1:5177/assets/models/arena/arena-shell-v1.glb",
+        "http://127.0.0.1:5177/assets/models/player/luke-player-v1.glb",
+        "http://127.0.0.1:5177/assets/models/ball/basketball-v1.glb"
+      ]
+    },
+    {
+      "name": "recover by ordinary reload",
+      "pass": true
+    }
+  ],
+  "controls": [
+    {
+      "pass": true,
+      "layout": "desktop",
+      "checks": [
+        {
+          "name": "Luke ready",
+          "pass": true,
+          "details": {
+            "character": "Luke",
+            "url": "/assets/models/player/luke-player-v1.glb",
+            "triangles": 4754,
+            "materials": 1,
+            "bones": 17,
+            "bytes": 244360
+          }
+        },
+        {
+          "name": "stable interface",
+          "pass": true
+        },
+        {
+          "name": "movement",
+          "pass": true,
+          "details": 3.371621817642868
+        },
+        {
+          "name": "sprint",
+          "pass": true
+        },
+        {
+          "name": "gather anchor",
+          "pass": true,
+          "details": 5.214799211354908e-16
+        },
+        {
+          "name": "shot release",
+          "pass": true
+        },
+        {
+          "name": "select layup",
+          "pass": true
+        },
+        {
+          "name": "attach layup",
+          "pass": true
+        },
+        {
+          "name": "score layup",
+          "pass": true,
+          "details": {
+            "score": 2
+          }
+        },
+        {
+          "name": "select dunk",
+          "pass": true
+        },
+        {
+          "name": "attach dunk",
+          "pass": true
+        },
+        {
+          "name": "score dunk",
+          "pass": true,
+          "details": {
+            "score": 2
+          }
+        },
+        {
+          "name": "mouse look",
+          "pass": true
+        },
+        {
+          "name": "mouse zoom",
+          "pass": true
+        },
+        {
+          "name": "reset",
+          "pass": true
+        },
+        {
+          "name": "missing clear error without substitute",
+          "pass": true
+        },
+        {
+          "name": "invalid clear error without substitute",
+          "pass": true
+        },
+        {
+          "name": "repeated pickup/gather",
+          "pass": true
+        }
+      ]
+    },
+    {
+      "pass": true,
+      "layout": "touch",
+      "checks": [
+        {
+          "name": "Luke ready",
+          "pass": true,
+          "details": {
+            "character": "Luke",
+            "url": "/assets/models/player/luke-player-v1.glb",
+            "triangles": 4754,
+            "materials": 1,
+            "bones": 17,
+            "bytes": 244360
+          }
+        },
+        {
+          "name": "stable interface",
+          "pass": true
+        },
+        {
+          "name": "movement",
+          "pass": true,
+          "details": 3.371621817642868
+        },
+        {
+          "name": "sprint",
+          "pass": true
+        },
+        {
+          "name": "gather anchor",
+          "pass": true,
+          "details": 5.33167196845001e-16
+        },
+        {
+          "name": "shot release",
+          "pass": true
+        },
+        {
+          "name": "select layup",
+          "pass": true
+        },
+        {
+          "name": "attach layup",
+          "pass": true
+        },
+        {
+          "name": "score layup",
+          "pass": true,
+          "details": {
+            "score": 2
+          }
+        },
+        {
+          "name": "select dunk",
+          "pass": true
+        },
+        {
+          "name": "attach dunk",
+          "pass": true
+        },
+        {
+          "name": "score dunk",
+          "pass": true,
+          "details": {
+            "score": 2
+          }
+        },
+        {
+          "name": "touch look",
+          "pass": true
+        },
+        {
+          "name": "reset",
+          "pass": true
+        },
+        {
+          "name": "missing clear error without substitute",
+          "pass": true
+        },
+        {
+          "name": "invalid clear error without substitute",
+          "pass": true
+        },
+        {
+          "name": "repeated pickup/gather",
+          "pass": true
+        }
+      ]
+    },
+    {
+      "pass": true,
+      "layout": "touch",
+      "checks": [
+        {
+          "name": "Luke ready",
+          "pass": true,
+          "details": {
+            "character": "Luke",
+            "url": "/assets/models/player/luke-player-v1.glb",
+            "triangles": 4754,
+            "materials": 1,
+            "bones": 17,
+            "bytes": 244360
+          }
+        },
+        {
+          "name": "stable interface",
+          "pass": true
+        },
+        {
+          "name": "movement",
+          "pass": true,
+          "details": 3.371621817642868
+        },
+        {
+          "name": "sprint",
+          "pass": true
+        },
+        {
+          "name": "gather anchor",
+          "pass": true,
+          "details": 2.9504581591051765e-16
+        },
+        {
+          "name": "shot release",
+          "pass": true
+        },
+        {
+          "name": "select layup",
+          "pass": true
+        },
+        {
+          "name": "attach layup",
+          "pass": true
+        },
+        {
+          "name": "score layup",
+          "pass": true,
+          "details": {
+            "score": 2
+          }
+        },
+        {
+          "name": "select dunk",
+          "pass": true
+        },
+        {
+          "name": "attach dunk",
+          "pass": true
+        },
+        {
+          "name": "score dunk",
+          "pass": true,
+          "details": {
+            "score": 2
+          }
+        },
+        {
+          "name": "touch look",
+          "pass": true
+        },
+        {
+          "name": "reset",
+          "pass": true
+        },
+        {
+          "name": "missing clear error without substitute",
+          "pass": true
+        },
+        {
+          "name": "invalid clear error without substitute",
+          "pass": true
+        },
+        {
+          "name": "repeated pickup/gather",
+          "pass": true
+        }
+      ]
+    },
+    {
+      "pass": true,
+      "layout": "touch",
+      "checks": [
+        {
+          "name": "Luke ready",
+          "pass": true,
+          "details": {
+            "character": "Luke",
+            "url": "/assets/models/player/luke-player-v1.glb",
+            "triangles": 4754,
+            "materials": 1,
+            "bones": 17,
+            "bytes": 244360
+          }
+        },
+        {
+          "name": "stable interface",
+          "pass": true
+        },
+        {
+          "name": "movement",
+          "pass": true,
+          "details": 3.371621817642868
+        },
+        {
+          "name": "sprint",
+          "pass": true
+        },
+        {
+          "name": "gather anchor",
+          "pass": true,
+          "details": 8.326672684688674e-17
+        },
+        {
+          "name": "shot release",
+          "pass": true
+        },
+        {
+          "name": "select layup",
+          "pass": true
+        },
+        {
+          "name": "attach layup",
+          "pass": true
+        },
+        {
+          "name": "score layup",
+          "pass": true,
+          "details": {
+            "score": 2
+          }
+        },
+        {
+          "name": "select dunk",
+          "pass": true
+        },
+        {
+          "name": "attach dunk",
+          "pass": true
+        },
+        {
+          "name": "score dunk",
+          "pass": true,
+          "details": {
+            "score": 2
+          }
+        },
+        {
+          "name": "touch look",
+          "pass": true
+        },
+        {
+          "name": "reset",
+          "pass": true
+        },
+        {
+          "name": "missing clear error without substitute",
+          "pass": true
+        },
+        {
+          "name": "invalid clear error without substitute",
+          "pass": true
+        },
+        {
+          "name": "repeated pickup/gather",
+          "pass": true
+        }
+      ]
+    }
+  ],
+  "rig": [
+    {
+      "pose": "neutral",
+      "writer": "isolated",
+      "view": "front",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "neutral",
+      "writer": "isolated",
+      "view": "side",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "neutral",
+      "writer": "isolated",
+      "view": "three-quarter",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "right knee",
+      "writer": "isolated",
+      "view": "front",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "right knee",
+      "writer": "isolated",
+      "view": "side",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "right knee",
+      "writer": "isolated",
+      "view": "three-quarter",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "left knee",
+      "writer": "isolated",
+      "view": "front",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "left knee",
+      "writer": "isolated",
+      "view": "side",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "left knee",
+      "writer": "isolated",
+      "view": "three-quarter",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "shallow squat",
+      "writer": "isolated",
+      "view": "front",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "shallow squat",
+      "writer": "isolated",
+      "view": "side",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "shallow squat",
+      "writer": "isolated",
+      "view": "three-quarter",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "athletic crouch",
+      "writer": "isolated",
+      "view": "front",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "athletic crouch",
+      "writer": "isolated",
+      "view": "side",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "athletic crouch",
+      "writer": "isolated",
+      "view": "three-quarter",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "forward step",
+      "writer": "isolated",
+      "view": "front",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "forward step",
+      "writer": "isolated",
+      "view": "side",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "forward step",
+      "writer": "isolated",
+      "view": "three-quarter",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "wide stance",
+      "writer": "isolated",
+      "view": "front",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "wide stance",
+      "writer": "isolated",
+      "view": "side",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "wide stance",
+      "writer": "isolated",
+      "view": "three-quarter",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "torso lean",
+      "writer": "isolated",
+      "view": "front",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "torso lean",
+      "writer": "isolated",
+      "view": "side",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "torso lean",
+      "writer": "isolated",
+      "view": "three-quarter",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "arm raise",
+      "writer": "isolated",
+      "view": "front",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "arm raise",
+      "writer": "isolated",
+      "view": "side",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "arm raise",
+      "writer": "isolated",
+      "view": "three-quarter",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "ball hold",
+      "writer": "isolated",
+      "view": "front",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "ball hold",
+      "writer": "isolated",
+      "view": "side",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "ball hold",
+      "writer": "isolated",
+      "view": "three-quarter",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "neutral",
+      "writer": "adapter",
+      "view": "front",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "neutral",
+      "writer": "adapter",
+      "view": "side",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "neutral",
+      "writer": "adapter",
+      "view": "three-quarter",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "right knee",
+      "writer": "adapter",
+      "view": "front",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "right knee",
+      "writer": "adapter",
+      "view": "side",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "right knee",
+      "writer": "adapter",
+      "view": "three-quarter",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "left knee",
+      "writer": "adapter",
+      "view": "front",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "left knee",
+      "writer": "adapter",
+      "view": "side",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "left knee",
+      "writer": "adapter",
+      "view": "three-quarter",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "shallow squat",
+      "writer": "adapter",
+      "view": "front",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "shallow squat",
+      "writer": "adapter",
+      "view": "side",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "shallow squat",
+      "writer": "adapter",
+      "view": "three-quarter",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "athletic crouch",
+      "writer": "adapter",
+      "view": "front",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "athletic crouch",
+      "writer": "adapter",
+      "view": "side",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "athletic crouch",
+      "writer": "adapter",
+      "view": "three-quarter",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "forward step",
+      "writer": "adapter",
+      "view": "front",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "forward step",
+      "writer": "adapter",
+      "view": "side",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "forward step",
+      "writer": "adapter",
+      "view": "three-quarter",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "wide stance",
+      "writer": "adapter",
+      "view": "front",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "wide stance",
+      "writer": "adapter",
+      "view": "side",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "wide stance",
+      "writer": "adapter",
+      "view": "three-quarter",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "torso lean",
+      "writer": "adapter",
+      "view": "front",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "torso lean",
+      "writer": "adapter",
+      "view": "side",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "torso lean",
+      "writer": "adapter",
+      "view": "three-quarter",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "arm raise",
+      "writer": "adapter",
+      "view": "front",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "arm raise",
+      "writer": "adapter",
+      "view": "side",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "arm raise",
+      "writer": "adapter",
+      "view": "three-quarter",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "ball hold",
+      "writer": "adapter",
+      "view": "front",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "ball hold",
+      "writer": "adapter",
+      "view": "side",
+      "capture": "first pass; unchanged pose source"
+    },
+    {
+      "pose": "ball hold",
+      "writer": "adapter",
+      "view": "three-quarter",
+      "capture": "first pass; unchanged pose source"
+    }
+  ],
+  "transitions": [
+    {
+      "type": "gather",
+      "before": {
+        "status": "ready",
+        "asset": {
+          "character": "Luke",
+          "url": "/assets/models/player/luke-player-v1.glb",
+          "triangles": 4754,
+          "materials": 1,
+          "bones": 17,
+          "bytes": 244360
+        },
+        "animation": {
+          "mode": "procedural",
+          "status": "procedural",
+          "requestedMode": "procedural",
+          "active": false,
+          "weight": 0,
+          "owner": "luke-procedural",
+          "action": "move",
+          "handoffRemaining": 0.060000000000000026,
+          "hybridWeight": 0,
+          "footCorrection": false
+        },
+        "action": "move",
+        "charge": false,
+        "progress": 0,
+        "position": [
+          0.011077290661426962,
+          0,
+          3.7495600538434974
+        ],
+        "speed": 2.361963563736758,
+        "ballMode": "dribble",
+        "ball": [
+          0.4397351889225954,
+          0.8910992980057849,
+          3.6144585873143815
+        ],
+        "hand": [
+          0.49181749109466455,
+          1.2266255481799055,
+          3.5429472282798096
+        ],
+        "score": 0,
+        "yaw": -0.0735,
+        "pitch": -0.178,
+        "coarsePointer": false,
+        "bones": {
+          "root": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0,
+              0
+            ],
+            "world": [
+              0.011077290661426962,
+              0,
+              3.7495600538434974
+            ]
+          },
+          "pelvis": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              1.0657366521543625,
+              0
+            ],
+            "world": [
+              0.011077290661426962,
+              1.0657366521543625,
+              3.7495600538434974
+            ]
+          },
+          "chest": {
+            "q": [
+              0.029993061218334723,
+              -0.012746388262042916,
+              -0.0003825064066689937,
+              0.9994687586682613
+            ],
+            "p": [
+              0,
+              0.36999988555908203,
+              0.014999999664723873
+            ],
+            "world": [
+              0.010339769599494472,
+              1.4357365377134446,
+              3.7645419112925897
+            ]
+          },
+          "left_upper_arm": {
+            "q": [
+              -0.01815437031404567,
+              0.08444377444096454,
+              0.2793405433405946,
+              0.9562993927859861
+            ],
+            "p": [
+              -0.23999999463558197,
+              0.20500004291534424,
+              0.03500000014901161
+            ],
+            "world": [
+              -0.23220472368842376,
+              1.638636644650207,
+              3.793760576757675
+            ]
+          },
+          "left_forearm": {
+            "q": [
+              -0.2260555306441519,
+              -0.42094014342834557,
+              0.3549111379903761,
+              0.8035834597887709
+            ],
+            "p": [
+              -0.3100000023841858,
+              -0.009999990463256836,
+              0.009999997913837433
+            ],
+            "world": [
+              -0.486003128185127,
+              1.4632707922640649,
+              3.8274234485535694
+            ]
+          },
+          "left_hand": {
+            "q": [
+              0.8905073590433422,
+              0.22801872198068002,
+              -0.06809682950576634,
+              0.3877717469429818
+            ],
+            "p": [
+              -0.3349999785423279,
+              -0.019999980926513672,
+              -0.054999999701976776
+            ],
+            "world": [
+              -0.41996999616945574,
+              1.1884193011210569,
+              3.6383566134917205
+            ]
+          },
+          "neck": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0.3200000524520874,
+              -0.009999999776482582
+            ],
+            "world": [
+              0.010141658441732978,
+              1.7557602078788008,
+              3.773753037756427
+            ]
+          },
+          "head": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0.059999942779541016,
+              -0.009999999776482582
+            ],
+            "world": [
+              0.010710109398553054,
+              1.816251628185809,
+              3.7673923725531306
+            ]
+          },
+          "right_upper_arm": {
+            "q": [
+              -0.02883172976838587,
+              -0.15452218030521672,
+              -0.24525821453680022,
+              0.9566295183374314
+            ],
+            "p": [
+              0.23999999463558197,
+              0.20500004291534424,
+              0.03500000014901161
+            ],
+            "world": [
+              0.2464580058759312,
+              1.6379026225159778,
+              3.82955781460957
+            ]
+          },
+          "right_forearm": {
+            "q": [
+              -0.20372010517921563,
+              0.6862416736347482,
+              -0.07153575063937744,
+              0.6945884540454224
+            ],
+            "p": [
+              0.3100000023841858,
+              -0.009999990463256836,
+              0.009999997913837433
+            ],
+            "world": [
+              0.4886581832418592,
+              1.4813022487171552,
+              3.9440802938689674
+            ]
+          },
+          "right_hand": {
+            "q": [
+              -0.7139538512909475,
+              0.6760564125514034,
+              -0.05961349031409474,
+              -0.1722319861335915
+            ],
+            "p": [
+              0.3349999785423279,
+              -0.019999980926513672,
+              -0.054999999701976776
+            ],
+            "world": [
+              0.4932908785105216,
+              1.339715398338366,
+              3.6349174132348256
+            ]
+          },
+          "left_thigh": {
+            "q": [
+              -0.04656786970746079,
+              0,
+              0,
+              0.9989151282821322
+            ],
+            "p": [
+              -0.15000000596046448,
+              -0.019999980926513672,
+              0
+            ],
+            "world": [
+              -0.13874129313145758,
+              1.0457366712278489,
+              3.7421848427662594
+            ]
+          },
+          "left_shin": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              -0.04499998688697815,
+              -0.4299999475479126,
+              0.014999999664723873
+            ],
+            "world": [
+              -0.18638814029378636,
+              0.6189972110881501,
+              3.7948456898553986
+            ]
+          },
+          "left_foot": {
+            "q": [
+              0.04656786970746079,
+              0,
+              0,
+              0.9989151282821322
+            ],
+            "p": [
+              -0.050000011920928955,
+              -0.4399999976158142,
+              0.030000001192092896
+            ],
+            "world": [
+              -0.23980903107740084,
+              0.18369659305586067,
+              3.8631068027537916
+            ]
+          },
+          "right_thigh": {
+            "q": [
+              0.04656786970746079,
+              0,
+              0,
+              0.9989151282821322
+            ],
+            "p": [
+              0.15000000596046448,
+              -0.019999980926513672,
+              0
+            ],
+            "world": [
+              0.1608958744543115,
+              1.0457366712278489,
+              3.7569352649207355
+            ]
+          },
+          "right_shin": {
+            "q": [
+              -0.07943641118221997,
+              0,
+              0,
+              0.9968399352847424
+            ],
+            "p": [
+              0.04499998688697815,
+              -0.4299999475479126,
+              0.014999999664723873
+            ],
+            "world": [
+              0.20707407694661492,
+              0.6162061701779755,
+              3.734108176113747
+            ]
+          },
+          "right_foot": {
+            "q": [
+              0.03292936361610685,
+              0,
+              0,
+              0.9994576814512149
+            ],
+            "p": [
+              0.050000011920928955,
+              -0.4399999976158142,
+              0.030000001192092896
+            ],
+            "world": [
+              0.2541177529102205,
+              0.17913510329637367,
+              3.795392547794827
+            ]
+          }
+        }
+      },
+      "after": {
+        "status": "ready",
+        "asset": {
+          "character": "Luke",
+          "url": "/assets/models/player/luke-player-v1.glb",
+          "triangles": 4754,
+          "materials": 1,
+          "bones": 17,
+          "bytes": 244360
+        },
+        "animation": {
+          "mode": "procedural",
+          "status": "procedural",
+          "requestedMode": "procedural",
+          "active": false,
+          "weight": 0,
+          "owner": "luke-procedural",
+          "action": "shoot",
+          "handoffRemaining": 0.15166666666666667,
+          "hybridWeight": 0,
+          "footCorrection": false
+        },
+        "action": "shoot",
+        "charge": true,
+        "progress": 0.003717948717948582,
+        "position": [
+          0.011077290661426962,
+          0,
+          3.7495600538434974
+        ],
+        "speed": 2.10186831910725,
+        "ballMode": "gather",
+        "ball": [
+          0.2495102867646992,
+          1.243076923076923,
+          3.3911612447366353
+        ],
+        "hand": [
+          0.24951028676469914,
+          1.2430769230769227,
+          3.3911612447366357
+        ],
+        "score": 0,
+        "yaw": -0.0735,
+        "pitch": -0.178,
+        "coarsePointer": false,
+        "bones": {
+          "root": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0,
+              0
+            ],
+            "world": [
+              0.011077290661426962,
+              0,
+              3.7495600538434974
+            ]
+          },
+          "pelvis": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              1.0661672838936143,
+              0
+            ],
+            "world": [
+              0.011077290661426962,
+              1.0661672838936143,
+              3.7495600538434974
+            ]
+          },
+          "chest": {
+            "q": [
+              0.02999271756250309,
+              -0.013614757821438695,
+              -0.00040856531159144427,
+              0.9994573069106382
+            ],
+            "p": [
+              0,
+              0.36999988555908203,
+              0.014999999664723873
+            ],
+            "world": [
+              0.01031859095728152,
+              1.4361671694526963,
+              3.7645408537120173
+            ]
+          },
+          "left_upper_arm": {
+            "q": [
+              0.028149137710907806,
+              -0.5318244253983707,
+              0.610751377178309,
+              0.5859634475550707
+            ],
+            "p": [
+              -0.23999999463558197,
+              0.20500004291534424,
+              0.03500000014901161
+            ],
+            "world": [
+              -0.2322955717881015,
+              1.6390923713281258,
+              3.7929968813683184
+            ]
+          },
+          "left_forearm": {
+            "q": [
+              -0.28593491360976947,
+              -0.17023432867999225,
+              -0.024860355292892315,
+              0.9426788749370366
+            ],
+            "p": [
+              -0.3100000023841858,
+              -0.009999990463256836,
+              0.009999997913837433
+            ],
+            "world": [
+              -0.11870116093684976,
+              1.4289700098716136,
+              3.594893614648577
+            ]
+          },
+          "left_hand": {
+            "q": [
+              0.5716292170407778,
+              0.5503037989348891,
+              0.06703971396564451,
+              0.6049061446659152
+            ],
+            "p": [
+              -0.3349999785423279,
+              -0.019999980926513672,
+              -0.054999999701976776
+            ],
+            "world": [
+              0.1246702850699751,
+              1.318076923076923,
+              3.3848387470607704
+            ]
+          },
+          "neck": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0.3200000524520874,
+              -0.009999999776482582
+            ],
+            "world": [
+              0.010124783823690477,
+              1.7561908121403491,
+              3.7737530263433134
+            ]
+          },
+          "head": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0.059999942779541016,
+              -0.009999999776482582
+            ],
+            "world": [
+              0.01071955138926562,
+              1.8166822049696538,
+              3.7673945065319483
+            ]
+          },
+          "right_upper_arm": {
+            "q": [
+              -0.002758167912067629,
+              0.3055922434295597,
+              -0.5662619318528137,
+              0.765475798310944
+            ],
+            "p": [
+              0.23999999463558197,
+              0.20500004291534424,
+              0.03500000014901161
+            ],
+            "world": [
+              0.24625200953723864,
+              1.638308351660491,
+              3.8303008680338912
+            ]
+          },
+          "right_forearm": {
+            "q": [
+              -0.16509493929018076,
+              0.10859093008838255,
+              -0.06803603413690576,
+              0.9779175675803321
+            ],
+            "p": [
+              0.3100000023841858,
+              -0.009999990463256836,
+              0.009999997913837433
+            ],
+            "world": [
+              0.3065800478614459,
+              1.3703897726515595,
+              3.685801165406083
+            ]
+          },
+          "right_hand": {
+            "q": [
+              -0.8255018235870398,
+              -0.42630586463897724,
+              0.14314001346295163,
+              -0.3410586248355432
+            ],
+            "p": [
+              0.3349999785423279,
+              -0.019999980926513672,
+              -0.054999999701976776
+            ],
+            "world": [
+              0.24571678815918058,
+              1.1180769230769227,
+              3.4660652457534695
+            ]
+          },
+          "left_thigh": {
+            "q": [
+              -0.04404977926133294,
+              0,
+              0,
+              0.9990293373805532
+            ],
+            "p": [
+              -0.15000000596046448,
+              -0.019999980926513672,
+              0
+            ],
+            "world": [
+              -0.13873071732507702,
+              1.0461673029671006,
+              3.74197305633098
+            ]
+          },
+          "left_shin": {
+            "q": [
+              -0.00018878452220742476,
+              0,
+              0,
+              0.9999999821802019
+            ],
+            "p": [
+              -0.04499998688697815,
+              -0.4299999475479126,
+              0.014999999664723873
+            ],
+            "world": [
+              -0.18634311190912858,
+              0.619156295265297,
+              3.7924172124289894
+            ]
+          },
+          "left_foot": {
+            "q": [
+              0.044238380103194405,
+              0,
+              0,
+              0.999021003645992
+            ],
+            "p": [
+              -0.050000011920928955,
+              -0.4399999976158142,
+              0.030000001192092896
+            ],
+            "world": [
+              -0.23975772432363798,
+              0.18353019211191407,
+              3.8585744236575543
+            ]
+          },
+          "right_thigh": {
+            "q": [
+              0.044238380103194405,
+              0,
+              0,
+              0.999021003645992
+            ],
+            "p": [
+              0.15000000596046448,
+              -0.019999980926513672,
+              0
+            ],
+            "world": [
+              0.16088529864793094,
+              1.0461673029671006,
+              3.757147051356015
+            ]
+          },
+          "right_shin": {
+            "q": [
+              -0.07549540044431478,
+              0,
+              0,
+              0.9971461500260393
+            ],
+            "p": [
+              0.04499998688697815,
+              -0.4299999475479126,
+              0.014999999664723873
+            ],
+            "world": [
+              0.20699438766876135,
+              0.6165245525925841,
+              3.7363862069303284
+            ]
+          },
+          "right_foot": {
+            "q": [
+              0.031309433574574316,
+              0,
+              0,
+              0.9995097395069442
+            ],
+            "p": [
+              0.050000011920928955,
+              -0.4399999976158142,
+              0.030000001192092896
+            ],
+            "world": [
+              0.25402306727858087,
+              0.17926483860399456,
+              3.796321546941952
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "gather",
+      "before": {
+        "status": "ready",
+        "asset": {
+          "character": "Luke",
+          "url": "/assets/models/player/luke-player-v1.glb",
+          "triangles": 4754,
+          "materials": 1,
+          "bones": 17,
+          "bytes": 244360
+        },
+        "animation": {
+          "mode": "procedural",
+          "status": "procedural",
+          "requestedMode": "procedural",
+          "active": false,
+          "weight": 0,
+          "owner": "luke-procedural",
+          "action": "move",
+          "handoffRemaining": 0,
+          "hybridWeight": 0,
+          "footCorrection": false
+        },
+        "action": "move",
+        "charge": false,
+        "progress": 0,
+        "position": [
+          0.06750024422706657,
+          0,
+          2.9832836821343736
+        ],
+        "speed": 3.329314950346786,
+        "ballMode": "dribble",
+        "ball": [
+          0.4980806941358556,
+          0.21381991399099282,
+          2.854440847035386
+        ],
+        "hand": [
+          0.5528218115062573,
+          1.0358136778717957,
+          2.787674438146085
+        ],
+        "score": 0,
+        "yaw": -0.0735,
+        "pitch": -0.178,
+        "coarsePointer": false,
+        "bones": {
+          "root": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0,
+              0
+            ],
+            "world": [
+              0.06750024422706657,
+              0,
+              2.9832836821343736
+            ]
+          },
+          "pelvis": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              1.0662741872741952,
+              0
+            ],
+            "world": [
+              0.06750024422706657,
+              1.0662741872741952,
+              2.9832836821343736
+            ]
+          },
+          "chest": {
+            "q": [
+              0.02999494214527735,
+              0.006097177336930436,
+              0.00018297021446599907,
+              0.9995314374226176
+            ],
+            "p": [
+              0,
+              0.36999988555908203,
+              0.014999999664723873
+            ],
+            "world": [
+              0.0664216677829651,
+              1.4362740728332772,
+              2.998244853973369
+            ]
+          },
+          "left_upper_arm": {
+            "q": [
+              -0.025370675478626183,
+              0.023585698110862516,
+              0.18499016136321986,
+              0.9821296675435436
+            ],
+            "p": [
+              -0.23999999463558197,
+              0.20500004291534424,
+              0.03500000014901161
+            ],
+            "world": [
+              -0.17611940401185192,
+              1.6386310732083693,
+              3.0310394865009576
+            ]
+          },
+          "left_forearm": {
+            "q": [
+              -0.14197009353288675,
+              0.03853315081473683,
+              0.6329677399338127,
+              0.7600733708226028
+            ],
+            "p": [
+              -0.3100000023841858,
+              -0.009999990463256836,
+              0.009999997913837433
+            ],
+            "world": [
+              -0.46116075274667634,
+              1.5159919517114269,
+              3.0343676444941323
+            ]
+          },
+          "left_hand": {
+            "q": [
+              0.7427766383522587,
+              -0.1385697460618352,
+              0.05385511051867413,
+              0.6528253350364845
+            ],
+            "p": [
+              -0.3349999785423279,
+              -0.019999980926513672,
+              -0.054999999701976776
+            ],
+            "world": [
+              -0.3756200858253669,
+              1.1884193011210566,
+              3.0664447035160483
+            ]
+          },
+          "neck": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0.3200000524520874,
+              -0.009999999776482582
+            ],
+            "world": [
+              0.06563794114055425,
+              1.7562978933975633,
+              3.0074194716142317
+            ]
+          },
+          "head": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0.059999942779541016,
+              -0.009999999776482582
+            ],
+            "world": [
+              0.06597526158737756,
+              1.8167894641035012,
+              3.001043797726514
+            ]
+          },
+          "right_upper_arm": {
+            "q": [
+              -0.01400850607656545,
+              -0.004819307127567985,
+              -0.3561388086821872,
+              0.9343156238588464
+            ],
+            "p": [
+              0.23999999463558197,
+              0.20500004291534424,
+              0.03500000014901161
+            ],
+            "world": [
+              0.3030227719591204,
+              1.6389822114049446,
+              3.0597212160179548
+            ]
+          },
+          "right_forearm": {
+            "q": [
+              -0.194414518449959,
+              0.3093022714857925,
+              -0.21962787236840975,
+              0.9045986389269691
+            ],
+            "p": [
+              0.3100000023841858,
+              -0.009999990463256836,
+              0.009999997913837433
+            ],
+            "world": [
+              0.5272828135575814,
+              1.4251408388822508,
+              3.076433558331473
+            ]
+          },
+          "right_hand": {
+            "q": [
+              -0.8031817937328647,
+              0.4381130721874593,
+              -0.07327933734953412,
+              -0.39697113360058933
+            ],
+            "p": [
+              0.3349999785423279,
+              -0.019999980926513672,
+              -0.054999999701976776
+            ],
+            "world": [
+              0.5521999813484045,
+              1.1489035280302562,
+              2.8796543224599485
+            ]
+          },
+          "left_thigh": {
+            "q": [
+              0.06324264075687844,
+              0,
+              0,
+              0.9979981805545021
+            ],
+            "p": [
+              -0.15000000596046448,
+              -0.019999980926513672,
+              0
+            ],
+            "world": [
+              -0.08211148345200459,
+              1.0462742063476815,
+              2.9724979170236905
+            ]
+          },
+          "left_shin": {
+            "q": [
+              -0.08703203665885197,
+              0,
+              0,
+              0.9962055132325921
+            ],
+            "p": [
+              -0.04499998688697815,
+              -0.4299999475479126,
+              0.014999999664723873
+            ],
+            "world": [
+              -0.12416194204189862,
+              0.6178204603947657,
+              2.9299643983322934
+            ]
+          },
+          "left_foot": {
+            "q": [
+              0.023855146842096452,
+              0,
+              0,
+              0.9997154254932461
+            ],
+            "p": [
+              -0.050000011920928955,
+              -0.4399999976158142,
+              0.030000001192092896
+            ],
+            "world": [
+              -0.17769626603538785,
+              0.17975214419677893,
+              2.9771896634300767
+            ]
+          },
+          "right_thigh": {
+            "q": [
+              -0.06324264075687844,
+              0,
+              0,
+              0.9979981805545021
+            ],
+            "p": [
+              0.15000000596046448,
+              -0.019999980926513672,
+              0
+            ],
+            "world": [
+              0.21711197190613774,
+              1.0462742063476815,
+              2.9940694472450566
+            ]
+          },
+          "right_shin": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0.04499998688697815,
+              -0.4299999475479126,
+              0.014999999664723873
+            ],
+            "world": [
+              0.2570225332415869,
+              0.6216074227346502,
+              3.0662859529112105
+            ]
+          },
+          "right_foot": {
+            "q": [
+              0.06324264075687844,
+              0,
+              0,
+              0.9979981805545021
+            ],
+            "p": [
+              0.050000011920928955,
+              -0.4399999976158142,
+              0.030000001192092896
+            ],
+            "world": [
+              0.30075946042151425,
+              0.18891406349148937,
+              3.1549625407642727
+            ]
+          }
+        }
+      },
+      "after": {
+        "status": "ready",
+        "asset": {
+          "character": "Luke",
+          "url": "/assets/models/player/luke-player-v1.glb",
+          "triangles": 4754,
+          "materials": 1,
+          "bones": 17,
+          "bytes": 244360
+        },
+        "animation": {
+          "mode": "procedural",
+          "status": "procedural",
+          "requestedMode": "procedural",
+          "active": false,
+          "weight": 0,
+          "owner": "luke-procedural",
+          "action": "shoot",
+          "handoffRemaining": 0.15166666666666667,
+          "hybridWeight": 0,
+          "footCorrection": false
+        },
+        "action": "shoot",
+        "charge": true,
+        "progress": 0.003717948717948582,
+        "position": [
+          0.06750024422706657,
+          0,
+          2.9832836821343736
+        ],
+        "speed": 2.9626966841915023,
+        "ballMode": "gather",
+        "ball": [
+          0.31359274803000026,
+          1.243076923076923,
+          2.6301003309242645
+        ],
+        "hand": [
+          0.31359274803000015,
+          1.2430769230769227,
+          2.630100330924264
+        ],
+        "score": 0,
+        "yaw": -0.0735,
+        "pitch": -0.178,
+        "coarsePointer": false,
+        "bones": {
+          "root": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0,
+              0
+            ],
+            "world": [
+              0.06750024422706657,
+              0,
+              2.9832836821343736
+            ]
+          },
+          "pelvis": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              1.0663496894317437,
+              0
+            ],
+            "world": [
+              0.06750024422706657,
+              1.0663496894317437,
+              2.9832836821343736
+            ]
+          },
+          "chest": {
+            "q": [
+              0.029994653244383707,
+              0.007511373920417388,
+              0.0002254088443235257,
+              0.9995218102820117
+            ],
+            "p": [
+              0,
+              0.36999988555908203,
+              0.014999999664723873
+            ],
+            "world": [
+              0.06641924944759715,
+              1.4363495749908257,
+              2.9982446794349706
+            ]
+          },
+          "left_upper_arm": {
+            "q": [
+              0.016076319484715457,
+              -0.5707782254790512,
+              0.5977401219047629,
+              0.5627259687770685
+            ],
+            "p": [
+              -0.23999999463558197,
+              0.20500004291534424,
+              0.03500000014901161
+            ],
+            "world": [
+              -0.17606787748261665,
+              1.6386659363091114,
+              3.031682655552888
+            ]
+          },
+          "left_forearm": {
+            "q": [
+              -0.24983309622638336,
+              -0.12774625853111657,
+              -0.02232735435220289,
+              0.9595654259657708
+            ],
+            "p": [
+              -0.3100000023841858,
+              -0.009999990463256836,
+              0.009999997913837433
+            ],
+            "world": [
+              -0.05004401533848554,
+              1.4381318539978825,
+              2.8311731314708446
+            ]
+          },
+          "left_hand": {
+            "q": [
+              0.5623353109369137,
+              0.5365819450993694,
+              0.06891969519702432,
+              0.6253869920943442
+            ],
+            "p": [
+              -0.3349999785423279,
+              -0.019999980926513672,
+              -0.054999999701976776
+            ],
+            "world": [
+              0.18891776773832092,
+              1.318076923076923,
+              2.621092040894002
+            ]
+          },
+          "neck": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0.3200000524520874,
+              -0.009999999776482582
+            ],
+            "world": [
+              0.06560579098200532,
+              1.7563733724539814,
+              3.007417514735695
+            ]
+          },
+          "head": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0.059999942779541016,
+              -0.009999999776482582
+            ],
+            "world": [
+              0.06591589316677708,
+              1.816864920058789,
+              3.0010402399189613
+            ]
+          },
+          "right_upper_arm": {
+            "q": [
+              0.008187121804450737,
+              0.2667146228295723,
+              -0.5651073349987625,
+              0.7806727745579672
+            ],
+            "p": [
+              0.23999999463558197,
+              0.20500004291534424,
+              0.03500000014901161
+            ],
+            "world": [
+              0.3031489125443704,
+              1.6390985143272156,
+              3.0590883252729735
+            ]
+          },
+          "right_forearm": {
+            "q": [
+              -0.181095501034135,
+              0.139348272905218,
+              -0.08158253018311787,
+              0.9701189458579034
+            ],
+            "p": [
+              0.3100000023841858,
+              -0.009999990463256836,
+              0.009999997913837433
+            ],
+            "world": [
+              0.3742177953034475,
+              1.3679603785890058,
+              2.925921788569784
+            ]
+          },
+          "right_hand": {
+            "q": [
+              -0.824741892596021,
+              -0.42980601833265536,
+              0.12860964569120753,
+              -0.34427773125391775
+            ],
+            "p": [
+              0.3349999785423279,
+              -0.019999980926513672,
+              -0.054999999701976776
+            ],
+            "world": [
+              0.30818777401184244,
+              1.1180769230769227,
+              2.7049053190992725
+            ]
+          },
+          "left_thigh": {
+            "q": [
+              0.06004703649930615,
+              0,
+              0,
+              0.9981955486815451
+            ],
+            "p": [
+              -0.15000000596046448,
+              -0.019999980926513672,
+              0
+            ],
+            "world": [
+              -0.08210973806791513,
+              1.04634970850523,
+              2.9724737336685094
+            ]
+          },
+          "left_shin": {
+            "q": [
+              -0.08269785670261103,
+              0,
+              0,
+              0.996574665791176
+            ],
+            "p": [
+              -0.04499998688697815,
+              -0.4299999475479126,
+              0.014999999664723873
+            ],
+            "world": [
+              -0.12435109578194262,
+              0.6176524561523284,
+              2.9326706279539336
+            ]
+          },
+          "left_foot": {
+            "q": [
+              0.02270735606704369,
+              0,
+              0,
+              0.9997421547481354
+            ],
+            "p": [
+              -0.050000011920928955,
+              -0.4399999976158142,
+              0.030000001192092896
+            ],
+            "world": [
+              -0.17782054694804283,
+              0.17946828990160846,
+              2.978883758173521
+            ]
+          },
+          "right_thigh": {
+            "q": [
+              -0.05985859120914742,
+              0,
+              0,
+              0.99820686686601
+            ],
+            "p": [
+              0.15000000596046448,
+              -0.019999980926513672,
+              0
+            ],
+            "world": [
+              0.21711022652204828,
+              1.04634970850523,
+              2.9940936306002377
+            ]
+          },
+          "right_shin": {
+            "q": [
+              -0.00018878452220742476,
+              0,
+              0,
+              0.9999999821802019
+            ],
+            "p": [
+              0.04499998688697815,
+              -0.4299999475479126,
+              0.014999999664723873
+            ],
+            "world": [
+              0.25721675278160083,
+              0.6212237220546787,
+              3.0634428620077663
+            ]
+          },
+          "right_foot": {
+            "q": [
+              0.06004703649930615,
+              0,
+              0,
+              0.9981955486815451
+            ],
+            "p": [
+              0.050000011920928955,
+              -0.4399999976158142,
+              0.030000001192092896
+            ],
+            "world": [
+              0.301139144696008,
+              0.18799301458060952,
+              3.149361292833578
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "gather",
+      "before": {
+        "status": "ready",
+        "asset": {
+          "character": "Luke",
+          "url": "/assets/models/player/luke-player-v1.glb",
+          "triangles": 4754,
+          "materials": 1,
+          "bones": 17,
+          "bytes": 244360
+        },
+        "animation": {
+          "mode": "procedural",
+          "status": "procedural",
+          "requestedMode": "procedural",
+          "active": false,
+          "weight": 0,
+          "owner": "luke-procedural",
+          "action": "move",
+          "handoffRemaining": 0,
+          "hybridWeight": 0,
+          "footCorrection": false
+        },
+        "action": "move",
+        "charge": false,
+        "progress": 0,
+        "position": [
+          0.1520140617778275,
+          0,
+          1.8355071589372256
+        ],
+        "speed": 3.3791600131243746,
+        "ballMode": "dribble",
+        "ball": [
+          0.5826293665312626,
+          0.9199185156577344,
+          1.7067808628198193
+        ],
+        "hand": [
+          0.6376324740436381,
+          1.2396717528268317,
+          1.6406360280110843
+        ],
+        "score": 0,
+        "yaw": -0.0735,
+        "pitch": -0.178,
+        "coarsePointer": false,
+        "bones": {
+          "root": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0,
+              0
+            ],
+            "world": [
+              0.1520140617778275,
+              0,
+              1.8355071589372256
+            ]
+          },
+          "pelvis": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              1.0756146403666216,
+              0
+            ],
+            "world": [
+              0.1520140617778275,
+              1.0756146403666216,
+              1.8355071589372256
+            ]
+          },
+          "chest": {
+            "q": [
+              0.029992043866020262,
+              -0.015173542234556029,
+              -0.00045534287809698436,
+              0.9994348570985796
+            ],
+            "p": [
+              0,
+              0.36999988555908203,
+              0.014999999664723873
+            ],
+            "world": [
+              0.1509127394894865,
+              1.4456145259257036,
+              1.8504666736071245
+            ]
+          },
+          "left_upper_arm": {
+            "q": [
+              -0.015018993665338263,
+              0.06690830482837833,
+              0.3119271351791515,
+              0.9476281817850296
+            ],
+            "p": [
+              -0.23999999463558197,
+              0.20500004291534424,
+              0.03500000014901161
+            ],
+            "world": [
+              -0.09232133793494166,
+              1.648584788610608,
+              1.87260873936241
+            ]
+          },
+          "left_forearm": {
+            "q": [
+              -0.22672037966654587,
+              -0.41552202604033756,
+              0.3018114509131685,
+              0.8275561391330976
+            ],
+            "p": [
+              -0.3100000023841858,
+              -0.009999990463256836,
+              0.009999997913837433
+            ],
+            "world": [
+              -0.33536939605241656,
+              1.456256376581827,
+              1.8880173284460728
+            ]
+          },
+          "left_hand": {
+            "q": [
+              0.8888706105713917,
+              0.2562713512430423,
+              -0.05912711607921739,
+              0.375150658187696
+            ],
+            "p": [
+              -0.3349999785423279,
+              -0.019999980926513672,
+              -0.054999999701976776
+            ],
+            "world": [
+              -0.27426816422282185,
+              1.1884193011210566,
+              1.687568019878629
+            ]
+          },
+          "neck": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0.3200000524520874,
+              -0.009999999776482582
+            ],
+            "world": [
+              0.15053920137314583,
+              1.7656381147474929,
+              1.8596751822684852
+            ]
+          },
+          "head": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0.059999942779541016,
+              -0.009999999776482582
+            ],
+            "world": [
+              0.151310351843697,
+              1.826129453710934,
+              1.8533351218240033
+            ]
+          },
+          "right_upper_arm": {
+            "q": [
+              -0.02936683666245537,
+              -0.15605472380654253,
+              -0.2513676745758326,
+              0.9547768347946255
+            ],
+            "p": [
+              0.23999999463558197,
+              0.20500004291534424,
+              0.03500000014901161
+            ],
+            "world": [
+              0.3850945681729554,
+              1.6477110243850788,
+              1.9223408098157035
+            ]
+          },
+          "right_forearm": {
+            "q": [
+              -0.2045508148781976,
+              0.6909462001916269,
+              -0.05257279197856133,
+              0.691367061781943
+            ],
+            "p": [
+              0.3100000023841858,
+              -0.009999990463256836,
+              0.009999997913837433
+            ],
+            "world": [
+              0.6214387212207353,
+              1.4878362486098011,
+              2.044330557895899
+            ]
+          },
+          "right_hand": {
+            "q": [
+              -0.7064244456344627,
+              0.6856148028049898,
+              -0.05298865140939718,
+              -0.16759787470767756
+            ],
+            "p": [
+              0.3349999785423279,
+              -0.019999980926513672,
+              -0.054999999701976776
+            ],
+            "world": [
+              0.636870797618575,
+              1.3527616029852922,
+              1.732614860576846
+            ]
+          },
+          "left_thigh": {
+            "q": [
+              -0.15802086539767457,
+              0,
+              0,
+              0.9874357731513326
+            ],
+            "p": [
+              -0.15000000596046448,
+              -0.019999980926513672,
+              0
+            ],
+            "world": [
+              0.0024189057907493816,
+              1.055614659440108,
+              1.8244939353700247
+            ]
+          },
+          "left_shin": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              -0.04499998688697815,
+              -0.4299999475479126,
+              0.014999999664723873
+            ],
+            "world": [
+              -0.0533584113965447,
+              0.6517704835848714,
+              1.9692306833512143
+            ]
+          },
+          "left_foot": {
+            "q": [
+              0.15802086539767457,
+              0,
+              0,
+              0.9874357731513326
+            ],
+            "p": [
+              -0.050000011920928955,
+              -0.4399999976158142,
+              0.030000001192092896
+            ],
+            "world": [
+              -0.11539770787873073,
+              0.24310673617879175,
+              2.13092504445744
+            ]
+          },
+          "right_thigh": {
+            "q": [
+              0.15802086539767457,
+              0,
+              0,
+              0.9874357731513326
+            ],
+            "p": [
+              0.15000000596046448,
+              -0.019999980926513672,
+              0
+            ],
+            "world": [
+              0.3016092177649056,
+              1.055614659440108,
+              1.8465203825044265
+            ]
+          },
+          "right_shin": {
+            "q": [
+              -0.21517478115125083,
+              0,
+              0,
+              0.9765755544536794
+            ],
+            "p": [
+              0.04499998688697815,
+              -0.4299999475479126,
+              0.014999999664723873
+            ],
+            "world": [
+              0.355293893061983,
+              0.6424083564702516,
+              1.7302084719999204
+            ]
+          },
+          "right_foot": {
+            "q": [
+              0.05815196214776989,
+              0,
+              0,
+              0.9983077427819361
+            ],
+            "p": [
+              0.050000011920928955,
+              -0.4399999976158142,
+              0.030000001192092896
+            ],
+            "world": [
+              0.39922031452123014,
+              0.20886742483836712,
+              1.8145454701862287
+            ]
+          }
+        }
+      },
+      "after": {
+        "status": "ready",
+        "asset": {
+          "character": "Luke",
+          "url": "/assets/models/player/luke-player-v1.glb",
+          "triangles": 4754,
+          "materials": 1,
+          "bones": 17,
+          "bytes": 244360
+        },
+        "animation": {
+          "mode": "procedural",
+          "status": "procedural",
+          "requestedMode": "procedural",
+          "active": false,
+          "weight": 0,
+          "owner": "luke-procedural",
+          "action": "shoot",
+          "handoffRemaining": 0.15166666666666667,
+          "hybridWeight": 0,
+          "footCorrection": false
+        },
+        "action": "shoot",
+        "charge": true,
+        "progress": 0.003717948717948582,
+        "position": [
+          0.1520140617778275,
+          0,
+          1.8355071589372256
+        ],
+        "speed": 3.0070528969310324,
+        "ballMode": "gather",
+        "ball": [
+          0.3985867335089483,
+          1.243076923076923,
+          1.4826588663873297
+        ],
+        "hand": [
+          0.39858673350894785,
+          1.2430769230769225,
+          1.4826588663873292
+        ],
+        "score": 0,
+        "yaw": -0.0735,
+        "pitch": -0.178,
+        "coarsePointer": false,
+        "bones": {
+          "root": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0,
+              0
+            ],
+            "world": [
+              0.1520140617778275,
+              0,
+              1.8355071589372256
+            ]
+          },
+          "pelvis": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              1.0756523574561783,
+              0
+            ],
+            "world": [
+              0.1520140617778275,
+              1.0756523574561783,
+              1.8355071589372256
+            ]
+          },
+          "chest": {
+            "q": [
+              0.0299917132300516,
+              -0.01588268220349297,
+              -0.00047662346172326386,
+              0.9994238392061824
+            ],
+            "p": [
+              0,
+              0.36999988555908203,
+              0.014999999664723873
+            ],
+            "world": [
+              0.15091271823691255,
+              1.4456522430152603,
+              1.8504666720424907
+            ]
+          },
+          "left_upper_arm": {
+            "q": [
+              0.030156387227553573,
+              -0.5342946210787758,
+              0.615637048417092,
+              0.5784555945031229
+            ],
+            "p": [
+              -0.23999999463558197,
+              0.20500004291534424,
+              0.03500000014901161
+            ],
+            "world": [
+              -0.09233528618425796,
+              1.648643010998393,
+              1.8722651006450168
+            ]
+          },
+          "left_forearm": {
+            "q": [
+              -0.2666880721970602,
+              -0.140824819338739,
+              -0.02032874656146334,
+              0.9532222114854789
+            ],
+            "p": [
+              -0.3100000023841858,
+              -0.009999990463256836,
+              0.009999997913837433
+            ],
+            "world": [
+              0.03188800507667726,
+              1.4402536425216679,
+              1.678764593514131
+            ]
+          },
+          "left_hand": {
+            "q": [
+              0.5620315864824208,
+              0.5334469977345667,
+              0.05706110519001317,
+              0.6295226975086161
+            ],
+            "p": [
+              -0.3349999785423279,
+              -0.019999980926513672,
+              -0.054999999701976776
+            ],
+            "world": [
+              0.27392412151197965,
+              1.3180769230769227,
+              1.47348100334123
+            ]
+          },
+          "neck": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0.3200000524520874,
+              -0.009999999776482582
+            ],
+            "world": [
+              0.15055328048873523,
+              1.765675805401267,
+              1.859676660486744
+            ]
+          },
+          "head": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0.059999942779541016,
+              -0.009999999776482582
+            ],
+            "world": [
+              0.1513385534168773,
+              1.8261671179289254,
+              1.8533380814513984
+            ]
+          },
+          "right_upper_arm": {
+            "q": [
+              -0.002326600355516943,
+              0.33325019128371625,
+              -0.5806326445263587,
+              0.7428355329751531
+            ],
+            "p": [
+              0.23999999463558197,
+              0.20500004291534424,
+              0.03500000014901161
+            ],
+            "world": [
+              0.38500954619516314,
+              1.6477284212268908,
+              1.9226740703481335
+            ]
+          },
+          "right_forearm": {
+            "q": [
+              -0.13696590569509176,
+              0.04217448902529618,
+              -0.04125566020037511,
+              0.9888172852726682
+            ],
+            "p": [
+              0.3100000023841858,
+              -0.009999990463256836,
+              0.009999997913837433
+            ],
+            "world": [
+              0.42934500608536186,
+              1.3816289445987597,
+              1.7692940299898894
+            ]
+          },
+          "right_hand": {
+            "q": [
+              -0.8139601238550206,
+              -0.43190426129444026,
+              0.18351931178228423,
+              -0.3424153735634252
+            ],
+            "p": [
+              0.3349999785423279,
+              -0.019999980926513672,
+              -0.054999999701976776
+            ],
+            "world": [
+              0.3930800156812883,
+              1.1180769230769225,
+              1.5574564335855114
+            ]
+          },
+          "left_thigh": {
+            "q": [
+              -0.14976117956012636,
+              0,
+              0,
+              0.9887222001638072
+            ],
+            "p": [
+              -0.15000000596046448,
+              -0.019999980926513672,
+              0
+            ],
+            "world": [
+              0.002418921437087135,
+              1.0556523765296646,
+              1.824493722844272
+            ]
+          },
+          "left_shin": {
+            "q": [
+              -0.00018878452220742476,
+              0,
+              0,
+              0.9999999821802019
+            ],
+            "p": [
+              -0.04499998688697815,
+              -0.4299999475479126,
+              0.014999999664723873
+            ],
+            "world": [
+              -0.05286137186319223,
+              0.6493830259950291,
+              1.9624765394910488
+            ]
+          },
+          "left_foot": {
+            "q": [
+              0.14994783268663203,
+              0,
+              0,
+              0.9886939098996116
+            ],
+            "p": [
+              -0.050000011920928955,
+              -0.4399999976158142,
+              0.030000001192092896
+            ],
+            "world": [
+              -0.11440897791891064,
+              0.23806440927667727,
+              2.1174890773557227
+            ]
+          },
+          "right_thigh": {
+            "q": [
+              0.14994783268663203,
+              0,
+              0,
+              0.9886939098996116
+            ],
+            "p": [
+              0.15000000596046448,
+              -0.019999980926513672,
+              0
+            ],
+            "world": [
+              0.3016092021185679,
+              1.0556523765296646,
+              1.8465205950301793
+            ]
+          },
+          "right_shin": {
+            "q": [
+              -0.20431532868796662,
+              0,
+              0,
+              0.9789051263851508
+            ],
+            "p": [
+              0.04499998688697815,
+              -0.4299999475479126,
+              0.014999999664723873
+            ],
+            "world": [
+              0.35479712228866267,
+              0.6405413946266427,
+              1.7369584138157377
+            ]
+          },
+          "right_foot": {
+            "q": [
+              0.05522061906564308,
+              0,
+              0,
+              0.998474177547926
+            ],
+            "p": [
+              0.050000011920928955,
+              -0.4399999976158142,
+              0.030000001192092896
+            ],
+            "world": [
+              0.3989104459315591,
+              0.20653297761765266,
+              1.818755160744101
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "gather",
+      "before": {
+        "status": "ready",
+        "asset": {
+          "character": "Luke",
+          "url": "/assets/models/player/luke-player-v1.glb",
+          "triangles": 4754,
+          "materials": 1,
+          "bones": 17,
+          "bytes": 244360
+        },
+        "animation": {
+          "mode": "procedural",
+          "status": "procedural",
+          "requestedMode": "procedural",
+          "active": false,
+          "weight": 0,
+          "owner": "luke-procedural",
+          "action": "move",
+          "handoffRemaining": 0,
+          "hybridWeight": 0,
+          "footCorrection": false
+        },
+        "action": "move",
+        "charge": false,
+        "progress": 0,
+        "position": [
+          0.22853959563554657,
+          0,
+          0.796218984145415
+        ],
+        "speed": 3.3799792325622455,
+        "ballMode": "dribble",
+        "ball": [
+          0.6591550471538848,
+          0.1460314711995746,
+          0.6674931789870958
+        ],
+        "hand": [
+          0.714160396666335,
+          1.0043025522183742,
+          0.6013538061216974
+        ],
+        "score": 0,
+        "yaw": -0.0735,
+        "pitch": -0.178,
+        "coarsePointer": false,
+        "bones": {
+          "root": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0,
+              0
+            ],
+            "world": [
+              0.22853959563554657,
+              0,
+              0.796218984145415
+            ]
+          },
+          "pelvis": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              1.0776592815676744,
+              0
+            ],
+            "world": [
+              0.22853959563554657,
+              1.0776592815676744,
+              0.796218984145415
+            ]
+          },
+          "chest": {
+            "q": [
+              0.02999107945806044,
+              0.01716023314207699,
+              0.0005149614919800051,
+              0.999402719811244
+            ],
+            "p": [
+              0,
+              0.36999988555908203,
+              0.014999999664723873
+            ],
+            "world": [
+              0.22743808996809625,
+              1.4476591671267565,
+              0.8111784853137792
+            ]
+          },
+          "left_upper_arm": {
+            "q": [
+              -0.024890033499800412,
+              -0.010372138611687077,
+              0.263546971755381,
+              0.9642696192723108
+            ],
+            "p": [
+              -0.23999999463558197,
+              0.20500004291534424,
+              0.03500000014901161
+            ],
+            "world": [
+              -0.014645197316169173,
+              1.6496987498281668,
+              0.8489369819772711
+            ]
+          },
+          "left_forearm": {
+            "q": [
+              -0.0433865109273671,
+              0.36796743756362066,
+              0.4949146050518879,
+              0.7859879829035215
+            ],
+            "p": [
+              -0.3100000023841858,
+              -0.009999990463256836,
+              0.009999997913837433
+            ],
+            "world": [
+              -0.2761635069275845,
+              1.483061093719673,
+              0.8371020104778353
+            ]
+          },
+          "left_hand": {
+            "q": [
+              0.5395805275017971,
+              -0.24861090267521954,
+              0.2464487232980823,
+              0.7657078425853037
+            ],
+            "p": [
+              -0.3349999785423279,
+              -0.019999980926513672,
+              -0.054999999701976776
+            ],
+            "world": [
+              -0.22353264161309913,
+              1.1884193011210569,
+              0.9985522842408767
+            ]
+          },
+          "neck": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0.3200000524520874,
+              -0.009999999776482582
+            ],
+            "world": [
+              0.22641921020825262,
+              1.7676826788407527,
+              0.8203407666424151
+            ]
+          },
+          "head": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0.059999942779541016,
+              -0.009999999776482582
+            ],
+            "world": [
+              0.22654520963525124,
+              1.8281739406964008,
+              0.8139544928983873
+            ]
+          },
+          "right_upper_arm": {
+            "q": [
+              -0.005033090257402506,
+              0.029418972790585543,
+              -0.4137325706207419,
+              0.9099090899919401
+            ],
+            "p": [
+              0.23999999463558197,
+              0.20500004291534424,
+              0.03500000014901161
+            ],
+            "world": [
+              0.4649845774832305,
+              1.6506868853241914,
+              0.867759638921392
+            ]
+          },
+          "right_forearm": {
+            "q": [
+              -0.16620658718504716,
+              0.18440400623625547,
+              -0.17143428939787278,
+              0.9534048548643776
+            ],
+            "p": [
+              0.3100000023841858,
+              -0.009999990463256836,
+              0.009999997913837433
+            ],
+            "world": [
+              0.66247148676989,
+              1.4115981484811029,
+              0.8561192857946065
+            ]
+          },
+          "right_hand": {
+            "q": [
+              -0.7922065982325974,
+              0.3994358212056294,
+              -0.03777923902063654,
+              -0.4598178547572309
+            ],
+            "p": [
+              0.3349999785423279,
+              -0.019999980926513672,
+              -0.054999999701976776
+            ],
+            "world": [
+              0.7133975927312209,
+              1.1173924023768347,
+              0.6933326293436408
+            ]
+          },
+          "left_thigh": {
+            "q": [
+              0.1785248351220788,
+              0,
+              0,
+              0.9839354060326494
+            ],
+            "p": [
+              -0.15000000596046448,
+              -0.019999980926513672,
+              0
+            ],
+            "world": [
+              0.07894457466382318,
+              1.0576593006411608,
+              0.785203926787007
+            ]
+          },
+          "left_shin": {
+            "q": [
+              -0.24281688937202653,
+              0,
+              0,
+              0.9700721407378387
+            ],
+            "p": [
+              -0.04499998688697815,
+              -0.4299999475479126,
+              0.014999999664723873
+            ],
+            "world": [
+              0.04412804800960264,
+              0.6497988030932538,
+              0.6452482991306416
+            ]
+          },
+          "left_foot": {
+            "q": [
+              0.06573416565410513,
+              0,
+              0,
+              0.9978371708178437
+            ],
+            "p": [
+              -0.050000011920928955,
+              -0.4399999976158142,
+              0.030000001192092896
+            ],
+            "world": [
+              -0.012159606001721703,
+              0.21753678811629323,
+              0.7288021714496102
+            ]
+          },
+          "right_thigh": {
+            "q": [
+              -0.1785248351220788,
+              0,
+              0,
+              0.9839354060326494
+            ],
+            "p": [
+              0.15000000596046448,
+              -0.019999980926513672,
+              0
+            ],
+            "world": [
+              0.37813461660727,
+              1.0576593006411608,
+              0.807234041503823
+            ]
+          },
+          "right_shin": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0.04499998688697815,
+              -0.4299999475479126,
+              0.014999999664723873
+            ],
+            "world": [
+              0.4108885567895259,
+              0.6603382172256447,
+              0.975201567463561
+            ]
+          },
+          "right_foot": {
+            "q": [
+              0.1785248351220788,
+              0,
+              0,
+              0.9839354060326494
+            ],
+            "p": [
+              0.050000011920928955,
+              -0.4399999976158142,
+              0.030000001192092896
+            ],
+            "world": [
+              0.44733974500740264,
+              0.25892421698934265,
+              1.1610458852602863
+            ]
+          }
+        }
+      },
+      "after": {
+        "status": "ready",
+        "asset": {
+          "character": "Luke",
+          "url": "/assets/models/player/luke-player-v1.glb",
+          "triangles": 4754,
+          "materials": 1,
+          "bones": 17,
+          "bytes": 244360
+        },
+        "animation": {
+          "mode": "procedural",
+          "status": "procedural",
+          "requestedMode": "procedural",
+          "active": false,
+          "weight": 0,
+          "owner": "luke-procedural",
+          "action": "shoot",
+          "handoffRemaining": 0.15166666666666667,
+          "hybridWeight": 0,
+          "footCorrection": false
+        },
+        "action": "shoot",
+        "charge": true,
+        "progress": 0.003717948717948582,
+        "position": [
+          0.22853959563554657,
+          0,
+          0.796218984145415
+        ],
+        "speed": 3.0077819053752326,
+        "ballMode": "gather",
+        "ball": [
+          0.4751160967257205,
+          1.243076923076923,
+          0.4433733676073497
+        ],
+        "hand": [
+          0.4751160967257212,
+          1.2430769230769232,
+          0.44337336760734997
+        ],
+        "score": 0,
+        "yaw": -0.0735,
+        "pitch": -0.178,
+        "coarsePointer": false,
+        "bones": {
+          "root": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0,
+              0
+            ],
+            "world": [
+              0.22853959563554657,
+              0,
+              0.796218984145415
+            ]
+          },
+          "pelvis": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              1.07767142655622,
+              0
+            ],
+            "world": [
+              0.22853959563554657,
+              1.07767142655622,
+              0.796218984145415
+            ]
+          },
+          "chest": {
+            "q": [
+              0.029990959076035478,
+              0.01739229294626649,
+              0.0005219253753960755,
+              0.999398708280971
+            ],
+            "p": [
+              0,
+              0.36999988555908203,
+              0.014999999664723873
+            ],
+            "world": [
+              0.2274380897428717,
+              1.447671312115302,
+              0.8111784852971954
+            ]
+          },
+          "left_upper_arm": {
+            "q": [
+              0.011747061499400075,
+              -0.6056774801069197,
+              0.5918403970842859,
+              0.5317346528265537
+            ],
+            "p": [
+              -0.23999999463558197,
+              0.20500004291534424,
+              0.03500000014901161
+            ],
+            "world": [
+              -0.014633279729462711,
+              1.6497042491785339,
+              0.8490487830804968
+            ]
+          },
+          "left_forearm": {
+            "q": [
+              -0.19087378137601224,
+              -0.04806210524878421,
+              -0.01798635439177707,
+              0.980272270687063
+            ],
+            "p": [
+              -0.3100000023841858,
+              -0.009999990463256836,
+              0.009999997913837433
+            ],
+            "world": [
+              0.1283898081317498,
+              1.4610000263929095,
+              0.6484618595604068
+            ]
+          },
+          "left_hand": {
+            "q": [
+              0.5399819980664868,
+              0.5015469241530948,
+              0.06037766583491,
+              0.6732196239749866
+            ],
+            "p": [
+              -0.3349999785423279,
+              -0.019999980926513672,
+              -0.054999999701976776
+            ],
+            "world": [
+              0.35045358434112595,
+              1.318076923076923,
+              0.4341941516298874
+            ]
+          },
+          "neck": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0.3200000524520874,
+              -0.009999999776482582
+            ],
+            "world": [
+              0.22641456940595553,
+              1.767694814204508,
+              0.8203405855776066
+            ]
+          },
+          "head": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0.059999942779541016,
+              -0.009999999776482582
+            ],
+            "world": [
+              0.22653592848997475,
+              1.8281860664353657,
+              0.8139541308025909
+            ]
+          },
+          "right_upper_arm": {
+            "q": [
+              0.015271703095462441,
+              0.2697369978750875,
+              -0.5794641762906285,
+              0.7689148167760339
+            ],
+            "p": [
+              0.23999999463558197,
+              0.20500004291534424,
+              0.03500000014901161
+            ],
+            "world": [
+              0.4650051411004982,
+              1.6507057433244494,
+              0.8676491049469215
+            ]
+          },
+          "right_forearm": {
+            "q": [
+              -0.1643926921665186,
+              0.0938837217167808,
+              -0.06478925116724309,
+              0.9797771391964798
+            ],
+            "p": [
+              0.3100000023841858,
+              -0.009999990463256836,
+              0.009999997913837433
+            ],
+            "world": [
+              0.5226141430909161,
+              1.3783349300875587,
+              0.7305529918288614
+            ]
+          },
+          "right_hand": {
+            "q": [
+              -0.8126222948909609,
+              -0.43887577689653884,
+              0.15978991187801578,
+              -0.34856884881128364
+            ],
+            "p": [
+              0.3349999785423279,
+              -0.019999980926513672,
+              -0.054999999701976776
+            ],
+            "world": [
+              0.4696085671392439,
+              1.1180769230769232,
+              0.5181708750381064
+            ]
+          },
+          "left_thigh": {
+            "q": [
+              0.1694120924985483,
+              0,
+              0,
+              0.9855453023150499
+            ],
+            "p": [
+              -0.15000000596046448,
+              -0.019999980926513672,
+              0
+            ],
+            "world": [
+              0.07894457482966172,
+              1.0576714456297063,
+              0.7852039245347613
+            ]
+          },
+          "left_shin": {
+            "q": [
+              -0.2305890207165805,
+              0,
+              0,
+              0.9730512337615982
+            ],
+            "p": [
+              -0.04499998688697815,
+              -0.4299999475479126,
+              0.014999999664723873
+            ],
+            "world": [
+              0.043572037478852195,
+              0.6473449895183079,
+              0.6527994808124915
+            ]
+          },
+          "left_foot": {
+            "q": [
+              0.062409280512807204,
+              0,
+              0,
+              0.9980506408523937
+            ],
+            "p": [
+              -0.050000011920928955,
+              -0.4399999976158142,
+              0.030000001192092896
+            ],
+            "world": [
+              -0.012503960994555918,
+              0.21450977747591432,
+              0.7334788510192651
+            ]
+          },
+          "right_thigh": {
+            "q": [
+              -0.16922603343467588,
+              0,
+              0,
+              0.9855772671931743
+            ],
+            "p": [
+              0.15000000596046448,
+              -0.019999980926513672,
+              0
+            ],
+            "world": [
+              0.3781346164414314,
+              1.0576714456297063,
+              0.8072340437560688
+            ]
+          },
+          "right_shin": {
+            "q": [
+              -0.00018878452220742476,
+              0,
+              0,
+              0.9999999821802019
+            ],
+            "p": [
+              0.04499998688697815,
+              -0.4299999475479126,
+              0.014999999664723873
+            ],
+            "world": [
+              0.4114416968222759,
+              0.6573032622500312,
+              0.9676893641251372
+            ]
+          },
+          "right_foot": {
+            "q": [
+              0.1694120924985483,
+              0,
+              0,
+              0.9855453023150499
+            ],
+            "p": [
+              0.050000011920928955,
+              -0.4399999976158142,
+              0.030000001192092896
+            ],
+            "world": [
+              0.4484407082179207,
+              0.2525774645220342,
+              1.1460936829481874
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "Luke before first gather",
+      "snapshot": {
+        "model": {
+          "triangles": 4754,
+          "materials": 1,
+          "bones": 17,
+          "bytes": 244360
+        },
+        "status": "ready",
+        "animation": {
+          "mode": "procedural",
+          "status": "procedural",
+          "active": false,
+          "weight": 0
+        },
+        "action": "shoot",
+        "progress": 0.003717948717948988,
+        "speed": 2.9626966841915023,
+        "ballMode": "gather",
+        "ball": [
+          0.22,
+          1.2430769230769232,
+          2.610801930804997
+        ],
+        "root": [
+          0,
+          0,
+          2.980801930804997
+        ],
+        "bones": {
+          "pelvis": {
+            "position": [
+              0,
+              1.0714742836941635,
+              0
+            ],
+            "rotation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "world": [
+              0,
+              1.0714742836941635,
+              2.980801930804997
+            ]
+          },
+          "left_thigh": {
+            "position": [
+              -0.15000000596046448,
+              -0.019999980926513672,
+              0
+            ],
+            "rotation": [
+              -0.0018123338017703133,
+              0,
+              0,
+              0.9999983577217469
+            ],
+            "world": [
+              -0.15000000596046448,
+              1.0514743027676499,
+              2.980801930804997
+            ]
+          },
+          "left_shin": {
+            "position": [
+              -0.04499998688697815,
+              -0.4299999475479126,
+              0.014999999664723873
+            ],
+            "rotation": [
+              0.003624661650827847,
+              0,
+              0,
+              0.9999934308923819
+            ],
+            "world": [
+              -0.19499999284744263,
+              0.6215315498592157,
+              2.9973604362528437
+            ]
+          },
+          "left_foot": {
+            "position": [
+              -0.050000011920928955,
+              -0.4399999976158142,
+              0.030000001192092896
+            ],
+            "rotation": [
+              -0.0018123338017703133,
+              0,
+              0,
+              0.9999983577217469
+            ],
+            "world": [
+              -0.24500000476837158,
+              0.18142570279689196,
+              3.0257653892539778
+            ]
+          },
+          "right_thigh": {
+            "position": [
+              0.15000000596046448,
+              -0.019999980926513672,
+              0
+            ],
+            "rotation": [
+              -0.0018123338017703133,
+              0,
+              0,
+              0.9999983577217469
+            ],
+            "world": [
+              0.15000000596046448,
+              1.0514743027676499,
+              2.980801930804997
+            ]
+          },
+          "right_shin": {
+            "position": [
+              0.04499998688697815,
+              -0.4299999475479126,
+              0.014999999664723873
+            ],
+            "rotation": [
+              0.003624661650827847,
+              0,
+              0,
+              0.9999934308923819
+            ],
+            "world": [
+              0.19499999284744263,
+              0.6215315498592157,
+              2.9973604362528437
+            ]
+          },
+          "right_foot": {
+            "position": [
+              0.050000011920928955,
+              -0.4399999976158142,
+              0.030000001192092896
+            ],
+            "rotation": [
+              -0.0018123338017703133,
+              0,
+              0,
+              0.9999983577217469
+            ],
+            "world": [
+              0.24500000476837158,
+              0.18142570279689196,
+              3.0257653892539778
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "Luke after first gather",
+      "snapshot": {
+        "status": "ready",
+        "asset": {
+          "character": "Luke",
+          "url": "/assets/models/player/luke-player-v1.glb",
+          "triangles": 4754,
+          "materials": 1,
+          "bones": 17,
+          "bytes": 244360
+        },
+        "animation": {
+          "mode": "procedural",
+          "status": "procedural",
+          "requestedMode": "procedural",
+          "active": false,
+          "weight": 0,
+          "owner": "luke-procedural",
+          "action": "shoot",
+          "handoffRemaining": 0.15166666666666667,
+          "hybridWeight": 0,
+          "footCorrection": false
+        },
+        "action": "shoot",
+        "charge": true,
+        "progress": 0.003717948717948582,
+        "position": [
+          0,
+          0,
+          2.980801930804997
+        ],
+        "speed": 2.9626966841915023,
+        "ballMode": "gather",
+        "ball": [
+          0.22,
+          1.243076923076923,
+          2.610801930804997
+        ],
+        "hand": [
+          0.21999999999999986,
+          1.243076923076923,
+          2.610801930804997
+        ],
+        "score": 0,
+        "yaw": 0,
+        "pitch": -0.16,
+        "coarsePointer": false,
+        "bones": {
+          "root": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0,
+              0
+            ],
+            "world": [
+              0,
+              0,
+              2.980801930804997
+            ]
+          },
+          "pelvis": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              1.0663496894317437,
+              0
+            ],
+            "world": [
+              0,
+              1.0663496894317437,
+              2.980801930804997
+            ]
+          },
+          "chest": {
+            "q": [
+              0.029994653244383707,
+              0.007511373920417388,
+              0.0002254088443235257,
+              0.9995218102820117
+            ],
+            "p": [
+              0,
+              0.36999988555908203,
+              0.014999999664723873
+            ],
+            "world": [
+              0,
+              1.4363495749908257,
+              2.995801930469721
+            ]
+          },
+          "left_upper_arm": {
+            "q": [
+              0.01607631948471553,
+              -0.570778225479053,
+              0.597740121904762,
+              0.5627259687770674
+            ],
+            "p": [
+              -0.23999999463558197,
+              0.20500004291534424,
+              0.03500000014901161
+            ],
+            "world": [
+              -0.2394468702729215,
+              1.6386659363091114,
+              3.046628117521621
+            ]
+          },
+          "left_forearm": {
+            "q": [
+              -0.24983309622638095,
+              -0.1277462585311134,
+              -0.022327354352202844,
+              0.9595654259657719
+            ],
+            "p": [
+              -0.3100000023841858,
+              -0.009999990463256836,
+              0.009999997913837433
+            ],
+            "world": [
+              -0.12820067361420184,
+              1.4381318539978831,
+              2.837557873808413
+            ]
+          },
+          "left_hand": {
+            "q": [
+              0.562335310936913,
+              0.5365819450993684,
+              0.06891969519702423,
+              0.6253869920943457
+            ],
+            "p": [
+              -0.3349999785423279,
+              -0.019999980926513672,
+              -0.054999999701976776
+            ],
+            "world": [
+              0.09500000000000008,
+              1.318076923076923,
+              2.610801930804997
+            ]
+          },
+          "neck": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0.3200000524520874,
+              -0.009999999776482582
+            ],
+            "world": [
+              -0.00015029085901602503,
+              1.7563733724539814,
+              3.005009537910699
+            ]
+          },
+          "head": {
+            "q": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "p": [
+              0,
+              0.059999942779541016,
+              -0.009999999776482582
+            ],
+            "world": [
+              -0.0003005817180320501,
+              1.816864920058789,
+              2.998626497090616
+            ]
+          },
+          "right_upper_arm": {
+            "q": [
+              0.008187121804450725,
+              0.2667146228295723,
+              -0.5651073349987625,
+              0.7806727745579671
+            ],
+            "p": [
+              0.23999999463558197,
+              0.20500004291534424,
+              0.03500000014901161
+            ],
+            "world": [
+              0.24049890631402754,
+              1.6390985143272156,
+              3.039427137523999
+            ]
+          },
+          "right_forearm": {
+            "q": [
+              -0.181095501034135,
+              0.139348272905218,
+              -0.08158253018311787,
+              0.9701189458579034
+            ],
+            "p": [
+              0.3100000023841858,
+              -0.009999990463256836,
+              0.009999997913837433
+            ],
+            "world": [
+              0.3017861764931608,
+              1.367960378589006,
+              2.9014851819479843
+            ]
+          },
+          "right_hand": {
+            "q": [
+              -0.824741892596021,
+              -0.42980601833265536,
+              0.12860964569120753,
+              -0.34427773125391775
+            ],
+            "p": [
+              0.3349999785423279,
+              -0.019999980926513672,
+              -0.054999999701976776
+            ],
+            "world": [
+              0.21999999999999983,
+              1.118076923076923,
+              2.685801930804997
+            ]
+          },
+          "left_thigh": {
+            "q": [
+              0.06004703649930615,
+              0,
+              0,
+              0.9981955486815451
+            ],
+            "p": [
+              -0.15000000596046448,
+              -0.019999980926513672,
+              0
+            ],
+            "world": [
+              -0.15000000596046448,
+              1.04634970850523,
+              2.980801930804997
+            ]
+          },
+          "left_shin": {
+            "q": [
+              -0.08269785670261103,
+              0,
+              0,
+              0.996574665791176
+            ],
+            "p": [
+              -0.04499998688697815,
+              -0.4299999475479126,
+              0.014999999664723873
+            ],
+            "world": [
+              -0.19499999284744263,
+              0.6176524561523284,
+              2.9441464986533785
+            ]
+          },
+          "left_foot": {
+            "q": [
+              0.02270735606704369,
+              0,
+              0,
+              0.9997421547481354
+            ],
+            "p": [
+              -0.050000011920928955,
+              -0.4399999976158142,
+              0.030000001192092896
+            ],
+            "world": [
+              -0.24500000476837158,
+              0.17946828990160846,
+              2.994092814039035
+            ]
+          },
+          "right_thigh": {
+            "q": [
+              -0.05985859120914742,
+              0,
+              0,
+              0.99820686686601
+            ],
+            "p": [
+              0.15000000596046448,
+              -0.019999980926513672,
+              0
+            ],
+            "world": [
+              0.15000000596046448,
+              1.04634970850523,
+              2.980801930804997
+            ]
+          },
+          "right_shin": {
+            "q": [
+              -0.00018878452220742476,
+              0,
+              0,
+              0.9999999821802019
+            ],
+            "p": [
+              0.04499998688697815,
+              -0.4299999475479126,
+              0.014999999664723873
+            ],
+            "world": [
+              0.19499999284744263,
+              0.6212237220546787,
+              3.0470805135115917
+            ]
+          },
+          "right_foot": {
+            "q": [
+              0.06004703649930615,
+              0,
+              0,
+              0.9981955486815451
+            ],
+            "p": [
+              0.050000011920928955,
+              -0.4399999976158142,
+              0.030000001192092896
+            ],
+            "world": [
+              0.24500000476837158,
+              0.18799301458060952,
+              3.1296102177092897
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "pass": true
+}

@@ -15,7 +15,9 @@
     "assets:build:shoes": "node scripts/build-shoe-audio.mjs",
     "assets:check": "node scripts/validate-assets.mjs",
     "assets:optimize:texture": "node scripts/prepare-texture.mjs",
-    "test:audio": "node --test tests/audio.test.mjs"
+    "test:audio": "node --test tests/audio.test.mjs",
+    "rig:check": "node scripts/validate-luke-rig.mjs",
+    "test:rig": "node --test tests/luke-rig.test.mjs"
   },
   "dependencies": {
     "three": "^0.183.0"

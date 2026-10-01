@@ -17,12 +17,6 @@ const meterTrack = shotMeter.querySelector('.shot-meter__track');
 const meterFill = shotMeter.querySelector('i');
 const meterNeedle = shotMeter.querySelector('b');
 const meterDebug = new URLSearchParams(window.location.search).has('meterDebug');
-const motionCredits = document.querySelector('#motionCredits');
-if (new URLSearchParams(window.location.search).get('animation') === 'hybrid' &&
-    new URLSearchParams(window.location.search).get('player') !== 'luke') {
-  motionCredits.href = import.meta.env.BASE_URL + 'assets/models/player/cmu-motion-terms.txt';
-  motionCredits.hidden = false;
-}
 let meterTrackWidth = 0;
 
 const renderer = new THREE.WebGLRenderer({
@@ -50,6 +44,22 @@ scene.add(arena.group);
 
 const player = createPlayer(THREE);
 scene.add(player.group);
+startButton.disabled = true;
+startButton.setAttribute('aria-live', 'polite');
+startButton.querySelector('span').textContent = 'LOADING LUKE…';
+startButton.querySelector('small').textContent = 'Preparing the playable character';
+player.group.userData.assetReady.then(status => {
+  if (status === 'ready') {
+    startButton.disabled = false;
+    startButton.querySelector('span').textContent = 'TAP OR CLICK TO PLAY';
+    startButton.querySelector('small').textContent = 'PS2-era basketball vertical slice';
+  } else {
+    startButton.classList.add('has-load-error');
+    startButton.querySelector('span').textContent = 'CHARACTER LOAD FAILED';
+    startButton.querySelector('strong').textContent = 'LUKE UNAVAILABLE';
+    startButton.querySelector('small').textContent = player.group.userData.assetError;
+  }
+});
 
 const audio = new AudioDirector({ volume: 0.46 });
 const clock = new THREE.Clock();
@@ -285,6 +295,7 @@ function updateBallRotation(dt) {
 }
 
 function resetPossession(keepScore = true) {
+  player.resetPose();
   game.charge.active = false;
   game.charge.value = 0;
   game.charge.pressTime = 0;
@@ -781,6 +792,7 @@ function render() {
 }
 
 function unlockAndStart() {
+  if (player.group.userData.assetStatus !== 'ready') return;
   game.started = true;
   audio.unlock();
   startButton.classList.add('is-hidden');

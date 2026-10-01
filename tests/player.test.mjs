@@ -4,11 +4,11 @@ import sharp from 'sharp';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { createPoseAdapter } from '../src/player-pose.js';
-import { createPlayer as createProceduralPlayer } from '../src/player-procedural.js';
+import { validateLukeRig } from '../src/luke-rig-contract.js';
 
 // Offline contract/deformation checks on the actual shipped binary. Image
 // decoding is tested separately; remove textures only for Node's scene parser.
-const path = process.argv[2] || 'public/assets/models/player/fictional-player-v2.glb';
+const path = process.argv[2] || 'public/assets/models/player/luke-player-v1.glb';
 const data = await readFile(path);
 assert.equal(data.toString('ascii',0,4),'glTF');assert.equal(data.readUInt32LE(8),data.length);
 assert.ok(data.length<=800000);
@@ -29,6 +29,7 @@ globalThis.ProgressEvent ||= class { constructor(type,init){Object.assign(this,{
 const gltf=await new GLTFLoader().parseAsync(JSON.stringify(parseDoc),'');
 const bones=new Map();let mesh;
 gltf.scene.traverse(n=>{if(n.isBone)bones.set(n.name,n);if(n.isSkinnedMesh)mesh=n;});
+validateLukeRig(THREE,gltf.scene,bones,[mesh]);
 const geometry=mesh.geometry, pos=geometry.attributes.position;
 assert.ok(geometry.index.count/3<=6000);
 const bindBounds=new THREE.Box3().setFromObject(gltf.scene);
@@ -47,16 +48,12 @@ for(let i=0;i<pos.count;i++){
 assert.ok(maxInfluences<=4);assert.ok(maxBindError<1e-6);
 const anchors=Object.fromEntries(['rightHand','leftHand','chest','head'].map(n=>[n,new THREE.Object3D()]));
 const pose=createPoseAdapter(THREE,gltf.scene,bones,anchors);
-const procedural=createProceduralPlayer(THREE);
 const rootTransform=gltf.scene.position.clone();
 let maxGatherError=0,minPoseY=Infinity,maxPoseRadius=0,minGameFloorY=Infinity,maxDunkGripError=0;
 const minYByAction={};
-const originalHandDeltaByAction={};
 for(const action of ['idle','move','shoot','layup','dunk'])for(let f=0;f<=60;f++){
  const progress=f/60;
  pose.update(1/60,{action,speed:action==='move'?5.45:0,shotProgress:progress,dribblePhase:f*.2});
- procedural.update(1/60,{action,speed:action==='move'?5.45:0,shotProgress:progress,dribblePhase:f*.2});
- originalHandDeltaByAction[action]=Math.max(originalHandDeltaByAction[action]||0,anchors.rightHand.position.distanceTo(procedural.getRightHandWorldPosition()));
  gltf.scene.updateMatrixWorld(true);mesh.skeleton.update();
  assert.ok(gltf.scene.position.equals(rootTransform));
  if(action==='shoot'&&progress<=.58){const ball=new THREE.Vector3(.22,1.24+progress/.58*.48,-.37);maxGatherError=Math.max(maxGatherError,anchors.rightHand.position.distanceTo(ball),anchors.leftHand.position.distanceTo(ball));}
@@ -74,4 +71,4 @@ for(const action of ['idle','move','shoot','layup','dunk'])for(let f=0;f<=60;f++
 assert.ok(maxGatherError<.006,`gather error ${maxGatherError}`);
 assert.ok(minGameFloorY>-.005,`floor penetration ${minGameFloorY}`);
 assert.ok(maxDunkGripError<.015,`dunk grip ${maxDunkGripError}`);
-console.log(JSON.stringify({pass:true,bytes:data.length,triangles:geometry.index.count/3,vertices:pos.count,bones:bones.size,materials:1,maxInfluences,maxBindError,maxGatherError,maxDunkGripError,minGameFloorY,minPoseY,minYByAction,originalHandDeltaByAction,maxPoseRadius,poses:305},null,2));
+console.log(JSON.stringify({pass:true,character:'Luke',bytes:data.length,triangles:geometry.index.count/3,vertices:pos.count,bones:bones.size,materials:1,maxInfluences,maxBindError,maxGatherError,maxDunkGripError,minGameFloorY,minPoseY,minYByAction,maxPoseRadius,poses:305},null,2));

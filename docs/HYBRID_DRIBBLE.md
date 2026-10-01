@@ -1,5 +1,11 @@
 # Hybrid forward-dribble experiment
 
+> Historical, superseded by Luke Part 1. The URLs, old-model fallback claims,
+> scripts, clip paths and measurements below describe the previous build.
+> Neither the old player nor this incompatible companion is shipped or loaded.
+> Luke-specific animation is pending Part 2; this record is retained for source
+> terms, audit and comparison only. See [Luke's contract](PLAYER_ASSET.md).
+
 Use [the opt-in preview](https://vindigit.github.io/TheArena/?animation=hybrid), or
 `http://127.0.0.1:5174/?animation=hybrid` when Vite uses port 5174. The ordinary URL
 keeps the accepted fictional v2 player's procedural animation.

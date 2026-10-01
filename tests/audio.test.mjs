@@ -278,7 +278,7 @@ test('dispose stops and disconnects the ambience source without closing an exter
 });
 
 test('main starts audio from desktop, touch-compatible click, and keyboard paths then disposes it', () => {
-  assert.match(mainSource, /function unlockAndStart\(\) \{\s*game\.started = true;\s*audio\.unlock\(\);/);
+  assert.match(mainSource, /function unlockAndStart\(\) \{\s*if \(player\.group\.userData\.assetStatus !== 'ready'\) return;\s*game\.started = true;\s*audio\.unlock\(\);/);
   assert.match(mainSource, /startButton\.addEventListener\('click', unlockAndStart\);/);
   assert.match(mainSource, /canvas\.addEventListener\('click', \(\) => \{\s*if \(!game\.started\) \{\s*unlockAndStart\(\);/);
   assert.match(mainSource, /window\.addEventListener\('keydown',[\s\S]*?unlockAndStart\(\);/);
@@ -593,7 +593,7 @@ test('main calls the dunk cue only from the established release event and preser
   assert.match(mainSource, /const releaseAt = p\.action === 'dunk' \? 0\.57 : 0\.59;/);
   assert.match(mainSource, /if \(!p\.finishReleased && p\.actionProgress >= releaseAt\) releaseFinish\(\);/);
   assert.match(mainSource, /audio\.score\(ball\.finishKind === 'DUNK' \? 1 : 0\.78\);/);
-  assert.match(mainSource, /function unlockAndStart\(\) \{\s*game\.started = true;\s*audio\.unlock\(\);/);
+  assert.match(mainSource, /function unlockAndStart\(\) \{\s*if \(player\.group\.userData\.assetStatus !== 'ready'\) return;\s*game\.started = true;\s*audio\.unlock\(\);/);
   assert.equal((mainSource.match(/audio\.dunk\(/g) ?? []).length, 1);
 });
 

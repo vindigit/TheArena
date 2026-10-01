@@ -73,10 +73,14 @@ kbd { padding: 2px 4px; border: 1px solid #718697; border-bottom-width: 2px; bor
 .start-card small { margin-top: 8px; color: #b9c7d3; font-size: 10px; }
 .start-card:hover { background: #182a43; transform: translate(-50%, -50%) translate(-2px, -2px); }
 .start-card.is-hidden { display: none; }
+.start-card:disabled { cursor: wait; }
+.start-card:disabled:hover { transform: translate(-50%, -50%); background: rgba(10, 19, 31, .93); }
+.start-card.has-load-error { cursor: default; }
+.start-card.has-load-error span { color: #ff8964; }
+.start-card.has-load-error strong { font-size: clamp(27px, 5vw, 48px); line-height: .95; }
+.start-card.has-load-error small { max-width: 35em; line-height: 1.5; letter-spacing: .04em; }
 
 .touch-controls { display: none; }
-.motion-credits { position: fixed; z-index: 5; top: 94px; left: 16px; color: #c6bdb1; font: 10px/1.2 "DM Mono", monospace; }
-.motion-credits[hidden] { display: none; }
 
 @media (any-pointer: coarse) {
   .touch-controls {

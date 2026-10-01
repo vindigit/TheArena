@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
 import { createHash } from 'node:crypto';
-import { readFile, realpath, stat } from 'node:fs/promises';
+import { readFile, realpath, stat, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Ajv from 'ajv';
 import sharp from 'sharp';
+import { checkLukeRig } from './validate-luke-rig.mjs';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const publicRoot = path.join(projectRoot, 'public');
@@ -187,6 +188,15 @@ async function checkManifest() {
   }
 
   if (errors.length) throw new Error(`asset validation failed:\n  ${errors.join('\n  ')}`);
+  const playerFiles = (await readdir(path.join(publicRoot, 'assets', 'models', 'player'))).filter(name => name.endsWith('.glb'));
+  if (playerFiles.length !== 1 || playerFiles[0] !== 'luke-player-v1.glb') {
+    throw new Error('Only the canonical Luke GLB may be published in the player asset directory');
+  }
+  const playerAssets = manifest.assets.filter(asset => asset.runtime.some(entry => entry.path.startsWith('assets/models/player/')));
+  if (playerAssets.length !== 1 || playerAssets[0].id !== 'luke-player-v1') {
+    throw new Error('Luke must be the only player model in the production inventory');
+  }
+  await checkLukeRig();
   console.log(`Assets valid: ${manifest.assets.filter(a => a.status === 'accepted').length} accepted assets, ${manifest.assets.filter(a => a.status === 'preview').length} preview assets, ${fileCount} runtime files, ${totalBytes} bytes.`);
 }
 

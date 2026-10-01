@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import * as THREE from 'three';
-import { createPlayer } from '../src/player.js';
+import { createPlayerRoot } from '../src/player-root.js';
 import { meterProgress, greenWindow, gradeShot, shotTarget, solveShotArc, sampleShotArc, crossesHoop } from '../src/shooting.js';
 
 // Gameplay landmarks from createArena; Node cannot execute its Vite asset URL.
@@ -11,7 +11,8 @@ const rim = {
   rimRadius: 0.23,
   ballRadius: 0.12,
 };
-const player = createPlayer(THREE);
+// Shot arcs need the authoritative transform, independent of asset loading.
+const player = createPlayerRoot(THREE);
 const radius = rim.ballRadius;
 
 test('meter catches up after a stalled frame and release uses its event time', () => {

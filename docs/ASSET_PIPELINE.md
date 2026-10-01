@@ -1,6 +1,6 @@
 # TheArena asset pipeline
 
-This pipeline replaces original procedural presentation assets one category at a time. Keep the current geometry and synthesized audio available as fallbacks until each replacement passes the checks below. Gameplay timing, collision values, camera, desktop controls, and touch controls remain owned by the existing code.
+This pipeline replaces original procedural presentation assets one category at a time. Keep the current geometry and synthesized audio available as fallbacks until each replacement passes the checks below, except the player: supplied Luke is the sole runtime character and has an explicit load error instead of geometry fallback. Gameplay timing, collision values, camera, desktop controls, and touch controls remain owned by the existing code.
 
 ## Visual target
 
@@ -8,7 +8,7 @@ This pipeline replaces original procedural presentation assets one category at a
 - **Surface detail:** 256–512 px color textures, broad painted color regions, subtle grain and wear, and baked-looking ambient shading. Preserve crisp court lines and ball seams at gameplay distance.
 - **Lighting:** warm pools on the court against cool, dark seating. Keep strong light/dark separation and restrained specular highlights. Check textures under the current arena lights, fog, tone mapping, and low-resolution shadows.
 - **Palette:** parquet amber, worn orange leather, cream markings, muted purple paint and seating, charcoal concrete and metal. Reuse a small set of material colors across categories.
-- **Identity:** fictional uniform and venue graphics only. Use original references with documented rights; no league marks, real teams, real-player likenesses, or borrowed audio.
+- **Identity:** original fictional direction for new assets and venue graphics. The user explicitly requires preserving supplied Luke's existing uniform; its provenance and rights limits remain in the manifest. Do not generate a substitute or alter those graphics as part of rig maintenance.
 - **Presentation check:** inspect the camera view at desktop and narrow touch sizes. A close-up render alone cannot prove that the object reads during play.
 
 ## Existing replacement contracts
@@ -34,7 +34,7 @@ public/assets/
   manifest.schema.json             # manifest validation contract
   models/
     ball/basketball-v1.glb
-    player/fictional-player-v1.glb
+    player/luke-player-v1.glb
     hoop/hoop-assembly-v1.glb
     arena/arena-detail-v1.glb
   textures/
@@ -54,6 +54,8 @@ public/assets/
 ```
 
 These paths describe slots, not a requirement to fill them all at once. Keep generation intermediates, source scans, project files, and rejected outputs outside `public/assets/` and outside commits. Use GLB for meshes, WebP or optimized PNG for color and alpha textures, and compressed MP3 or OGG for audio. Use KTX2 only after confirming a transcoder and fallback path on target browsers. For tiling maps, preserve UV repeat and texture color space; color maps use sRGB and data maps use linear color space.
+
+Luke's maintained editable source is local, ignored `art/source/player/luke-player-v1.blend`, with tracked hashes and export provenance in `art/source/player/README.md` and `docs/rig/luke-source-provenance.json`. `docs/rig/luke-rig-contract.json` is the exact rig target, and `src/luke-rig-contract.js` checks it before runtime posing. The production player asset directory must contain only Luke's GLB. Historical character/CMU provenance is quarantined in `docs/rig/superseded-player-assets.json` and Git history; the former binaries and generator are removed. `scripts/retarget-dribble.py` validates Luke's target and exports no animation in Part 1.
 
 ## Manifest contract
 

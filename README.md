@@ -21,4 +21,6 @@ On a touch screen, use the left stick to move, drag the court to turn the camera
 
 Run npm ci, then npm run dev.
 
-The [asset pipeline](docs/ASSET_PIPELINE.md) records the PS2-era art direction, replacement interfaces, runtime budgets, generation recipes, and acceptance checks. Run `npm run assets:check` before `npm run build` when changing an asset. The first accepted slice is a small court wood texture with procedural plank colors as a load fallback. Other geometry and sounds remain original procedural placeholders; the player and arena contain no NBA marks or real-player likenesses.
+The [asset pipeline](docs/ASSET_PIPELINE.md) records the PS2-era art direction, replacement interfaces, runtime budgets, generation recipes, and acceptance checks. Run `npm run assets:check` and `npm run build` when changing an asset.
+
+The ordinary URL always loads supplied Luke. His uniform and appearance are preserved; model-load failure shows an error. The former player selector and old character fallback are removed. [Luke's rig contract](docs/PLAYER_ASSET.md) describes the canonical asset, editable source, baseline posing and Part 2 animation target. `npm run rig:check` validates its exact rest transforms, inverse bind matrices and skinning. The previous hybrid dribble clip is superseded and is no longer shipped.
