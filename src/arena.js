@@ -1,5 +1,6 @@
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { LOOK } from './look.js';
 
 /**
  * A compact PS2-style basketball arena with an authored shell and fallback.
@@ -9,7 +10,7 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
  * the world origin to use the positions in the returned `hoop` object as
  * world-space gameplay coordinates.
  */
-export function createArena(THREE) {
+export function createArena(THREE, { look = LOOK } = {}) {
   if (!THREE) {
     throw new Error("createArena requires the Three.js namespace.");
   }
@@ -621,18 +622,61 @@ export function createArena(THREE) {
     addBox(22, 0.14, 0.18, materials.darkMetal, V(0, 10.65, z), "ceiling truss");
   }
   const lightPositions = [[-5.2, -3.5], [5.2, -3.5], [-5.2, 4.5], [5.2, 4.5]];
+  const lit = look === 'new';
   lightPositions.forEach(([x, z], index) => {
     addBox(2.2, 0.08, 0.64, materials.light, V(x, 10.52, z), "overhead light housing");
-    const light = new THREE.SpotLight(0xffe8be, 7.5, 23, 0.66, 0.55, 1.45);
+    // Visual pass: brighter pools aimed at the parquet, no shadow maps (the
+    // player key below owns the single shadow).
+    const light = lit ? new THREE.SpotLight(0xfff0d6, 15, 24, 0.6, 0.45, 1.2)
+      : new THREE.SpotLight(0xffe8be, 7.5, 23, 0.66, 0.55, 1.45);
     light.name = `arena spotlight ${index + 1}`;
     light.position.set(x, 10.4, z);
-    light.target.position.set(x * 0.35, 0, z * 0.28);
-    light.castShadow = true;
+    light.target.position.set(x * (lit ? .45 : .35), 0, z * (lit ? .45 : .28));
+    light.castShadow = !lit;
     light.shadow.mapSize.set(512, 512);
     group.add(light, light.target);
   });
-  group.add(new THREE.HemisphereLight(0x6f7dca, 0x16101c, 1.15));
-  group.add(new THREE.AmbientLight(0x1a1f45, 0.72));
+  const lighting = { update() {} };
+  if (lit) {
+    // Soft fill so the side of the player away from the key never crushes.
+    group.add(new THREE.HemisphereLight(0xe6e0d6, 0x4a3626, 0.9));
+    group.add(new THREE.AmbientLight(0x4a4650, 0.55));
+    // Key: above and in front of the player on the camera side. Narrow cone
+    // keeps walls and crowd darker than the court. Sole shadow caster.
+    const key = new THREE.SpotLight(0xfff4e2, 70, 18, 0.42, 0.55, 1.1);
+    key.name = 'player key light';
+    key.castShadow = true;
+    key.shadow.mapSize.set(1024, 1024);
+    key.shadow.camera.near = 3;
+    key.shadow.camera.far = 16;
+    key.shadow.bias = -0.0008;
+    key.shadow.normalBias = 0.02;
+    // Rim: behind the player opposite the camera, lifts his outline off the stands.
+    const rim = new THREE.SpotLight(0xfff3e4, 40, 14, 0.38, 0.6, 1.2);
+    rim.name = 'player rim light';
+    group.add(key, key.target, rim, rim.target);
+    const LIGHTING = {
+      keyHeight: 7.5, keyBack: 4.0, keySide: 1.6, // relative to the camera side of the player
+      rimHeight: 4.2, rimBack: 4.5, rimSide: -1.2, // behind the player, away from camera
+      aimHeight: 1.0,
+    };
+    const toCamera = new THREE.Vector3(), side = new THREE.Vector3();
+    lighting.update = (cameraPosition, focus) => {
+      toCamera.set(cameraPosition.x - focus.x, 0, cameraPosition.z - focus.z);
+      if (toCamera.lengthSq() < 1e-6) toCamera.set(0, 0, 1);
+      toCamera.normalize();
+      side.set(toCamera.z, 0, -toCamera.x);
+      key.position.copy(focus).addScaledVector(toCamera, LIGHTING.keyBack).addScaledVector(side, LIGHTING.keySide);
+      key.position.y = LIGHTING.keyHeight;
+      key.target.position.set(focus.x, LIGHTING.aimHeight, focus.z);
+      rim.position.copy(focus).addScaledVector(toCamera, -LIGHTING.rimBack).addScaledVector(side, LIGHTING.rimSide);
+      rim.position.y = LIGHTING.rimHeight;
+      rim.target.position.set(focus.x, LIGHTING.aimHeight + .4, focus.z);
+    };
+  } else {
+    group.add(new THREE.HemisphereLight(0x6f7dca, 0x16101c, 1.15));
+    group.add(new THREE.AmbientLight(0x1a1f45, 0.72));
+  }
 
   // A small seven-segment shot clock sits just above the backboard.
   const shotClock = new THREE.Group();
@@ -792,7 +836,7 @@ export function createArena(THREE) {
 
   group.userData.court = court;
   group.userData.hoop = hoop;
-  return { group, hoop, court };
+  return { group, hoop, court, lighting };
 }
 
 export default createArena;

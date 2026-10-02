@@ -184,3 +184,16 @@ kbd { padding: 2px 4px; border: 1px solid #718697; border-bottom-width: 2px; bor
   .hud--bottom { bottom: calc(98px + env(safe-area-inset-bottom)); }
   .shot-meter { width: min(220px, 63vw); }
 }
+
+/* Visual pass: in wide views the 3/4 camera puts the player at screen centre,
+   so shot feedback moves up under the scoreboard instead of over him. */
+@media (orientation: landscape) {
+  [data-look="new"] .feedback {
+    position: fixed;
+    top: 24vh;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    white-space: nowrap;
+  }
+}

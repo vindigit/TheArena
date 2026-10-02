@@ -4,9 +4,21 @@ import { createPolishedPoseAdapter as createPoseAdapter } from './polished-pose.
 import {createHandShapeAdapter} from './hand-clearance.js';
 import handShapes from '../art/animation/hand-shapes.json' with {type:'json'};
 import { validateLukeRig } from './luke-rig-contract.js';
+import { LOOK } from './look.js';
 
 export const LUKE_MODEL_URL = (import.meta.env?.BASE_URL || '/') + 'assets/models/player/luke-player-v1.glb';
+export const LUKE_KIT_TEXTURE_URL = (import.meta.env?.BASE_URL || '/') + 'assets/textures/player/luke-kit-green-v1.jpg';
 const requestedAnimation = new URLSearchParams(globalThis.location?.search || '').get('animation');
+
+// Repaint of the same UV atlas (scripts/build-luke-kit-texture.mjs). Only the
+// colour image is swapped; mesh, UVs, skin and material settings are untouched.
+// A missing repaint keeps the embedded uniform rather than blocking play.
+function loadKitTexture(THREE, url) {
+  return new THREE.TextureLoader().loadAsync(url).then(texture => {
+    texture.flipY = false;
+    return texture;
+  });
+}
 
 // Stable collision/facing root and attachment references are independent of
 // Luke's asynchronous visual. The old GLB and old-rig clips have no load path.
@@ -15,6 +27,7 @@ export function createPlayer(THREE, {
   animationMode = requestedAnimation === 'hybrid' ? 'hybrid' : 'luke-motion',
   fetchAsset = (...args) => fetch(...args),
   parseModel = data => new GLTFLoader().parseAsync(data, ''),
+  kitTextureUrl = LOOK === 'old' || typeof document === 'undefined' ? null : LUKE_KIT_TEXTURE_URL,
 } = {}) {
   const root = createPlayerRoot(THREE), { group } = root;
   const anchors = {};
@@ -37,6 +50,8 @@ export function createPlayer(THREE, {
 
   async function loadRig() {
     let visual;
+    const kitRequest = kitTextureUrl ? loadKitTexture(THREE, kitTextureUrl) : null;
+    kitRequest?.catch(() => {});
     try {
       const response = await fetchAsset(modelUrl);
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -86,6 +101,7 @@ export function createPlayer(THREE, {
           gltf.animations.length || meshes.length !== 1 || Math.abs(bounds.min.y) > .005 || size.y < 1.9 || size.y > 2.2)
         throw new Error('Luke asset contract validation failed');
       validateLukeRig(THREE, visual, bones, meshes);
+      if (kitRequest) await applyKitTexture(kitRequest, materials);
       handShapesAdapter=createHandShapeAdapter(THREE,meshes[0],handShapes);
       handShapesAdapter.installMorphs();
       // Polished plants/contact use the authoritative root during the first pose.
@@ -111,6 +127,33 @@ export function createPlayer(THREE, {
       group.userData.assetError = 'Luke could not be loaded. Reload to try again.';
       console.error('Luke asset unavailable; play is blocked.', error);
       return 'error';
+    }
+  }
+
+  async function applyKitTexture(kitRequest, materials) {
+    try {
+      const kit = await kitRequest;
+      for (const material of materials) {
+        const original = material.map;
+        if (kit.image.width !== original.image.width || kit.image.height !== original.image.height)
+          throw new Error('Kit repaint must match the 512px atlas');
+        Object.assign(kit, { magFilter: original.magFilter, minFilter: original.minFilter, wrapS: original.wrapS,
+          wrapT: original.wrapT, colorSpace: original.colorSpace });
+        kit.needsUpdate = true;
+        // glTF gives the emissive slot its own Texture over the same image.
+        const emissive = material.emissiveMap;
+        if (emissive && (emissive === original || emissive.image === original.image)) {
+          if (emissive !== original) emissive.dispose();
+          material.emissiveMap = kit;
+        }
+        material.map = kit;
+        material.needsUpdate = true;
+        original.dispose();
+      }
+      group.userData.kit = 'green';
+    } catch (error) {
+      group.userData.kit = 'original';
+      console.warn('Green kit texture unavailable; keeping the original uniform.', error);
     }
   }
 

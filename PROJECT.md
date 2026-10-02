@@ -17,6 +17,13 @@ The ordinary game URL loads the supplied Luke unconditionally from `public/asset
 
 The exact 17-bone local rest frames, hierarchy, inverse bind matrices, axes and attachment conventions are pinned in [`docs/rig/luke-rig-contract.json`](docs/rig/luke-rig-contract.json). See [`docs/PLAYER_ASSET.md`](docs/PLAYER_ASSET.md) for maintenance and Part 2 handoff. Editable Blender source stays local and ignored under `art/source/player/`; only the canonical GLB is published. `npm run rig:check` checks the actual binary and the same strict contract used at runtime.
 
+### Visual pass (branch `visual-pass`, under review)
+
+- `?look=old` restores the previous straight-behind camera, four-shadow spotlight rig and black embedded uniform; the default URL uses the new look. The switch lives in `src/look.js`.
+- Camera: 3/4 side view at head height framed on the player-to-rim line, held still from gather until the shot resolves. All tuning numbers are in the `CAMERA` block in `src/main.js`.
+- Lighting: a player key light (the only shadow map), soft hemisphere/ambient fill and a rim light from behind, plus brighter, shadowless court pools. See `src/arena.js`.
+- Kit: `public/assets/textures/player/luke-kit-green-v1.jpg` repaints Luke's existing 512² atlas over his unchanged UVs. Regenerate it with `node scripts/build-luke-kit-texture.mjs`. The GLB is untouched. The sponsor/maker/crest marks were recreated at the user's request from a reference image; this does not establish branding rights.
+
 ### Superseded hybrid dribble experiment
 
 The old forward-dribble companion targeted a different rest pose and is removed from production assets and loading paths. `?animation=hybrid` cannot load that clip onto Luke. Luke uses the baseline procedural adapter while Luke-specific animation authoring remains Part 2. [`docs/HYBRID_DRIBBLE.md`](docs/HYBRID_DRIBBLE.md) and the historical validation/provenance remain an audit record; they are not current rig compatibility or animation approval. `scripts/retarget-dribble.py` now validates the Luke target only and exports no clips.

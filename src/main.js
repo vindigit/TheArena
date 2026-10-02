@@ -2,12 +2,14 @@ import './styles.css';
 import * as THREE from 'three';
 import { AudioDirector } from './audio.js';
 import { createArena } from './arena.js';
+import { LOOK } from './look.js';
 import { createPlayer } from './player.js';
 import { createBasketball } from './ball.js';
 import { samplePolished, POLISHED_PACK } from './polished-motion-data.js';
 import { PICKUP_SECONDS, dribbleBallLocal, pickupBallLocal, gatherBallLocal } from './player-ball-presentation.js';
 import { SHOT_GRAVITY, meterProgress, greenWindow, gradeShot, shotTarget, solveShotArc, sampleShotArc, crossesHoop } from './shooting.js';
 
+document.documentElement.dataset.look = LOOK;
 const canvas = document.querySelector('#game');
 const startButton = document.querySelector('#startButton');
 const clockElement = document.querySelector('#clock');
@@ -32,7 +34,7 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 0.92;
+renderer.toneMappingExposure = LOOK === 'old' ? 0.92 : 1.08;
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x07101d);
@@ -97,7 +99,8 @@ const game = {
   score: 0,
   started: false,
   pointerLocked: false,
-  cameraYaw: 0,
+  cameraYaw: 0, // rendered camera heading; movement input stays relative to it
+  cameraLookYaw: 0, // player mouse/drag adjustment on top of the automatic framing
   cameraPitch: -0.16,
   cameraDistance: 6.8,
   feedbackTimer: 0,
@@ -873,19 +876,118 @@ function updateArenaPresentation() {
   });
 }
 
-function updateCamera(dt) {
+// Camera framing settings. Angles in degrees, distances/heights in metres,
+// follow speeds as exponential rates per second (higher = snappier).
+const CAMERA = {
+  sideAngle: 35, // off the player-to-rim line, toward Luke's ball (right) hand
+  height: 2.0, // camera height above the floor, about Luke's head
+  distance: 5.0, // behind the player along that offset line
+  fov: 52,
+  lookHeight: 1.35, // aim height at the player end of the frame
+  rimBias: 0.32, // how far the aim point slides from player toward the rim (0-1)
+  shotRimBias: 0.45, // aim bias held during shots so the arc and rim stay in frame
+  // Tall screens see far less sideways, so they get their own values.
+  portrait: { sideAngle: 26, distance: 6.6, fov: 68, lookHeight: 0.55, rimBias: 0.2, shotRimBias: 0.3 },
+  nearRimBlend: 3.2, // inside this range the rim line eases toward the court axis
+  followSpeed: 7, // position follow while running
+  aimSpeed: 6, // look-at follow
+  yawFollowSpeed: 1.6, // how quickly the side angle re-centres as he moves
+  shotHoldAfter: 0.6, // seconds the shot framing holds after the ball leaves flight
+};
+const cameraState = {
+  initialized: false,
+  autoYaw: 0,
+  hold: null,
+  holdTimer: 0,
+  focus: new THREE.Vector3(),
+  aim: new THREE.Vector3(),
+  desiredAim: new THREE.Vector3(),
+};
+
+function shotFramingActive() {
+  const p = game.player;
+  return game.charge.active || p.action === 'shoot' || p.action === 'layup' || p.action === 'dunk' || game.ball.mode === 'flight';
+}
+
+function rimLineYaw(position) {
+  const rim = arena.hoop.rimCenter;
+  const dx = position.x - rim.x, dz = position.z - rim.z, distance = Math.hypot(dx, dz);
+  // Near the basket the player-rim line is unstable; lean on the court axis.
+  const axis = clamp(1 - distance / CAMERA.nearRimBlend, 0, 1) * CAMERA.nearRimBlend;
+  return Math.atan2(dx, dz + axis);
+}
+
+// Original straight-behind follow camera, kept for ?look=old comparison.
+function updateClassicCamera(dt) {
   const target = temp.cameraTarget.copy(game.player.position);
   target.y += 1.05 + game.player.jumpY * 0.22;
 
   const pitch = game.cameraPitch;
+  const yaw = game.cameraYaw = game.cameraLookYaw;
   const horizontalDistance = game.cameraDistance * Math.cos(pitch);
   temp.cameraDesired.set(
-    target.x + Math.sin(game.cameraYaw) * horizontalDistance,
+    target.x + Math.sin(yaw) * horizontalDistance,
     target.y + 1.25 - Math.sin(pitch) * game.cameraDistance,
-    target.z + Math.cos(game.cameraYaw) * horizontalDistance,
+    target.z + Math.cos(yaw) * horizontalDistance,
   );
   camera.position.lerp(temp.cameraDesired, 1 - Math.exp(-dt * 11));
   camera.lookAt(target);
+}
+
+function updateCamera(dt) {
+  if (LOOK === 'old') { updateClassicCamera(dt); return; }
+  const portrait = camera.aspect < 1;
+  const frame = portrait ? { ...CAMERA, ...CAMERA.portrait } : CAMERA;
+  const fov = frame.fov;
+  if (camera.fov !== fov) { camera.fov = fov; camera.updateProjectionMatrix(); }
+
+  // Hold one framing from gather until the ball is resolved: the jump is not
+  // followed vertically and the rim stays in shot.
+  if (shotFramingActive()) {
+    cameraState.holdTimer = CAMERA.shotHoldAfter;
+    if (!cameraState.hold) cameraState.hold = { focus: game.player.position.clone(), yaw: cameraState.autoYaw };
+  } else if (cameraState.hold && (cameraState.holdTimer -= dt) <= 0) {
+    cameraState.hold = null;
+  }
+
+  const hold = cameraState.hold;
+  const source = hold ? hold.focus : game.player.position;
+  const targetYaw = hold ? hold.yaw : rimLineYaw(source) + THREE.MathUtils.degToRad(frame.sideAngle);
+  if (!cameraState.initialized) {
+    cameraState.autoYaw = targetYaw;
+    cameraState.focus.copy(source);
+  }
+  cameraState.autoYaw = dampAngle(cameraState.autoYaw, targetYaw, CAMERA.yawFollowSpeed, dt);
+  const follow = 1 - Math.exp(-dt * CAMERA.followSpeed);
+  cameraState.focus.lerp(source, follow);
+
+  const yaw = cameraState.autoYaw + game.cameraLookYaw;
+  const zoom = game.cameraDistance / 6.8;
+  const distance = frame.distance * zoom;
+  const lift = (game.cameraPitch + 0.16) * -distance; // mouse/drag tilt
+  temp.cameraDesired.set(
+    cameraState.focus.x + Math.sin(yaw) * distance,
+    Math.max(0.6, CAMERA.height + lift),
+    cameraState.focus.z + Math.cos(yaw) * distance,
+  );
+  const rim = arena.hoop.rimCenter;
+  const bias = hold ? frame.shotRimBias : frame.rimBias;
+  cameraState.desiredAim.set(cameraState.focus.x, frame.lookHeight, cameraState.focus.z)
+    .lerp(temp.cameraTarget.set(rim.x, rim.y, rim.z), bias);
+  // Keep the player end of the frame anchored: aim never rises above the
+  // camera so the floor and his feet stay visible.
+  cameraState.desiredAim.y = Math.min(cameraState.desiredAim.y, temp.cameraDesired.y);
+
+  if (!cameraState.initialized) {
+    camera.position.copy(temp.cameraDesired);
+    cameraState.aim.copy(cameraState.desiredAim);
+    cameraState.initialized = true;
+  }
+  camera.position.lerp(temp.cameraDesired, follow);
+  cameraState.aim.lerp(cameraState.desiredAim, 1 - Math.exp(-dt * CAMERA.aimSpeed));
+  camera.lookAt(cameraState.aim);
+  game.cameraYaw = Math.atan2(camera.position.x - cameraState.aim.x, camera.position.z - cameraState.aim.z);
+  arena.lighting.update(camera.position, cameraState.focus);
 }
 
 function update(dt, now) {
@@ -1002,7 +1104,7 @@ canvas.addEventListener('pointerdown', (event) => {
 });
 canvas.addEventListener('pointermove', (event) => {
   if (event.pointerId !== lookPointer) return;
-  game.cameraYaw -= (event.clientX - lastLookX) * 0.006;
+  game.cameraLookYaw -= (event.clientX - lastLookX) * 0.006;
   game.cameraPitch = clamp(game.cameraPitch - (event.clientY - lastLookY) * 0.004, -0.52, 0.16);
   lastLookX = event.clientX;
   lastLookY = event.clientY;
@@ -1076,7 +1178,7 @@ document.addEventListener('pointerlockchange', () => {
 
 document.addEventListener('mousemove', (event) => {
   if (!game.pointerLocked) return;
-  game.cameraYaw -= event.movementX * 0.00245;
+  game.cameraLookYaw -= event.movementX * 0.00245;
   game.cameraPitch = clamp(game.cameraPitch - event.movementY * 0.0018, -0.52, 0.16);
 });
 
