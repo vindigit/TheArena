@@ -1,10 +1,16 @@
 {
   "schemaVersion": 1,
   "contract": "game-humanoid-v2",
-  "status": "integrated-locally-publication-blocked-on-uniform",
+  "status": "integrated-locally-ready-for-publication-check",
   "builder": "scripts/build-player-v2-rig.py",
   "blender": "5.2.1 LTS",
   "sources": [
+    {
+      "character": "ReplacementBasketballKit",
+      "path": "art/source/player/basketball-jersey-source.glb",
+      "sha256": "6e2eebe0d508f4c9e943e8b9aca2b3ee9246d360cc83e71a6d9222f3c0a12d96",
+      "licenseNote": "User-supplied asset; retained locally and not redistributed as a raw source."
+    },
     {
       "character": "Luke",
       "path": "public/assets/models/player/luke-player-v1.glb",
@@ -22,11 +28,11 @@
   "outputs": [
     {
       "character": "Luke",
-      "blend": "art/source/player/luke-player-v2.blend",
-      "blendSha256": "1227c804193b8d729fed269f4bf405de51865ee40c29ad523d1f0ffa742dc67a",
+      "blend": "art/source/player/luke-player-v2-uniform.blend",
+      "blendSha256": "0ccc586f33793e1948896094fae6e178d03bc1235c42cf626eb57efdd4aeda2d",
       "glb": "art/staging/player/luke-player-preview.glb",
-      "glbSha256": "8477c992d2cd5170e72cba2bd80d5357bf506f14297e9b9ad50092c06c9fd3e4",
-      "textureSha256": "76b9f57505eb021ad085bd143ee9b0edb169239514590c31603c7a521882fae1"
+      "glbSha256": "4c3fda6f26a917f76f84653a164966aebb47595fd5078643d012353cd0619a7e",
+      "textureSha256": "80308401f3ba092430733e2c65e044dd7034d7d8dfb13c143eaecba4d7c00df2"
     },
     {
       "character": "FictionalPlayer",
@@ -38,10 +44,10 @@
     }
   ],
   "appearance": {
-    "jerseyChanged": false,
+    "jerseyChanged": true,
     "uvChanged": false,
-    "sourceTextureBytesPreservedExactly": true,
+    "sourceTextureBytesPreservedExactly": false,
     "externalPreviewShared": false,
-    "jerseyReplacement": "pending user input"
+    "jerseyReplacement": "baked from inspected user-supplied kit onto unchanged Luke geometry"
   }
 }

@@ -34,10 +34,14 @@ influences. The second shoulder pass also draws upper-chest weights into the
 clavicles, reducing the visible armhole separation found in the first arms-up
 render.
 
-Geometry, proportions, UVs, material slots and source image bytes are retained.
-The embedded Luke JPEG and fictional-player PNG hashes exactly match their
-inputs. No jersey texture, branding, color or material was edited. These local
-renders have not been shared externally; jersey replacement remains pending.
+Geometry, proportions, UVs, material count and weights are retained. Luke now
+uses the user-supplied green number-3 kit (crest, sponsor, front/back number and
+shorts mark) baked into the existing single atlas. The supplied model is a
+separate sleeveless jersey-and-shorts display mesh, while Luke's clothing is
+fused into his body mesh and has a short-sleeve yoke. The reproducible fit uses
+front/back projection for matching panels and samples an unbranded green fabric
+region from that same source for Luke-only yoke faces where the supplied model
+has empty background. It does not add garment geometry or change skinning.
 
 Hands retain their existing open/spread modeled shapes with one hand bone per
 side and no finger bones. No new hand blend shapes were fabricated in this
@@ -48,7 +52,7 @@ step.
 | Asset | Bytes | Triangles | Exported vertices | Height | Bones | Max influences | Clips |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | fictional-player-v2 | 586,056 | 4,704 | 3,265 | 2.05 m | 22 | 3 | 0 |
-| luke-player-preview | 248,152 | 4,754 | 3,287 | 2.05 m | 22 | 4 | 0 |
+| luke-player-preview | 376,264 | 4,754 | 3,287 | 2.05 m | 22 | 4 | 0 |
 
 Both have one mesh, one skin and one material, and pass the Step 1 contract.
 
@@ -81,13 +85,13 @@ feet, torso and shoulders. This is compatibility plumbing, not a new motion.
 
 ## Local integration and remaining gate
 
-The local branch now loads Fictional Player v2 by default and Luke v2 with
-`?player=luke`, retaining the legacy GLB as a rollback asset. It adds runtime
+The local branch now loads Luke v2 by default and Fictional Player v2 with
+`?player=fictional`, retaining the legacy GLB as a rollback asset. It adds runtime
 load/fallback tests and CI validation for the 22-bone contract. It does not add
 or select a replacement basketball motion, alter release timing, or change
 gameplay physics ownership.
 
-No deployment or main push was performed. Luke still contains the old branded
-uniform. The authorized Library helper fails on this Windows host at
-`os.setxattr`, so the supplied replacement GLB has not materialized and was not
-silently substituted. Physical-phone comparison remains unperformed.
+The supplied replacement GLB was inspected locally and never uploaded to a
+third-party service. Source and fitted editable files stay ignored; the fitted
+runtime GLB, reproducible scripts and visual evidence are tracked. Physical-phone
+comparison remains unperformed.
