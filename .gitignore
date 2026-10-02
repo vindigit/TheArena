@@ -9,9 +9,6 @@ coverage/
 .tmp/
 art/source/**/*.blend
 art/source/**/*.blend1
-art/source/player/basketball-jersey-source.glb
-art/source/player/luke-player-v2-uniform-atlas.jpg
-art/source/player/uniform-alignment-*.png
 *.log
 .DS_Store
 Thumbs.db

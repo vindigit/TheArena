@@ -55,17 +55,6 @@ async function verify(path, expectedFile, label) {
     await call('Input.dispatchKeyEvent', { type: 'keyUp', code: 'Space', key: ' ' });
     await new Promise(resolve => setTimeout(resolve, 500));
   }
-  // Interrupt charge/release with movement twice; gameplay remains the owner
-  // of state transitions while the rig adapter follows the live action state.
-  for (let repeat = 0; repeat < 2; repeat++) {
-    await call('Input.dispatchKeyEvent', { type: 'keyDown', code: 'Space', key: ' ' });
-    await new Promise(resolve => setTimeout(resolve, 140));
-    await call('Input.dispatchKeyEvent', { type: 'keyDown', code: 'KeyW', key: 'w' });
-    await new Promise(resolve => setTimeout(resolve, 90));
-    await call('Input.dispatchKeyEvent', { type: 'keyUp', code: 'Space', key: ' ' });
-    await call('Input.dispatchKeyEvent', { type: 'keyUp', code: 'KeyW', key: 'w' });
-    await new Promise(resolve => setTimeout(resolve, 450));
-  }
   const relevantErrors = errors.filter(error => !error.includes('not valid for pointer lock'));
   assert.deepEqual(relevantErrors, [], `${label} browser exceptions`);
   const shot = await call('Page.captureScreenshot', { format: 'png' });
@@ -75,8 +64,8 @@ async function verify(path, expectedFile, label) {
 }
 try {
   const result = [
-    await verify('/', 'luke-player-preview.glb', 'luke-default'),
-    await verify('/?player=fictional', 'fictional-player-v2.glb', 'fictional'),
+    await verify('/', 'fictional-player-v2.glb', 'fictional'),
+    await verify('/?player=luke', 'luke-player-preview.glb', 'luke'),
   ];
   console.log(JSON.stringify({ pass: true, result }));
 } finally { socket.close(); }

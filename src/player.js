@@ -60,7 +60,7 @@ export function validateStagedPlayerRigContract({
   return { contract: STAGED_PLAYER_RIG_CONTRACT, bones: normalized, ...STAGED_LIMITS };
 }
 const requestedAnimation = new URLSearchParams(globalThis.location?.search || '').get('animation');
-const requestedPlayer = new URLSearchParams(globalThis.location?.search || '').get('player') === 'fictional' ? 'fictional' : 'luke';
+const requestedPlayer = new URLSearchParams(globalThis.location?.search || '').get('player') === 'luke' ? 'luke' : 'fictional';
 const V2_POSE_ALIASES = Object.freeze({
   root: 'Hips', pelvis: 'Hips', chest: 'Spine2', neck: 'Neck', head: 'Head',
   left_upper_arm: 'LeftArm', left_forearm: 'LeftForeArm', left_hand: 'LeftHand',
