@@ -893,6 +893,7 @@ const CAMERA = {
   aimSpeed: 6, // look-at follow
   yawFollowSpeed: 1.6, // how quickly the side angle re-centres as he moves
   shotHoldAfter: 0.6, // seconds the shot framing holds after the ball leaves flight
+  playerSafeFrame: 0.62, // player never drifts past this share of the half-screen width
 };
 const cameraState = {
   initialized: false,
@@ -932,6 +933,20 @@ function updateClassicCamera(dt) {
   );
   camera.position.lerp(temp.cameraDesired, 1 - Math.exp(-dt * 11));
   camera.lookAt(target);
+}
+
+// Slide the aim sideways (never snap) when the follow lag would push Luke
+// toward the screen edge, e.g. sprinting across a narrow portrait view.
+function keepPlayerInFrame() {
+  const halfWidth = Math.atan(Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2) * camera.aspect);
+  const limit = halfWidth * CAMERA.playerSafeFrame;
+  const c = camera.position, a = cameraState.aim, p = game.player.position;
+  const aimAngle = Math.atan2(a.x - c.x, a.z - c.z), playerAngle = Math.atan2(p.x - c.x, p.z - c.z);
+  let offset = (playerAngle - aimAngle + Math.PI * 3) % (Math.PI * 2) - Math.PI;
+  if (Math.abs(offset) <= limit) return;
+  const angle = playerAngle - Math.sign(offset) * limit, reach = Math.hypot(a.x - c.x, a.z - c.z);
+  a.x = c.x + Math.sin(angle) * reach;
+  a.z = c.z + Math.cos(angle) * reach;
 }
 
 function updateCamera(dt) {
@@ -985,6 +1000,7 @@ function updateCamera(dt) {
   }
   camera.position.lerp(temp.cameraDesired, follow);
   cameraState.aim.lerp(cameraState.desiredAim, 1 - Math.exp(-dt * CAMERA.aimSpeed));
+  keepPlayerInFrame();
   camera.lookAt(cameraState.aim);
   game.cameraYaw = Math.atan2(camera.position.x - cameraState.aim.x, camera.position.z - cameraState.aim.z);
   arena.lighting.update(camera.position, cameraState.focus);
