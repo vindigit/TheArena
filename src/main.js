@@ -894,6 +894,8 @@ const CAMERA = {
   yawFollowSpeed: 1.6, // how quickly the side angle re-centres as he moves
   shotHoldAfter: 0.6, // seconds the shot framing holds after the ball leaves flight
   playerSafeFrame: 0.62, // player never drifts past this share of the half-screen width
+  teleportDistance: 2.5, // a one-frame player jump this big (reset after a make) glides instead of chasing
+  glideSeconds: 0.8, // eased travel time to the new framing after such a jump
 };
 const cameraState = {
   initialized: false,
@@ -903,6 +905,8 @@ const cameraState = {
   focus: new THREE.Vector3(),
   aim: new THREE.Vector3(),
   desiredAim: new THREE.Vector3(),
+  lastPlayer: new THREE.Vector3(),
+  glide: null,
 };
 
 function shotFramingActive() {
@@ -965,6 +969,17 @@ function updateCamera(dt) {
     cameraState.hold = null;
   }
 
+  // The player jumps back to the start spot after a make or a reset. Drop any
+  // held shot framing and ease to the new framing rather than chasing him.
+  if (cameraState.initialized && cameraState.lastPlayer.distanceTo(game.player.position) > CAMERA.teleportDistance) {
+    cameraState.hold = null;
+    cameraState.holdTimer = 0;
+    cameraState.glide = { t: 0, focus: cameraState.focus.clone(), aim: cameraState.aim.clone(), yaw: cameraState.autoYaw, residual: null };
+  }
+  cameraState.lastPlayer.copy(game.player.position);
+  const glide = cameraState.glide;
+  const glideK = glide ? THREE.MathUtils.smoothstep(glide.t / CAMERA.glideSeconds, 0, 1) : 1;
+
   const hold = cameraState.hold;
   const source = hold ? hold.focus : game.player.position;
   const targetYaw = hold ? hold.yaw : rimLineYaw(source) + THREE.MathUtils.degToRad(frame.sideAngle);
@@ -972,9 +987,15 @@ function updateCamera(dt) {
     cameraState.autoYaw = targetYaw;
     cameraState.focus.copy(source);
   }
-  cameraState.autoYaw = dampAngle(cameraState.autoYaw, targetYaw, CAMERA.yawFollowSpeed, dt);
   const follow = 1 - Math.exp(-dt * CAMERA.followSpeed);
-  cameraState.focus.lerp(source, follow);
+  if (glide) {
+    const turn = (targetYaw - glide.yaw + Math.PI * 3) % (Math.PI * 2) - Math.PI;
+    cameraState.autoYaw = glide.yaw + turn * glideK;
+    cameraState.focus.copy(glide.focus).lerp(source, glideK);
+  } else {
+    cameraState.autoYaw = dampAngle(cameraState.autoYaw, targetYaw, CAMERA.yawFollowSpeed, dt);
+    cameraState.focus.lerp(source, follow);
+  }
 
   const yaw = cameraState.autoYaw + game.cameraLookYaw;
   const zoom = game.cameraDistance / 6.8;
@@ -998,8 +1019,19 @@ function updateCamera(dt) {
     cameraState.aim.copy(cameraState.desiredAim);
     cameraState.initialized = true;
   }
-  camera.position.lerp(temp.cameraDesired, follow);
-  cameraState.aim.lerp(cameraState.desiredAim, 1 - Math.exp(-dt * CAMERA.aimSpeed));
+  if (glide) {
+    // The camera keeps its normal offset from the eased focus point, so it
+    // travels with the move instead of cutting across close to the player.
+    // Any lag it carried into the glide fades out over the same ease.
+    glide.residual ??= camera.position.clone().sub(temp.cameraDesired);
+    camera.position.copy(temp.cameraDesired).addScaledVector(glide.residual, 1 - glideK);
+    cameraState.aim.copy(glide.aim).lerp(cameraState.desiredAim, glideK);
+    glide.t += dt;
+    if (glide.t >= CAMERA.glideSeconds) cameraState.glide = null;
+  } else {
+    camera.position.lerp(temp.cameraDesired, follow);
+    cameraState.aim.lerp(cameraState.desiredAim, 1 - Math.exp(-dt * CAMERA.aimSpeed));
+  }
   keepPlayerInFrame();
   camera.lookAt(cameraState.aim);
   game.cameraYaw = Math.atan2(camera.position.x - cameraState.aim.x, camera.position.z - cameraState.aim.z);
