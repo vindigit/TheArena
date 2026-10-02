@@ -10,6 +10,34 @@ import { LOOK } from './look.js';
  * the world origin to use the positions in the returned `hoop` object as
  * world-space gameplay coordinates.
  */
+// The shell's two side-wall signs are authored with U running the wrong way
+// for a viewer inside the court, so their text reads mirrored. Each sign is a
+// four-vertex quad; for any quad whose U runs right-to-left as seen from the
+// court centre, mirror U inside that quad. Geometry in the GLB is unchanged.
+function unmirrorSignBoards(geometry) {
+  const position = geometry.getAttribute('position');
+  const uv = geometry.getAttribute('uv');
+  if (!uv || position.count % 4 !== 0) return;
+  for (let first = 0; first < position.count; first += 4) {
+    let low = first, high = first, cx = 0, cz = 0;
+    for (let i = first; i < first + 4; i += 1) {
+      if (uv.getX(i) < uv.getX(low)) low = i;
+      if (uv.getX(i) > uv.getX(high)) high = i;
+      cx += position.getX(i) / 4;
+      cz += position.getZ(i) / 4;
+    }
+    // A viewer at the court centre looks along (cx, cz); with y up their right
+    // is (-fz, fx).
+    const length = Math.hypot(cx, cz) || 1;
+    const rightX = -cz / length, rightZ = cx / length;
+    const du = (position.getX(high) - position.getX(low)) * rightX + (position.getZ(high) - position.getZ(low)) * rightZ;
+    if (du >= 0) continue;
+    const sum = uv.getX(low) + uv.getX(high);
+    for (let i = first; i < first + 4; i += 1) uv.setX(i, sum - uv.getX(i));
+    uv.needsUpdate = true;
+  }
+}
+
 export function createArena(THREE, { look = LOOK } = {}) {
   if (!THREE) {
     throw new Error("createArena requires the Three.js namespace.");
@@ -792,6 +820,7 @@ export function createArena(THREE, { look = LOOK } = {}) {
         const geometry = child.geometry;
         triangles += geometry.index ? geometry.index.count / 3 : geometry.getAttribute('position').count / 3;
         if (child.name === 'arena video board' && child.material?.emissiveIntensity !== undefined) videoBoards += 1;
+        if (child.name === 'arena video board') unmirrorSignBoards(child.geometry);
         if (child.name === 'shot_clock_digits') clockDigits += 1;
         child.castShadow = false;
         child.receiveShadow = false;

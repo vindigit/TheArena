@@ -895,7 +895,11 @@ const CAMERA = {
   shotHoldAfter: 0.6, // seconds the shot framing holds after the ball leaves flight
   playerSafeFrame: 0.62, // player never drifts past this share of the half-screen width
   teleportDistance: 2.5, // a one-frame player jump this big (reset after a make) glides instead of chasing
-  glideSeconds: 0.8, // eased travel time to the new framing after such a jump
+  glideSeconds: 1.2, // eased travel time to the new framing after such a jump
+  glidePullBack: 0.6, // extra distance at mid-glide, so the camera never sweeps close past the player
+  // The camera never leaves this box, so it can't end up inside the stands or
+  // the walls with crowd models between it and the player. Metres.
+  hall: { x: 7.2, zMin: -6.6, zMax: 10.4 },
 };
 const cameraState = {
   initialized: false,
@@ -953,6 +957,29 @@ function keepPlayerInFrame() {
   a.z = c.z + Math.cos(angle) * reach;
 }
 
+// Nominal side angle, or the nearest one to it that keeps the camera inside
+// the hall. Near a sideline the preferred angle would put the camera in the
+// stands, so it swings round toward the court instead of being squashed onto
+// the player. Returns radians.
+function pickSideAngle(focus, baseYaw, distance, nominalDegrees) {
+  const hall = CAMERA.hall, step = THREE.MathUtils.degToRad(2.5);
+  const nominal = THREE.MathUtils.degToRad(nominalDegrees);
+  for (let k = 0; k <= 72; k += 1) {
+    for (const sign of k ? [1, -1] : [1]) {
+      const side = nominal + sign * k * step;
+      const x = focus.x + Math.sin(baseYaw + side) * distance;
+      const z = focus.z + Math.cos(baseYaw + side) * distance;
+      if (Math.abs(x) <= hall.x && z >= hall.zMin && z <= hall.zMax) return side;
+    }
+  }
+  return nominal;
+}
+
+function clampToHall(position) {
+  position.x = clamp(position.x, -CAMERA.hall.x, CAMERA.hall.x);
+  position.z = clamp(position.z, CAMERA.hall.zMin, CAMERA.hall.zMax);
+}
+
 function updateCamera(dt) {
   if (LOOK === 'old') { updateClassicCamera(dt); return; }
   const portrait = camera.aspect < 1;
@@ -982,7 +1009,10 @@ function updateCamera(dt) {
 
   const hold = cameraState.hold;
   const source = hold ? hold.focus : game.player.position;
-  const targetYaw = hold ? hold.yaw : rimLineYaw(source) + THREE.MathUtils.degToRad(frame.sideAngle);
+  const zoom = game.cameraDistance / 6.8;
+  const distance = frame.distance * zoom;
+  const targetYaw = hold ? hold.yaw
+    : rimLineYaw(source) + pickSideAngle(source, rimLineYaw(source), distance, frame.sideAngle);
   if (!cameraState.initialized) {
     cameraState.autoYaw = targetYaw;
     cameraState.focus.copy(source);
@@ -998,14 +1028,14 @@ function updateCamera(dt) {
   }
 
   const yaw = cameraState.autoYaw + game.cameraLookYaw;
-  const zoom = game.cameraDistance / 6.8;
-  const distance = frame.distance * zoom;
   const lift = (game.cameraPitch + 0.16) * -distance; // mouse/drag tilt
+  const reach = glide ? distance * (1 + CAMERA.glidePullBack * Math.sin(Math.PI * glideK)) : distance;
   temp.cameraDesired.set(
-    cameraState.focus.x + Math.sin(yaw) * distance,
+    cameraState.focus.x + Math.sin(yaw) * reach,
     Math.max(0.6, CAMERA.height + lift),
-    cameraState.focus.z + Math.cos(yaw) * distance,
+    cameraState.focus.z + Math.cos(yaw) * reach,
   );
+  clampToHall(temp.cameraDesired);
   const rim = arena.hoop.rimCenter;
   const bias = hold ? frame.shotRimBias : frame.rimBias;
   cameraState.desiredAim.set(cameraState.focus.x, frame.lookHeight, cameraState.focus.z)
@@ -1032,6 +1062,7 @@ function updateCamera(dt) {
     camera.position.lerp(temp.cameraDesired, follow);
     cameraState.aim.lerp(cameraState.desiredAim, 1 - Math.exp(-dt * CAMERA.aimSpeed));
   }
+  clampToHall(camera.position);
   keepPlayerInFrame();
   camera.lookAt(cameraState.aim);
   game.cameraYaw = Math.atan2(camera.position.x - cameraState.aim.x, camera.position.z - cameraState.aim.z);
