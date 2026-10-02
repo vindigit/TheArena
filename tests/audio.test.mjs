@@ -748,7 +748,7 @@ test('shoe running cadence avoids rapid repetition while retaining the existing 
   await director.unlock();
   await director._shoeLoadPromise;
 
-  assert.equal(director.cooldowns.shoe, 58);
+  assert.equal(director.cooldowns.shoe, 500);
   assert.equal(director.shoe(0.72), true);
   assert.equal(director.shoe(0.72), false);
   assert.equal(context.sources.length, 1);

@@ -20,7 +20,7 @@ const DEFAULT_COOLDOWNS = Object.freeze({
   dunk: 420,
   backboard: 110,
   swish: 160,
-  shoe: 58,
+  shoe: 500,
   crowd: 650,
   score: 900,
 });
