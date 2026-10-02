@@ -190,13 +190,12 @@ async function checkManifest() {
 
   if (errors.length) throw new Error(`asset validation failed:\n  ${errors.join('\n  ')}`);
   const playerFiles = (await readdir(path.join(publicRoot, 'assets', 'models', 'player'))).filter(name => name.endsWith('.glb'));
-  const expectedPlayers = ['fictional-player-v2.glb', 'luke-player-preview.glb', 'luke-player-v1.glb'];
-  if (playerFiles.length !== expectedPlayers.length || expectedPlayers.some(name => !playerFiles.includes(name))) {
-    throw new Error('Player directory must contain legacy Luke plus both validated game-humanoid-v2 assets');
+  if (playerFiles.length !== 1 || playerFiles[0] !== 'luke-player-v1.glb') {
+    throw new Error('Only the canonical Luke GLB may be published in the player asset directory');
   }
   const playerAssets = manifest.assets.filter(asset => asset.runtime.some(entry => entry.path.startsWith('assets/models/player/')));
   if (playerAssets.length !== 1 || playerAssets[0].id !== 'luke-player-v1') {
-    throw new Error('Legacy Luke manifest provenance must remain pinned during the v2 migration');
+    throw new Error('Luke must be the only player model in the production inventory');
   }
   await checkLukeRig();
   await checkLukeMotion();

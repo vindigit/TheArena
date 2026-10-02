@@ -22,7 +22,7 @@ export function createPoseAdapter(THREE, visual, bones, anchors) {
   // This adapter is Luke's only pose writer. A lower-body history blends the
   // locomotion/gather handoff; it never moves the authoritative gameplay root.
   const lowerNames = ['pelvis', ...['right', 'left'].flatMap(side =>
-    ['thigh', 'shin', 'foot', 'toe'].map(part => `${side}_${part}`))].filter(name => get(name));
+    ['thigh', 'shin', 'foot'].map(part => `${side}_${part}`))];
   const previousLower = new Map();
   let previousPelvis = null, previousAction = null, handoffRemaining = 0;
   const arms = ['right', 'left'].map((side, i) => {
@@ -111,7 +111,6 @@ export function createPoseAdapter(THREE, visual, bones, anchors) {
       // of the ankle. The previous positive flexion bent the knee backwards.
       get(`${side}_shin`).rotation.x = moving ? -Math.max(0, stride * sign) * .5 : 0;
       get(`${side}_foot`).rotation.x = -get(`${side}_thigh`).rotation.x - get(`${side}_shin`).rotation.x;
-      get(`${side}_toe`)?.rotation.set(0, 0, 0);
     }
     if (action === 'shoot') {
       const crouch = Math.sin(Math.min(p / .58, 1) * Math.PI);
@@ -134,7 +133,6 @@ export function createPoseAdapter(THREE, visual, bones, anchors) {
     // old stride's ankle compensation can survive the landing pose.
     for (const side of ['right', 'left']) {
       get(`${side}_foot`).rotation.x = -get(`${side}_thigh`).rotation.x - get(`${side}_shin`).rotation.x;
-      get(`${side}_toe`)?.rotation.set(0, 0, 0);
     }
     // Capture the current lower pose on a state handoff, instead of resetting
     // a running stride to the narrow standing target in the first gather frame.
