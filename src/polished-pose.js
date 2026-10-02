@@ -5,11 +5,11 @@ import {createAbsoluteHandProbe} from './hand-absolute-clearance.js';
 export function createPolishedPoseAdapter(THREE,visual,bones,anchors) {
  const absoluteProbe=createAbsoluteHandProbe(THREE,visual);
  let skinMesh;visual.traverse(o=>{if(o.isSkinnedMesh)skinMesh=o});
- const shoeIndices=Object.fromEntries(['right','left'].map(side=>{const g=skinMesh.geometry,j=skinMesh.skeleton.bones.findIndex(b=>b.name===side+'_foot'),ids=[];for(let i=0;i<g.attributes.position.count;i++){let weight=0;for(let k=0;k<4;k++)if(g.attributes.skinIndex.getComponent(i,k)===j)weight+=g.attributes.skinWeight.getComponent(i,k);if(weight>.5)ids.push(i)}return[side,ids]}));
+ const shoeIndices=Object.fromEntries(['right','left'].map(side=>{const g=skinMesh.geometry,prefix=side[0].toUpperCase()+side.slice(1),joints=[side+'_foot',side+'_toe',prefix+'Foot',prefix+'ToeBase'].map(n=>skinMesh.skeleton.bones.findIndex(b=>b.name===n)).filter(j=>j>=0),ids=[];for(let i=0;i<g.attributes.position.count;i++){let weight=0;for(let k=0;k<4;k++)if(joints.includes(g.attributes.skinIndex.getComponent(i,k)))weight+=g.attributes.skinWeight.getComponent(i,k);if(weight>.35)ids.push(i)}return[side,ids]}));
  function shoeMinimum(side){visual.updateWorldMatrix(true,true);skinMesh.updateMatrixWorld(true);skinMesh.skeleton.update();const point=new THREE.Vector3();let min=Infinity;for(const i of shoeIndices[side]){skinMesh.getVertexPosition(i,point).applyMatrix4(skinMesh.matrixWorld);min=Math.min(min,point.y)}return min;}
  const legacy=createLegacy(THREE,visual,bones,anchors), get=n=>bones.get(n),V=(...v)=>new THREE.Vector3(...v),Q=()=>new THREE.Quaternion();
  const rest=new Map([...bones].map(([n,b])=>[n,{p:b.position.clone(),q:b.quaternion.clone(),s:b.scale.clone()}]));
- const lower=['pelvis',...['right','left'].flatMap(s=>['thigh','shin','foot'].map(p=>s+'_'+p))];
+ const lower=['pelvis',...['right','left'].flatMap(s=>['thigh','shin','foot','toe'].map(p=>s+'_'+p))].filter(n=>get(n));
  let age=0,dribbleAge=0,clip=null,priorClip=null,blendAge=1,previous=new Map(),previousOffset=0,stanceOffset=0,stance=null,stopping=false,plantSide=null,footLocks={},lockSerial=0,lastFeet={},lastFootRotations={},shotFeet=null,diagnostic={},contact={},lastBall=null;
  const smooth=t=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t)};
  const wp=b=>b.getWorldPosition(V()),wq=b=>b.getWorldQuaternion(Q());
@@ -62,8 +62,11 @@ export function createPolishedPoseAdapter(THREE,visual,bones,anchors) {
   let selected=shoot?'shoot':gather?'gather':clip==='run'?'run':clip==='ready'||(isStop&&state.ballMode!=='dribble')?'ready':'moving_dribble';
   let time=shoot?state.shootElapsed:gather?Math.min(POLISHED_PACK.clips.gather.duration,state.gatherElapsed||0):selected==='run'?age:((state.dribblePhase||0)/(Math.PI*2)-.25)*.8;
   const sample=samplePolished(THREE,selected,time);poseReset();
-  if(!previous.size&&!gather&&!shoot){stance=new Map(lower.map(n=>[n,new THREE.Quaternion().fromArray(POLISHED_PACK.clips.ready.samples[0].rotations[n])]));stanceOffset=POLISHED_PACK.clips.ready.samples[0].visualGroundingY;}
-  for(const[n,q]of Object.entries(sample.rotations))if(get(n))get(n).quaternion.copy(q);
+  if(!previous.size&&!gather&&!shoot){stance=new Map(lower.map(n=>{const q=POLISHED_PACK.clips.ready.samples[0].rotations[n];return[n,Array.isArray(q)&&q.length===4?rest.get(n).q.clone().multiply(new THREE.Quaternion().fromArray(q)):get(n).quaternion.clone()]}));stanceOffset=POLISHED_PACK.clips.ready.samples[0].visualGroundingY;}
+  // The authored temporary pack was sampled from the legacy identity-axis rig.
+  // Apply those rotations as deltas from the imported standard skeleton's bind
+  // basis; copying them as absolute locals folds its +Y bone chains backward.
+  for(const[n,q]of Object.entries(sample.rotations))if(get(n))get(n).quaternion.copy(rest.get(n).q).multiply(q);
   visual.position.y=sample.visualGroundingY;
   if((clip==='stationary-dribble'||clip==='ready'||isStop||gather)&&stance){for(const n of lower)get(n).quaternion.copy(stance.get(n));visual.position.y=stanceOffset;}
   if(isStop){get('pelvis').position.y-=.065*smooth(state.stopElapsed/.16);}

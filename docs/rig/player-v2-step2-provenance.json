@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "contract": "game-humanoid-v2",
-  "status": "staged-local-not-production",
+  "status": "integrated-locally-publication-blocked-on-uniform",
   "builder": "scripts/build-player-v2-rig.py",
   "blender": "5.2.1 LTS",
   "sources": [
@@ -23,17 +23,17 @@
     {
       "character": "Luke",
       "blend": "art/source/player/luke-player-v2.blend",
-      "blendSha256": "8a5e247cfeb8c6eecf25766e61905de5485f5e966645195fbd70e1393f294206",
+      "blendSha256": "1227c804193b8d729fed269f4bf405de51865ee40c29ad523d1f0ffa742dc67a",
       "glb": "art/staging/player/luke-player-preview.glb",
-      "glbSha256": "8e4d6ed636ba79e59e6957450553392d3f076c9ae536cd5191cfee90f046af16",
+      "glbSha256": "8477c992d2cd5170e72cba2bd80d5357bf506f14297e9b9ad50092c06c9fd3e4",
       "textureSha256": "76b9f57505eb021ad085bd143ee9b0edb169239514590c31603c7a521882fae1"
     },
     {
       "character": "FictionalPlayer",
       "blend": "art/source/player/fictional-player-v2.blend",
-      "blendSha256": "26ab1401a5f2535c35770f46a8f37fdd42a7a5677ca6901550cc5bc20dd3cf7d",
+      "blendSha256": "f428293286c9d00f277261fbe67eeed73a3ade2f280a99126e6a86b37d4255ef",
       "glb": "art/staging/player/fictional-player-v2.glb",
-      "glbSha256": "f1517657cb9774ee023a1e9da3cbb886584e8162c8c4dc5c65e5b8a727543d4f",
+      "glbSha256": "e7862c251241fa3c3c36e5d7446569a557d15d529f1aafb353014f8cdaeec3d3",
       "textureSha256": "f004a3e9c813cc5589de16f8d45c84f6e4d756c421a968609c844f8d0287ed5b"
     }
   ],

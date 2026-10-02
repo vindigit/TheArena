@@ -1,8 +1,8 @@
 # Player v2 Step 2: exact 22-bone Blender rebuild
 
 Step 2 was performed in the isolated `codex/player-v2-step2` branch based on
-published `3a4ecb5` plus the Step 1 contract commit only. Production player
-assets and the default legacy loader remain unchanged.
+published `3a4ecb5` plus the Step 1 contract commit only. A subsequent local
+integration copies both GLBs into runtime assets. It has not been deployed.
 
 ## Deliverables
 
@@ -47,14 +47,14 @@ step.
 
 | Asset | Bytes | Triangles | Exported vertices | Height | Bones | Max influences | Clips |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| fictional-player-v2 | 586,028 | 4,704 | 3,265 | 2.05 m | 22 | 3 | 0 |
-| luke-player-preview | 248,124 | 4,754 | 3,287 | 2.05 m | 22 | 4 | 0 |
+| fictional-player-v2 | 586,056 | 4,704 | 3,265 | 2.05 m | 22 | 3 | 0 |
+| luke-player-preview | 248,152 | 4,754 | 3,287 | 2.05 m | 22 | 4 | 0 |
 
 Both have one mesh, one skin and one material, and pass the Step 1 contract.
 
 ## Visual deformation review
 
-Five proof poses per character are under `docs/rig/v2-evidence/`: arms straight
+Five proof poses per character are under `docs/evidence/player-v2/`: arms straight
 up, deep squat, back arch, torso twist, and toes down. The action exists only in
 the editable Blender files; GLB export explicitly disables animation.
 
@@ -71,12 +71,23 @@ Observed results:
 - Toes down: toe regions bend independently at the shoe ball. The chunky shoe
   topology produces a blocky crease rather than a smooth sole roll.
 
-These are Blender deformation proofs, not gameplay, live-browser, animation,
-or physical-phone acceptance.
+These are Blender deformation proofs, not animation or physical-phone
+acceptance. Local production-build browser evidence is under `docs/evidence/`.
+Both runtime variants loaded without fallback and survived repeated move/shoot
+input. The first visual pass exposed an absolute-local/bind-basis mismatch that
+folded the standard legs upward; the adapter now applies the legacy temporary
+pose rotations as deltas from each v2 bind basis, and the rerun shows upright
+feet, torso and shoulders. This is compatibility plumbing, not a new motion.
 
-## Deliberately not done
+## Local integration and remaining gate
 
-No production asset replacement, runtime sockets, pose adapter, foot IK,
-animation library, clip events, ball release, fallback badge, gameplay change,
-deployment or main push was performed. Step 3 remains gated on explicit user
-approval and the pending jersey replacement decision.
+The local branch now loads Fictional Player v2 by default and Luke v2 with
+`?player=luke`, retaining the legacy GLB as a rollback asset. It adds runtime
+load/fallback tests and CI validation for the 22-bone contract. It does not add
+or select a replacement basketball motion, alter release timing, or change
+gameplay physics ownership.
+
+No deployment or main push was performed. Luke still contains the old branded
+uniform. The authorized Library helper fails on this Windows host at
+`os.setxattr`, so the supplied replacement GLB has not materialized and was not
+silently substituted. Physical-phone comparison remains unperformed.

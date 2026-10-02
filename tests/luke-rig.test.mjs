@@ -19,9 +19,10 @@ test('supplied canonical Luke has exact rest transforms, bind matrices and norma
   assert.deepEqual(contract.bones, LUKE_BONES, 'runtime and offline rest contracts must agree');
 });
 
-test('production player directory and manifest contain only canonical Luke', async () => {
+test('production player directory retains canonical Luke beside both validated v2 players', async () => {
   const filenames = await readdir(new URL('../public/assets/models/player/', import.meta.url));
-  assert.deepEqual(filenames.filter(name => name.endsWith('.glb')), ['luke-player-v1.glb']);
+  assert.deepEqual(filenames.filter(name => name.endsWith('.glb')).sort(),
+    ['fictional-player-v2.glb', 'luke-player-preview.glb', 'luke-player-v1.glb']);
   const manifest = JSON.parse(await readFile(new URL('../public/assets/manifest.json', import.meta.url), 'utf8'));
   const players = manifest.assets.filter(asset => asset.runtime.some(file => file.path.startsWith('assets/models/player/')));
   assert.equal(players.length, 1);

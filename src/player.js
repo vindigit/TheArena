@@ -5,7 +5,13 @@ import {createHandShapeAdapter} from './hand-clearance.js';
 import handShapes from '../art/animation/hand-shapes.json' with {type:'json'};
 import { validateLukeRig } from './luke-rig-contract.js';
 
-export const LUKE_MODEL_URL = (import.meta.env?.BASE_URL || '/') + 'assets/models/player/luke-player-v1.glb';
+const assetBase = import.meta.env?.BASE_URL || '/';
+export const LEGACY_LUKE_MODEL_URL = assetBase + 'assets/models/player/luke-player-v1.glb';
+export const PLAYER_V2_MODEL_URLS = Object.freeze({
+  fictional: assetBase + 'assets/models/player/fictional-player-v2.glb',
+  luke: assetBase + 'assets/models/player/luke-player-preview.glb',
+});
+export const LUKE_MODEL_URL = LEGACY_LUKE_MODEL_URL;
 export const LEGACY_LUKE_RIG_CONTRACT = 'legacy-luke-v1';
 export const STAGED_PLAYER_RIG_CONTRACT = 'game-humanoid-v2';
 export const REQUIRED_BONES = Object.freeze([
@@ -54,12 +60,27 @@ export function validateStagedPlayerRigContract({
   return { contract: STAGED_PLAYER_RIG_CONTRACT, bones: normalized, ...STAGED_LIMITS };
 }
 const requestedAnimation = new URLSearchParams(globalThis.location?.search || '').get('animation');
+const requestedPlayer = new URLSearchParams(globalThis.location?.search || '').get('player') === 'luke' ? 'luke' : 'fictional';
+const V2_POSE_ALIASES = Object.freeze({
+  root: 'Hips', pelvis: 'Hips', chest: 'Spine2', neck: 'Neck', head: 'Head',
+  left_upper_arm: 'LeftArm', left_forearm: 'LeftForeArm', left_hand: 'LeftHand',
+  right_upper_arm: 'RightArm', right_forearm: 'RightForeArm', right_hand: 'RightHand',
+  left_thigh: 'LeftUpLeg', left_shin: 'LeftLeg', left_foot: 'LeftFoot', left_toe: 'LeftToeBase',
+  right_thigh: 'RightUpLeg', right_shin: 'RightLeg', right_foot: 'RightFoot', right_toe: 'RightToeBase',
+});
+
+export function createV2PoseBoneAliases(bones) {
+  const aliases = new Map(bones);
+  for (const [legacy, current] of Object.entries(V2_POSE_ALIASES)) aliases.set(legacy, bones.get(current));
+  return aliases;
+}
 
 // Stable collision/facing root and attachment references are independent of
 // Luke's asynchronous visual. The old GLB and old-rig clips have no load path.
 export function createPlayer(THREE, {
-  modelUrl = LUKE_MODEL_URL,
-  rigContract = LEGACY_LUKE_RIG_CONTRACT,
+  modelUrl = PLAYER_V2_MODEL_URLS[requestedPlayer],
+  rigContract = STAGED_PLAYER_RIG_CONTRACT,
+  character = requestedPlayer === 'luke' ? 'Luke' : 'Fictional Player',
   animationMode = requestedAnimation === 'hybrid' ? 'hybrid' : 'luke-motion',
   fetchAsset = (...args) => fetch(...args),
   parseModel = data => new GLTFLoader().parseAsync(data, ''),
@@ -77,7 +98,7 @@ export function createPlayer(THREE, {
     root.update(dt, state);
     rig?.update(dt, state);
   };
-  group.userData.character = 'Luke';
+  group.userData.character = character;
   group.userData.rigContract = rigContract;
   group.userData.assetStatus = 'loading';
   group.userData.animationStatus = animationMode === 'hybrid' ? 'superseded' : 'luke-motion';
@@ -97,11 +118,11 @@ export function createPlayer(THREE, {
       let triangles = 0;
       visual.traverse(node => {
         if (node.isBone) {
-          if (bones.has(node.name)) throw new Error(`Duplicate Luke bone: ${node.name}`);
+          if (bones.has(node.name)) throw new Error(`Duplicate player bone: ${node.name}`);
           bones.set(node.name, node);
         }
         if (!node.isMesh) return;
-        if (!node.isSkinnedMesh) throw new Error('Luke geometry must be skinned');
+        if (!node.isSkinnedMesh) throw new Error('Player geometry must be skinned');
         meshes.push(node);
         skins.add(node.skeleton);
         const geometry = node.geometry;
@@ -121,8 +142,8 @@ export function createPlayer(THREE, {
           materials.add(material);
           if (material.map) {
             textures.add(material.map);
-            if (material.map.image.width !== 512 || material.map.image.height !== 512)
-              throw new Error('Luke atlas must remain 512px');
+            if (material.map.image.width !== material.map.image.height || material.map.image.width > 2048)
+              throw new Error('Player atlas must be at most 2048px square');
             material.map.magFilter = THREE.NearestFilter;
             material.map.colorSpace = THREE.SRGBColorSpace;
           }
@@ -151,17 +172,19 @@ export function createPlayer(THREE, {
       } else {
         throw new Error(`Unknown player rig contract: ${rigContract}`);
       }
-      handShapesAdapter=createHandShapeAdapter(THREE,meshes[0],handShapes);
-      handShapesAdapter.installMorphs();
+      if (rigContract === LEGACY_LUKE_RIG_CONTRACT) {
+        handShapesAdapter=createHandShapeAdapter(THREE,meshes[0],handShapes);
+        handShapesAdapter.installMorphs();
+      }
       // Polished plants/contact use the authoritative root during the first pose.
       group.add(visual);
-      const candidate = rigContract === LEGACY_LUKE_RIG_CONTRACT
-        ? createPoseAdapter(THREE, visual, runtimeBones, anchors) : null;
+      const poseBones = rigContract === STAGED_PLAYER_RIG_CONTRACT ? createV2PoseBoneAliases(runtimeBones) : runtimeBones;
+      const candidate = createPoseAdapter(THREE, visual, poseBones, anchors);
       candidate?.update(0, lastState);
       rig = candidate; rigVisual = visual; rigBones = runtimeBones;
       root.shadow.visible = true;
       group.userData.assetStatus = 'ready';
-      group.userData.playerAsset = { character: 'Luke', url: modelUrl, rigContract, triangles,
+      group.userData.playerAsset = { character, url: modelUrl, rigContract, triangles,
         materials: materials.size, bones: runtimeBones.size, bytes: data.byteLength };
       return 'ready';
     } catch (error) {
@@ -174,8 +197,13 @@ export function createPlayer(THREE, {
         materials.forEach(m => { m.map?.dispose(); m.dispose(); });
       }
       group.userData.assetStatus = 'error';
-      group.userData.assetError = 'Luke could not be loaded. Reload to try again.';
-      console.error('Luke asset unavailable; play is blocked.', error);
+      group.userData.assetError = `${character} could not be loaded. FALLBACK PLAYER unavailable.`;
+      const fallbackBadge = globalThis.document?.querySelector?.('#actionLabel');
+      if (fallbackBadge) {
+        fallbackBadge.textContent = 'FALLBACK PLAYER';
+        fallbackBadge.classList.add('has-load-error');
+      }
+      console.error('Player asset unavailable; play is blocked.', error);
       return 'error';
     }
   }

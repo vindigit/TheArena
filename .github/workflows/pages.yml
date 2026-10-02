@@ -24,6 +24,8 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: node scripts/validate-player-v2-assets.mjs public/assets/models/player/fictional-player-v2.glb public/assets/models/player/luke-player-preview.glb
+      - run: node --test tests/player-v2-runtime.test.mjs
       - run: npm run build -- --base=/TheArena/
       - uses: actions/upload-pages-artifact@v3
         with:

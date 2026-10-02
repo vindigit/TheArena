@@ -41,8 +41,7 @@ SOURCE_DIRECT = {
     "neck": "Neck", "head": "Head",
     "left_forearm": "LeftForeArm", "left_hand": "LeftHand",
     "right_forearm": "RightForeArm", "right_hand": "RightHand",
-    "left_thigh": "LeftUpLeg", "left_shin": "LeftLeg",
-    "right_thigh": "RightUpLeg", "right_shin": "RightLeg",
+    "left_shin": "LeftLeg", "right_shin": "RightLeg",
 }
 
 
@@ -95,9 +94,16 @@ def distribution(name, weight, co):
         shoulder_distance = max(0.0, abs(co.x) - 0.19)
         shoulder = max(0.0, min(0.72, 0.72 * (1 - shoulder_distance / 0.25)))
         return {side + "Shoulder": weight * shoulder, side + "Arm": weight * (1 - shoulder)}
+    if name in ("left_thigh", "right_thigh"):
+        side = "Left" if name.startswith("left") else "Right"
+        # Keep the upper baggy-short volume with the pelvis while letting the
+        # lower thigh follow the leg into a deep squat.
+        hips = max(0.0, min(0.62, (co.z - 0.80) / 0.25 * 0.62))
+        return {"Hips": weight * hips, side + "UpLeg": weight * (1 - hips)}
     if name in ("left_foot", "right_foot"):
         side = "Left" if name.startswith("left") else "Right"
-        toe = max(0.0, min(0.88, (co.y - 0.025) / 0.15))
+        # A broad overlap band avoids a single rigid shoe hinge.
+        toe = max(0.0, min(0.78, (co.y + 0.015) / 0.22))
         return {side + "ToeBase": weight * toe, side + "Foot": weight * (1 - toe)}
     target = SOURCE_DIRECT.get(name)
     return {target: weight} if target else {}
@@ -199,6 +205,7 @@ def save_and_export(mesh, rig, blend_path, glb_path, character):
     mesh.name = character + "_Mesh"
     rig["rig_contract"] = "game-humanoid-v2"
     rig["source_appearance_preserved"] = True
+    rig["game_axes_corrected"] = True
     for image in bpy.data.images:
         if image.source != "VIEWER":
             try:
