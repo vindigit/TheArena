@@ -2,8 +2,8 @@
 
 Luke's **gather**, **jump shot** and **layup** are captured from reference video
 supplied by the project owner, cleaned, retargeted onto the canonical 17-bone
-rig and stored in `art/animation/polished-samples.json`. Dunks still use the
-legacy procedural pose; dribble/run/ready are unchanged.
+rig and stored in `art/animation/polished-samples.json`. Dunks use
+hand-authored keyframes (`art/animation/luke-motion-v1.json`, no video reference): approach load, knee-drive takeoff, tucked rise, ball cocked behind the head, slam, rim hang and a soft landing. The layup keeps its captured clip and gets a runtime landing absorb and arm recovery (`src/polished-pose.js`); dribble/run/ready are unchanged.
 
 Only rotations ship. Source footage is never committed (see
 `public/assets/animation-credits.txt`).
