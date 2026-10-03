@@ -13,9 +13,11 @@
   "motionSources": {
     "run": "ManNeko PSOne Style - Action Heroine running (licensed integrated game use)",
     "moving_dribble": "CMU06_02 via RancidMilk FBX",
-    "shoot": "CMU124_05 via RancidMilk FBX",
+    "shoot": "Video-derived: user-supplied jump-shot reference, MediaPipe Pose + scripts/video-mocap retarget (dip 0, release 0.20 s, landing 0.40 s)",
     "ready": "Game-authored relaxed stance",
-    "gather": "CMU-derived game-authored contact transition"
+    "gather": "Video-derived: same jump-shot reference, ball pickup into the dip",
+    "layup": "Video-derived: user-supplied drive-and-layup reference (takeoff 0, release 0.59, landing 1.0 of 0.84 s)",
+    "dunk": "Legacy Luke-authored procedural pose (no video reference supplied)"
   },
   "terms": "animation-credits.txt",
   "motionData": "Bundled rig-specific game data; no standalone source motion asset supplied",
@@ -37,5 +39,16 @@
       "layup",
       "dunk"
     ]
+  },
+  "videoMocap": {
+    "pipeline": "scripts/video-mocap",
+    "doc": "docs/VIDEO_MOCAP.md",
+    "clips": [
+      "gather",
+      "shoot",
+      "layup"
+    ],
+    "samplePack": "art/animation/polished-samples.json",
+    "sourceFootageShipped": false
   }
 }

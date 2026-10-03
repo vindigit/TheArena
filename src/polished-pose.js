@@ -10,7 +10,7 @@ export function createPolishedPoseAdapter(THREE,visual,bones,anchors) {
  const legacy=createLegacy(THREE,visual,bones,anchors), get=n=>bones.get(n),V=(...v)=>new THREE.Vector3(...v),Q=()=>new THREE.Quaternion();
  const rest=new Map([...bones].map(([n,b])=>[n,{p:b.position.clone(),q:b.quaternion.clone(),s:b.scale.clone()}]));
  const lower=['pelvis',...['right','left'].flatMap(s=>['thigh','shin','foot'].map(p=>s+'_'+p))];
- let age=0,dribbleAge=0,clip=null,priorClip=null,blendAge=1,previous=new Map(),previousOffset=0,stanceOffset=0,stance=null,stopping=false,plantSide=null,footLocks={},lockSerial=0,lastFeet={},lastFootRotations={},shotFeet=null,diagnostic={},contact={},lastBall=null;
+ let heldBall=null,age=0,dribbleAge=0,clip=null,priorClip=null,blendAge=1,previous=new Map(),previousOffset=0,stanceOffset=0,stance=null,stopping=false,plantSide=null,footLocks={},lockSerial=0,lastFeet={},lastFootRotations={},shotFeet=null,diagnostic={},contact={},lastBall=null;
  const smooth=t=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t)};
  const wp=b=>b.getWorldPosition(V()),wq=b=>b.getWorldQuaternion(Q());
  function poseReset(){visual.position.set(0,0,0);for(const[n,b]of bones){b.position.copy(rest.get(n).p);b.quaternion.copy(rest.get(n).q);b.scale.copy(rest.get(n).s)}}
@@ -48,10 +48,12 @@ export function createPolishedPoseAdapter(THREE,visual,bones,anchors) {
  }
  function update(dt=1/60,state={}) {
   const speed=Math.max(0,state.speed||0),jump=state.jump||0,pickup=Number.isFinite(state.pickupProgress),finish=['layup','dunk'].includes(state.action);
-  if(pickup||finish){legacy.update(dt,state);clip=pickup?'legacy-pickup':state.action;contact=legacy.diagnostics().contact||{};diagnostic={...legacy.diagnostics(),clip,owner:'luke-polished-with-legacy-pickup-finishes'};footLocks={};previous.clear();return;}
+  // The layup is sampled from the video-captured clip; dunks keep the legacy pose.
+  const layup=state.action==='layup'&&!pickup&&!!POLISHED_PACK.clips.layup;heldBall=null;
+  if(pickup||(finish&&!layup)){legacy.update(dt,state);clip=pickup?'legacy-pickup':state.action;contact=legacy.diagnostics().contact||{};diagnostic={...legacy.diagnostics(),clip,owner:'luke-polished-with-legacy-pickup-finishes'};footLocks={};previous.clear();return;}
   const shoot=state.action==='shoot'&&Number.isFinite(state.shootElapsed),gather=state.charging;
   const isStop=state.stopElapsed!==null&&state.stopElapsed!==undefined&&state.stopElapsed<.30&&!gather&&!shoot;
-  clip=shoot?'shoot':gather?'gather':isStop?'stop':speed>.15?(state.ballMode==='dribble'?'dribble':'run'):state.ballMode==='dribble'?'stationary-dribble':'ready';
+  clip=shoot?'shoot':layup?'layup':gather?'gather':isStop?'stop':speed>.15?(state.ballMode==='dribble'?'dribble':'run'):state.ballMode==='dribble'?'stationary-dribble':'ready';
   if(clip!==priorClip){blendAge=0;
     if(shoot)shotFeet=Object.fromEntries(['right','left'].map(side=>[side,{position:(lastFeet[side]||wp(get(side+'_foot'))).clone(),rotation:(lastFootRotations[side]||wq(get(side+'_foot'))).clone()}]));
     if(isStop||gather||clip==='stationary-dribble'||clip==='ready'){
@@ -59,8 +61,8 @@ export function createPolishedPoseAdapter(THREE,visual,bones,anchors) {
     if(isStop){const root=visual.parent;const left=root.worldToLocal(wp(get('left_foot'))),right=root.worldToLocal(wp(get('right_foot')));plantSide=left.z<right.z?'left':'right';}
   }}
   age+=dt*Math.max(.2,speed/2.5);dribbleAge+=dt*Math.max(.65,Math.min(1.55,speed>0.15?speed/1.6:1));blendAge+=dt;
-  let selected=shoot?'shoot':gather?'gather':clip==='run'?'run':clip==='ready'||(isStop&&state.ballMode!=='dribble')?'ready':'moving_dribble';
-  let time=shoot?state.shootElapsed:gather?Math.min(POLISHED_PACK.clips.gather.duration,state.gatherElapsed||0):selected==='run'?age:((state.dribblePhase||0)/(Math.PI*2)-.25)*.8;
+  let selected=shoot?'shoot':layup?'layup':gather?'gather':clip==='run'?'run':clip==='ready'||(isStop&&state.ballMode!=='dribble')?'ready':'moving_dribble';
+  let time=shoot?state.shootElapsed:layup?(state.finishElapsed||0):gather?Math.min(POLISHED_PACK.clips.gather.duration,state.gatherElapsed||0):selected==='run'?age:((state.dribblePhase||0)/(Math.PI*2)-.25)*.8;
   const sample=samplePolished(THREE,selected,time);poseReset();
   if(!previous.size&&!gather&&!shoot){stance=new Map(lower.map(n=>[n,new THREE.Quaternion().fromArray(POLISHED_PACK.clips.ready.samples[0].rotations[n])]));stanceOffset=POLISHED_PACK.clips.ready.samples[0].visualGroundingY;}
   for(const[n,q]of Object.entries(sample.rotations))if(get(n))get(n).quaternion.copy(q);
@@ -120,6 +122,16 @@ export function createPolishedPoseAdapter(THREE,visual,bones,anchors) {
     armContact('right',ball,V(0,-1,0),1,reach,push>.99);
    }
   }
+  // Layup: the ball rides the captured right palm. It blends in from where
+  // the dribble left it, then the right arm is solved onto that path without
+  // changing the captured hand orientation.
+  if(layup&&state.ballMode==='finish'&&sample.ballLocal){
+   const held=V(...sample.ballLocal);
+   if(Array.isArray(state.finishOriginLocal))held.lerpVectors(V(...state.finishOriginLocal),held.clone(),smooth((state.finishElapsed||0)/.20));
+   heldBall=held;
+   const normal=V(...LUKE_PHYSICAL_PALMS.right.normal).applyQuaternion(wq(get('right_hand'))).normalize();
+   armContact('right',visual.parent.localToWorld(held.clone()),normal,1);
+  }
   // Shot's final rise uses exact parent-local ball target while attached;
   // after release, sampled accepted follow-through owns both arms again.
   if(shoot&&state.ballMode==='gather'&&Array.isArray(state.ballLocal)){
@@ -162,5 +174,5 @@ export function createPolishedPoseAdapter(THREE,visual,bones,anchors) {
    diagnostic.absoluteHandClearance={before,after,corrections,scope:'All neutral hand-region triangles against actual displayed ball; morph guard follows'};
    diagnostic.contact=contact;
  }
- return {update,resolveBallClearance,recordDisplayedHandClearance(ballWorld,radius=.12){if(diagnostic.absoluteHandClearance)diagnostic.absoluteHandClearance.displayed=absoluteProbe.measure(ballWorld,radius,true);},reset(){legacy.reset();age=0;dribbleAge=0;clip=null;priorClip=null;blendAge=1;previous.clear();stance=null;footLocks={};lastFeet={};lastFootRotations={};shotFeet=null;contact={};diagnostic={};poseReset();},diagnostics:()=>diagnostic,getHeldBallLocal:target=>legacy.getHeldBallLocal(target)};
+ return {update,resolveBallClearance,recordDisplayedHandClearance(ballWorld,radius=.12){if(diagnostic.absoluteHandClearance)diagnostic.absoluteHandClearance.displayed=absoluteProbe.measure(ballWorld,radius,true);},reset(){legacy.reset();heldBall=null;age=0;dribbleAge=0;clip=null;priorClip=null;blendAge=1;previous.clear();stance=null;footLocks={};lastFeet={};lastFootRotations={};shotFeet=null;contact={};diagnostic={};poseReset();},diagnostics:()=>diagnostic,getHeldBallLocal:target=>heldBall?(target||V()).copy(heldBall):legacy.getHeldBallLocal(target)};
 }
