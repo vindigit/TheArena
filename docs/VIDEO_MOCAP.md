@@ -61,4 +61,15 @@ Mixamo would give a different, incompatible rig.
 - Feet are not world-locked in the clips themselves. The runtime's existing
   foot-lock/sole solver handles planted frames.
 
-Evidence: `docs/evidence/video-mocap/`.
+## Evidence
+
+`docs/evidence/video-mocap/` contains:
+
+- `gameplay-before-after.mp4`: the same scripted run on the old and new builds, side by side (2 shots, 2 layups).
+- `before-after-*.jpg`: key moments from that run.
+- `blender-*-views.jpg`: Blender ¾/side/front sheets of each clip.
+- `touch-390x844-844x390.jpg`: touch layouts.
+- `capture-metadata.json`: how the run was captured.
+
+Re-capture with `node scripts/video-mocap/capture-gameplay.mjs URL OUT_DIR`
+(Playwright). Source-footage comparisons are kept out of the repository.

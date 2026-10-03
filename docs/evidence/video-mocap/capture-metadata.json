@@ -1,0 +1,12 @@
+{
+  "capture": "scripts/video-mocap/capture-gameplay.mjs against `vite preview` of the production build",
+  "browser": "Playwright Chromium 1194, SwiftShader WebGL, 1280x720",
+  "timing": "Virtual clock: performance.now, Date.now, Event.timeStamp and requestAnimationFrame advance exactly 1/30 s of game time per captured frame (60 Hz game steps), so slow software rendering does not change gameplay timing",
+  "scenario": "2 jump shots (0.667 s Space hold -> ON TIME), reset, 2 drives with W then F -> layup (both scored +2 LAYUP), reset",
+  "frames": 360,
+  "pageErrors": 0,
+  "before": "HEAD ce4b56d (CMU shot, procedural layup)",
+  "after": "video-derived gather/shoot/layup",
+  "touch": "390x844 and 844x390 mobile+touch viewports load with no page errors; controls unchanged",
+  "knownPreExisting": "Pressing R swings the camera through Luke's head for ~4 frames; identical in the before build"
+}
