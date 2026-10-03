@@ -10,7 +10,7 @@ export function createPolishedPoseAdapter(THREE,visual,bones,anchors) {
  const legacy=createLegacy(THREE,visual,bones,anchors), get=n=>bones.get(n),V=(...v)=>new THREE.Vector3(...v),Q=()=>new THREE.Quaternion();
  const rest=new Map([...bones].map(([n,b])=>[n,{p:b.position.clone(),q:b.quaternion.clone(),s:b.scale.clone()}]));
  const lower=['pelvis',...['right','left'].flatMap(s=>['thigh','shin','foot'].map(p=>s+'_'+p))];
- let heldBall=null,age=0,dribbleAge=0,clip=null,priorClip=null,blendAge=1,previous=new Map(),previousOffset=0,stanceOffset=0,stance=null,stopping=false,plantSide=null,footLocks={},lockSerial=0,lastFeet={},lastFootRotations={},shotFeet=null,diagnostic={},contact={},lastBall=null;
+ let heldBall=null,blendWindow=.11,age=0,dribbleAge=0,clip=null,priorClip=null,blendAge=1,previous=new Map(),previousOffset=0,stanceOffset=0,stance=null,stopping=false,plantSide=null,footLocks={},lockSerial=0,lastFeet={},lastFootRotations={},shotFeet=null,diagnostic={},contact={},lastBall=null;
  const smooth=t=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t)};
  const wp=b=>b.getWorldPosition(V()),wq=b=>b.getWorldQuaternion(Q());
  function poseReset(){visual.position.set(0,0,0);for(const[n,b]of bones){b.position.copy(rest.get(n).p);b.quaternion.copy(rest.get(n).q);b.scale.copy(rest.get(n).s)}}
@@ -54,7 +54,7 @@ export function createPolishedPoseAdapter(THREE,visual,bones,anchors) {
   const shoot=state.action==='shoot'&&Number.isFinite(state.shootElapsed),gather=state.charging;
   const isStop=state.stopElapsed!==null&&state.stopElapsed!==undefined&&state.stopElapsed<.30&&!gather&&!shoot;
   clip=shoot?'shoot':layup?'layup':gather?'gather':isStop?'stop':speed>.15?(state.ballMode==='dribble'?'dribble':'run'):state.ballMode==='dribble'?'stationary-dribble':'ready';
-  if(clip!==priorClip){blendAge=0;
+  if(clip!==priorClip){blendAge=0;blendWindow=priorClip==='layup'?.22:.11;
     if(shoot)shotFeet=Object.fromEntries(['right','left'].map(side=>[side,{position:(lastFeet[side]||wp(get(side+'_foot'))).clone(),rotation:(lastFootRotations[side]||wq(get(side+'_foot'))).clone()}]));
     if(isStop||gather||clip==='stationary-dribble'||clip==='ready'){
     visual.updateWorldMatrix(true,true);stance=new Map(lower.map(n=>[n,get(n).quaternion.clone()]));stanceOffset=visual.position.y;
@@ -71,8 +71,26 @@ export function createPolishedPoseAdapter(THREE,visual,bones,anchors) {
   if(isStop){get('pelvis').position.y-=.065*smooth(state.stopElapsed/.16);}
   // Blend from the actual last pose, so stop/resume and early input interrupt
   // from the displayed body instead of a presumed authored clip boundary.
-  const blend=smooth(blendAge/(shoot?.055:.11));
+  const blend=smooth(blendAge/(shoot?.055:blendWindow));
   if(previous.size&&blend<1){for(const[n,b]of bones)b.quaternion.copy(previous.get(n)?.clone().slerp(b.quaternion,blend)||b.quaternion);visual.position.y=previousOffset+(visual.position.y-previousOffset)*blend;}
+  // Layup landing. The captured clip lands straight-legged with the follow-through
+  // arm still overhead. Over its last fifth the knees and hips absorb the landing,
+  // the torso folds forward and the arms come down toward the ready stance.
+  if(layup){
+   const p=Math.max(0,Math.min(1,state.shotProgress||0)),land=smooth((p-.80)/.20),relax=.85*smooth((p-.72)/.25),qx=a=>Q().setFromAxisAngle(V(1,0,0),a);
+   if(land>0){
+    // Lower the pelvis and re-plant each foot exactly where the clip had it. The
+    // leg IK bends the knees to absorb the landing, so both soles keep their
+    // clip height even when the video lands on one foot.
+    visual.updateWorldMatrix(true,true);
+    const feet=['right','left'].map(side=>{const foot=get(side+'_foot');return[side,wp(foot),wq(foot)]});
+    get('pelvis').position.y-=.10*land;visual.updateWorldMatrix(true,true);
+    for(const[side,position,rotation]of feet)solveFoot(side,{position,rotation});
+    get('chest').quaternion.premultiply(qx(-.16*land));get('head').quaternion.premultiply(qx(.1*land));
+   }
+   if(relax>0){const ready=POLISHED_PACK.clips.ready.samples[0].rotations;
+    for(const n of['right_upper_arm','right_forearm','right_hand','left_upper_arm','left_forearm','left_hand'])if(ready[n]&&get(n))get(n).quaternion.slerp(new THREE.Quaternion().fromArray(ready[n]),relax);}
+  }
   visual.updateWorldMatrix(true,true);
   // The imported shot contains a large source-stage yaw inside the pelvis.
   // Gameplay facing owns yaw; remove the sampled torso heading without changing

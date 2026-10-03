@@ -17,14 +17,14 @@
     "ready": "Game-authored relaxed stance",
     "gather": "Video-derived: same jump-shot reference, ball pickup into the dip",
     "layup": "Video-derived: user-supplied drive-and-layup reference (takeoff 0, release 0.59, landing 1.0 of 0.84 s)",
-    "dunk": "Legacy Luke-authored procedural pose (no video reference supplied)"
+    "dunk": "Luke-authored keyframes (art/animation/luke-motion-v1.json): approach load, knee-drive takeoff, tucked rise, ball cocked behind the head, slam, rim hang, soft landing; no video reference"
   },
   "terms": "animation-credits.txt",
   "motionData": "Bundled rig-specific game data; no standalone source motion asset supplied",
   "retainedLukeMotionPack": {
     "path": "art/animation/luke-motion-v1.json",
-    "bytes": 46871,
-    "sha256": "224ae8b07b870de0b04eef96d45f0024d25114af27e52789092d4b0dbcb9fdfb",
+    "bytes": 52440,
+    "sha256": "1fdd926a11928c052793fb9d70dee744d27a770718b62e9b181b56848a41603f",
     "rootTracks": 0,
     "clips": [
       "idle-ready",

@@ -2046,22 +2046,22 @@
         {
           "time": 0,
           "values": {
-            "rightHip": 0.3,
-            "rightKnee": -0.6,
+            "rightHip": 0.45,
+            "rightKnee": -0.7,
             "leftHip": 0.3,
-            "leftKnee": -0.6,
-            "chestX": -0.035,
+            "leftKnee": -0.45,
+            "chestX": -0.1,
             "chestY": 0,
-            "headX": 0.035,
+            "headX": 0.05,
             "rightTarget": [
-              0.04,
-              1.6128,
+              0.06,
+              1.45,
               -0.3
             ],
             "leftTarget": [
-              -0.07999999999999999,
-              1.6128,
-              -0.3
+              -0.1,
+              1.45,
+              -0.28
             ],
             "rightWrist": [
               1.570796327,
@@ -2083,27 +2083,156 @@
               1.2,
               0.15
             ],
+            "pelvisX": -0.08
+          }
+        },
+        {
+          "time": 0.14,
+          "values": {
+            "rightHip": 1.4,
+            "rightKnee": -1.6,
+            "leftHip": -0.05,
+            "leftKnee": -0.15,
+            "chestX": -0.06,
+            "chestY": 0,
+            "headX": 0.1,
+            "rightTarget": [
+              0.06,
+              1.65,
+              -0.3
+            ],
+            "leftTarget": [
+              -0.14,
+              1.55,
+              -0.28
+            ],
+            "rightWrist": [
+              1.570796327,
+              0,
+              0
+            ],
+            "leftWrist": [
+              3.141592653589793,
+              -1.5707963267948966,
+              0
+            ],
+            "rightPole": [
+              0.8,
+              1.15,
+              0.2
+            ],
+            "leftPole": [
+              -0.8,
+              1.2,
+              0.15
+            ],
+            "pelvisX": -0.04
+          }
+        },
+        {
+          "time": 0.3,
+          "values": {
+            "rightHip": 1.25,
+            "rightKnee": -1.55,
+            "leftHip": 0.35,
+            "leftKnee": -1.2,
+            "chestX": 0.04,
+            "chestY": 0,
+            "headX": 0.18,
+            "rightTarget": [
+              0.05,
+              2.08,
+              -0.1
+            ],
+            "leftTarget": [
+              -0.1,
+              2,
+              -0.1
+            ],
+            "rightWrist": [
+              1.570796327,
+              0,
+              0
+            ],
+            "leftWrist": [
+              3.141592653589793,
+              -1.5707963267948966,
+              0
+            ],
+            "rightPole": [
+              0.7,
+              1.45,
+              0.1
+            ],
+            "leftPole": [
+              -0.7,
+              1.45,
+              0.1
+            ],
             "pelvisX": 0
           }
         },
         {
-          "time": 0.58,
+          "time": 0.44,
           "values": {
-            "rightHip": 0.36,
-            "rightKnee": -0.72,
-            "leftHip": -0.1,
-            "leftKnee": -0.25,
-            "chestX": -0.05,
+            "rightHip": 0.8,
+            "rightKnee": -1.1,
+            "leftHip": 0.2,
+            "leftKnee": -0.9,
+            "chestX": 0.14,
             "chestY": 0,
-            "headX": 0.2,
+            "headX": 0.22,
             "rightTarget": [
-              0.04,
-              2.2128,
-              -0.3
+              0.05,
+              2.22,
+              0.02
             ],
             "leftTarget": [
-              -0.07999999999999999,
-              2.2128,
+              -0.06,
+              2.12,
+              0.02
+            ],
+            "rightWrist": [
+              1.570796327,
+              0,
+              0
+            ],
+            "leftWrist": [
+              3.141592653589793,
+              -1.5707963267948966,
+              0
+            ],
+            "rightPole": [
+              0.7,
+              1.45,
+              0.1
+            ],
+            "leftPole": [
+              -0.7,
+              1.45,
+              0.1
+            ],
+            "pelvisX": 0.02
+          }
+        },
+        {
+          "time": 0.57,
+          "values": {
+            "rightHip": 0.42,
+            "rightKnee": -0.75,
+            "leftHip": -0.22,
+            "leftKnee": -0.5,
+            "chestX": -0.16,
+            "chestY": 0,
+            "headX": 0.12,
+            "rightTarget": [
+              0.06,
+              2.18,
+              -0.4
+            ],
+            "leftTarget": [
+              -0.15,
+              2,
               -0.3
             ],
             "rightWrist": [
@@ -2117,37 +2246,123 @@
               0
             ],
             "rightPole": [
-              0.68,
-              1.44,
-              0.1
+              0.62,
+              1.5,
+              -0.1
             ],
             "leftPole": [
-              -0.68,
-              1.44,
-              0.1
+              -0.7,
+              1.4,
+              0.05
             ],
-            "pelvisX": 0
+            "pelvisX": -0.06
           }
         },
         {
-          "time": 1,
+          "time": 0.66,
           "values": {
             "rightHip": 0.22,
-            "rightKnee": -0.44,
-            "leftHip": 0.22,
-            "leftKnee": -0.44,
-            "chestX": -0.035,
+            "rightKnee": -0.5,
+            "leftHip": -0.05,
+            "leftKnee": -0.42,
+            "chestX": -0.2,
             "chestY": 0,
-            "headX": 0.12,
+            "headX": 0.08,
             "rightTarget": [
-              0.04,
-              1.9928,
-              -0.3
+              0.1,
+              2.12,
+              -0.52
             ],
             "leftTarget": [
-              -0.07999999999999999,
-              1.9928,
-              -0.3
+              -0.46,
+              1.85,
+              -0.15
+            ],
+            "rightWrist": [
+              1.85,
+              0,
+              0
+            ],
+            "leftWrist": [
+              3.141592653589793,
+              -1.5707963267948966,
+              0
+            ],
+            "rightPole": [
+              0.62,
+              1.5,
+              -0.1
+            ],
+            "leftPole": [
+              -0.8,
+              1.5,
+              0.1
+            ],
+            "pelvisX": -0.05
+          }
+        },
+        {
+          "time": 0.78,
+          "values": {
+            "rightHip": 0.38,
+            "rightKnee": -0.6,
+            "leftHip": 0.32,
+            "leftKnee": -0.55,
+            "chestX": -0.14,
+            "chestY": 0,
+            "headX": 0.02,
+            "rightTarget": [
+              0.12,
+              2.14,
+              -0.46
+            ],
+            "leftTarget": [
+              -0.52,
+              1.72,
+              -0.08
+            ],
+            "rightWrist": [
+              1.95,
+              0,
+              0
+            ],
+            "leftWrist": [
+              3.141592653589793,
+              -1.5707963267948966,
+              0
+            ],
+            "rightPole": [
+              0.8,
+              1.15,
+              0.2
+            ],
+            "leftPole": [
+              -0.8,
+              1.2,
+              0.15
+            ],
+            "pelvisX": -0.07
+          }
+        },
+        {
+          "time": 0.9,
+          "values": {
+            "rightHip": 0.78,
+            "rightKnee": -1.15,
+            "leftHip": 0.78,
+            "leftKnee": -1.15,
+            "chestX": -0.22,
+            "chestY": 0,
+            "headX": 0,
+            "rightTarget": [
+              0.2,
+              1.7,
+              -0.34
+            ],
+            "leftTarget": [
+              -0.42,
+              1.45,
+              -0.12
             ],
             "rightWrist": [
               2.1,
@@ -2169,7 +2384,50 @@
               1.2,
               0.15
             ],
-            "pelvisX": 0
+            "pelvisX": -0.1
+          }
+        },
+        {
+          "time": 1,
+          "values": {
+            "rightHip": 0.7,
+            "rightKnee": -1.05,
+            "leftHip": 0.7,
+            "leftKnee": -1.05,
+            "chestX": -0.18,
+            "chestY": 0,
+            "headX": 0.02,
+            "rightTarget": [
+              0.28,
+              1.22,
+              -0.25
+            ],
+            "leftTarget": [
+              -0.34,
+              1.25,
+              -0.2
+            ],
+            "rightWrist": [
+              2.1,
+              0,
+              0
+            ],
+            "leftWrist": [
+              3.141592653589793,
+              -1.5707963267948966,
+              0
+            ],
+            "rightPole": [
+              0.8,
+              1.15,
+              0.2
+            ],
+            "leftPole": [
+              -0.8,
+              1.2,
+              0.15
+            ],
+            "pelvisX": -0.08
           }
         }
       ]

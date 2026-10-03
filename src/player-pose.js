@@ -185,6 +185,7 @@ export function createPoseAdapter(THREE, visual, bones, anchors) {
   let pickupLowerOrigin = new Map(), pickupPelvisOrigin = null;
   let lowerOrigin = new Map(), pelvisOrigin = null, chestOrigin = null, headOrigin = null;
   let freeArmAge = .32;
+  let offHandReleaseAge = 0;
   let pickupFinger = vec(0, 0, 1);
   let contact = {}, fallback = null, lastSelected = null, heldBallLocal = null;
   const smooth = value => { const n = clamp(value); return n * n * (3 - 2 * n); };
@@ -280,6 +281,9 @@ export function createPoseAdapter(THREE, visual, bones, anchors) {
       get(`${side}_thigh`).rotation.x = pose[`${side}Hip`] * runningScale - pose.pelvisX + pickupStride;
       get(`${side}_shin`).rotation.x = pose[`${side}Knee`] * runningScale;
       get(`${side}_foot`).rotation.x = -get(`${side}_thigh`).rotation.x - get(`${side}_shin`).rotation.x - pose.pelvisX;
+      // Airborne feet point their toes instead of staying flat. It fades in
+      // after takeoff and out before the landing so the soles meet the floor flat.
+      if (selected === 'dunk') get(`${side}_foot`).rotation.x -= .55 * smooth((t - .06) / .16) * smooth((.86 - t) / .16);
     }
     // A left-side floor ball needs the torso to turn into the reach. The
     // authored yaw envelope lowers the right shoulder with the deep lean;
@@ -405,11 +409,20 @@ export function createPoseAdapter(THREE, visual, bones, anchors) {
         if (origin) pole.lerpVectors(origin.pole, pole.clone(), smooth(t));
         phaseName = 'released-follow-through';
       } else if (ball && ['layup', 'dunk'].includes(selected)) {
-        if (arm.side === 'right' || selected === 'dunk') {
+        // A dunk's off-hand leaves the ball when the ball is released and swings
+        // out on its authored path for balance instead of chasing the ball down.
+        const offHandFree = arm.side === 'left' && selected === 'dunk' && state.ballMode !== 'finish';
+        if (offHandFree) offHandReleaseAge += safeDt; else if (arm.side === 'left') offHandReleaseAge = 0;
+        if (arm.side === 'right' || (selected === 'dunk' && !(offHandFree && offHandReleaseAge > .14))) {
+          const free = target.clone();
           target.copy(ball).add(arm.side === 'right' ? vec(0, -radius, 0) : vec(-radius, 0, 0));
           contactNormal = ball.clone().sub(target).normalize();
           normalBlend = armHandoff.has(arm.side) ? smooth(1 - upperBlendRemaining / .22) : 1;
           required = state.ballMode === 'finish'; phaseName = required ? 'finish-contact' : 'released-finish';
+          if (offHandFree) {
+            const away = smooth(offHandReleaseAge / .14);
+            target.lerp(free, away); normalBlend *= 1 - away; required = false; phaseName = 'released-finish';
+          }
         }
       } else if (ball && state.ballMode === 'dribble' && arm.side === 'right') {
         const bob = .5 + Math.sin(dribble) * .5;
