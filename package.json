@@ -19,7 +19,7 @@
     "rig:check": "node scripts/validate-luke-rig.mjs",
     "motion:check": "node scripts/validate-luke-motion.mjs",
     "motion:manifest": "node scripts/update-luke-motion-manifest.mjs",
-    "test:motion": "node --test tests/luke-motion.test.mjs tests/luke-motion-continuity.test.mjs tests/player-pose.test.mjs tests/player.test.mjs",
+    "test:motion": "node --test tests/luke-motion.test.mjs tests/luke-motion-continuity.test.mjs tests/player-pose.test.mjs tests/player.test.mjs tests/video-clips.test.mjs",
     "test:rig": "node --test tests/luke-rig.test.mjs"
   },
   "dependencies": {

@@ -30,5 +30,11 @@ Source hashes (SHA-256):
 06_02.fbx: 13db9d5409a19621b8fa4ab60826f1a9c9bcda1104871986afcb8c86d4278380
 124_05.fbx: 95c5594ca3ae37c35e6b978da18c62e81ded9a769dc85655b6e118c5ce80c408
 
+Video-derived motion (gather, jump shot, layup)
+Source: reference video clips supplied by the project owner for this purpose. No footage, frames or images of the people in it are included in the game or repository; only joint rotations retargeted onto Luke's rig are shipped. The project owner is responsible for having the right to use that reference footage.
+Pose extraction: Google MediaPipe Pose Landmarker (heavy), Apache License 2.0 — https://ai.google.dev/edge/mediapipe/solutions/vision/pose_landmarker
+Cleanup, retargeting, review renders and import-ready exports: scripts/video-mocap (game-authored) and Blender 4.5 LTS (GPL; Blender's license does not extend to data produced with it).
+The jump-shot release replaces the earlier CMU 124_05 shot in the shipped sample pack; the CMU notice above still applies to the dribble motion.
+
 Game-authored work
 TheArena adds rig-specific retargeting, cleanup, transitions, foot/contact solving, jump/release timing, and ball presentation. The reversible hand shapes are original game-authored deformations of Luke's existing geometry; the source motion capture does not provide these finger shapes. Luke's supplied model and its existing rights are unchanged. Existing model, texture, audio, and software notices remain applicable. None of the source parties necessarily endorses this game.

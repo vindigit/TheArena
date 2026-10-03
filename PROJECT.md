@@ -17,6 +17,10 @@ The ordinary game URL loads the supplied Luke unconditionally from `public/asset
 
 The exact 17-bone local rest frames, hierarchy, inverse bind matrices, axes and attachment conventions are pinned in [`docs/rig/luke-rig-contract.json`](docs/rig/luke-rig-contract.json). See [`docs/PLAYER_ASSET.md`](docs/PLAYER_ASSET.md) for maintenance and Part 2 handoff. Editable Blender source stays local and ignored under `art/source/player/`; only the canonical GLB is published. `npm run rig:check` checks the actual binary and the same strict contract used at runtime.
 
+### Video-derived animation
+
+Luke's gather, jump shot and layup now come from reference video supplied by the project owner. MediaPipe extracts the pose; `scripts/video-mocap` cleans and retargets it, and Blender reviews and exports it. The layup no longer uses the procedural pose; dunks still do. See [`docs/VIDEO_MOCAP.md`](docs/VIDEO_MOCAP.md). Source footage is not committed.
+
 ### Visual pass (branch `visual-pass`, under review)
 
 - `?look=old` restores the previous straight-behind camera, four-shadow spotlight rig and black embedded uniform; the default URL uses the new look. The switch lives in `src/look.js`.
@@ -52,6 +56,7 @@ The court wood, basketball, and arena shell are accepted runtime assets. The bas
 | `src/ball.js` | Replaceable basketball GLB visual, procedural loading/error fallback, contact-shadow reference |
 | `src/player.js` | Player model, animation readiness/state, stable dribble attachment points |
 | `src/player-pose.js`, `src/luke-rig-contract.js` | Luke baseline procedural posing, explicit joint ownership and strict canonical rest/skin contract |
+| `scripts/video-mocap/` | Video → cleaned clip → MediaPipe pose → Luke retarget → Blender review/export → runtime sample pack |
 | `src/arena.js` | Court, arena, basket, net, lighting, collision references |
 | `src/audio.js` | Sample-backed basketball bounces, rim/backboard/dunk impacts, and shoe squeaks with synthesized fallback; guarded-loop arena ambience on an independent gain path; synthesized swish and crowd/game feedback |
 | `src/styles.css` | HUD, start screen, and responsive touch controls |

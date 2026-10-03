@@ -166,6 +166,7 @@ export function createPlayer(THREE, {
       const diag=rig?.diagnostics(), clip=diag?.clip;
       const desired=clip==='gather'||(clip==='shoot'&&ballMode==='gather')?[.7,0,.65,0]
         : clip==='shoot'?[0,.8,0,0]
+          : clip==='layup'?(ballMode==='finish'?[.7,0,0,0]:[0,.6,0,0])
           : ballMode==='dribble'&&diag?.contact?.right?.required?[.6,0,0,0]:[0,0,0,0];
       const a=1-Math.exp(-24*Math.max(0,dt));
       handWeights=handWeights.map((v,i)=>v+(desired[i]-v)*a);
