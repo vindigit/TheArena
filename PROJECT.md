@@ -32,6 +32,10 @@ Luke's gather, jump shot and layup now come from reference video supplied by the
 
 The old forward-dribble companion targeted a different rest pose and is removed from production assets and loading paths. `?animation=hybrid` cannot load that clip onto Luke. Luke uses the baseline procedural adapter while Luke-specific animation authoring remains Part 2. [`docs/HYBRID_DRIBBLE.md`](docs/HYBRID_DRIBBLE.md) and the historical validation/provenance remain an audit record; they are not current rig compatibility or animation approval. `scripts/retarget-dribble.py` now validates the Luke target only and exports no clips.
 
+### Shelved 22-bone player v2
+
+The 22-bone `game-humanoid-v2` rebuild (`08e36e5`–`d52b8ec`) was abandoned by `c613ad0`. Its write-up, contract, provenance, proof renders, Blender scripts and staged GLBs are under [`archive/player-v2/`](archive/player-v2/README.md). Nothing there is loaded, built or tested. The archive README lists the removed runtime-coupled tests and scripts and how to resume.
+
 The initial release is a browser-based, third-person solo basketball demo with:
 
 - One indoor arena, player, basketball, hoop, backboard, and net

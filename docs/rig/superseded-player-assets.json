@@ -1,6 +1,6 @@
 {
   "status": "historical-only-superseded-by-luke-part-1",
-  "notes": "Former provenance preserved for audit. These are not runtime inventory, build dependencies, source targets, compatible Luke clips, or current validation claims. Binaries are recoverable through Git history.",
+  "notes": "Former provenance preserved for audit. These are not runtime inventory, build dependencies, source targets, compatible Luke clips, or current validation claims. Binaries are recoverable through Git history. Entries with a supersededBy field were withdrawn by that commit, not by Luke Part 1.",
   "assets": [
     {
       "id": "fictional-player-v2",
@@ -312,6 +312,317 @@
       "integration": {
         "module": "src/player.js",
         "fallback": "Ordinary URL and Luke preview use the existing procedural animation. Companion failure retains the accepted skeletal procedural pose; mesh failure retains the original primitive player. Simulation owns movement, ball position, possession and bounce clock."
+      }
+    },
+    {
+      "id": "fictional-player-v2-rig22",
+      "category": "model",
+      "status": "preview",
+      "supersededBy": {
+        "commit": "c613ad0",
+        "note": "Restoring the pre-rig build (3a4ecb5) abandoned the 22-bone game-humanoid-v2 work. See archive/player-v2/README.md."
+      },
+      "publication": {
+        "manifestRecorded": false,
+        "deployments": [
+          {
+            "commit": "117e832",
+            "workflowRun": 36962635703,
+            "liveFrom": "2026-10-02T04:00:59Z",
+            "liveUntil": "2026-10-02T05:55:31Z",
+            "selection": "?player=fictional"
+          },
+          {
+            "commit": "d52b8ec",
+            "workflowRun": 36971081525,
+            "liveFrom": "2026-10-02T05:55:31Z",
+            "liveUntil": "2026-10-02T06:00:04Z",
+            "selection": "default URL"
+          }
+        ],
+        "note": "Live windows are GitHub Pages workflow completion times. The public manifest at these commits listed only luke-player-v1, so this ledger is the only provenance record of the publication."
+      },
+      "source": {
+        "type": "third-party",
+        "prompt": null,
+        "modelId": "Tripo H3.1",
+        "modelVersion": "H3.1",
+        "settings": {
+          "inputAsset": "fictional-player-v2",
+          "inputCommit": "ae16694",
+          "inputSha256": "af5fba2627efdad63d5c7e8e14fd10aad43fc364987e57ddcdf4e910a1368ced",
+          "rigContract": "game-humanoid-v2",
+          "builder": "archive/player-v2/scripts/build-player-v2-rig.py",
+          "blendSha256": "f428293286c9d00f277261fbe67eeed73a3ade2f280a99126e6a86b37d4255ef",
+          "textureSha256": "f004a3e9c813cc5589de16f8d45c84f6e4d756c421a968609c844f8d0287ed5b",
+          "archivedBinary": "archive/player-v2/art/staging/player/fictional-player-v2.glb"
+        },
+        "seed": null,
+        "scenarioAssetId": null,
+        "scenarioJobId": null,
+        "generatedAt": null,
+        "referenceAssetIds": [],
+        "optimizationSteps": [
+          "Rebuilt in Blender 5.2.1 LTS onto the exact 22-bone game-humanoid-v2 armature: Hips root, three spine, two shoulder and two toe bones, no finger bones.",
+          "Remapped the 17 source vertex groups into the added spine, shoulder, hip and toe regions; normalized to at most four influences; a second shoulder pass drew upper-chest weights into the clavicles.",
+          "Exported one mesh, one skin and one material with animation disabled.",
+          "Geometry, proportions, UVs and embedded PNG bytes retained from the input."
+        ],
+        "outputNotes": "Rig rebuild of the accepted fictional-player-v2 entry above, not a new generation. Same filename, different bytes and rig."
+      },
+      "license": {
+        "name": "Tripo Studio Pro generated output (rig rebuild)",
+        "url": "https://www.tripo3d.ai/help/privacy-policy/how-to-use-tripo-models-commercially",
+        "commercialUse": true,
+        "attribution": null,
+        "evidence": "Inherits the fictional-player-v2 entry's license. The Step 2 provenance required input rights to be re-verified before shipping; no re-verification is recorded before these deployments."
+      },
+      "runtime": [
+        {
+          "path": "assets/models/player/fictional-player-v2.glb",
+          "format": "glb",
+          "bytes": 586056,
+          "maxBytes": 1500000,
+          "sha256": "e7862c251241fa3c3c36e5d7446569a557d15d529f1aafb353014f8cdaeec3d3",
+          "triangles": 4704
+        }
+      ],
+      "validation": {
+        "checks": {
+          "rigContract": "pass",
+          "skinWeights": "pass",
+          "runtimeLoad": "pass",
+          "localBrowserDesktop": "pass",
+          "touch": "pending",
+          "physicalPhone": "pending"
+        },
+        "measured": {
+          "downloadBytes": 586056,
+          "triangles": 4704,
+          "vertices": 3265,
+          "materials": 1,
+          "bones": 22,
+          "maximumBoneInfluences": 3,
+          "atlasFormat": "image/png",
+          "atlasWidth": 512,
+          "atlasHeight": 512,
+          "animationClips": 0,
+          "bindHeightMeters": 2.05
+        },
+        "evidence": [
+          "archive/player-v2/docs/evidence/player-v2/",
+          "archive/player-v2/docs/evidence/player-v2-fictional.png"
+        ],
+        "notes": "CI ran scripts/validate-player-v2-assets.mjs (22-bone contract, one mesh/skin/material/image, normalized weights with at most four influences, no clips) and tests/player-v2-runtime.test.mjs (loads without fallback, survives idle/move/shoot/layup states). Both were removed with the Luke-only restore and are recoverable from Git history. Local production-build browser check at f7a3dad (tree identical to d52b8ec) loaded it without fallback through repeated move/shoot input. Blender proofs: no tears at extremes; loose sleeves, baggy shorts and shoes deform blockily."
+      },
+      "integration": {
+        "module": "src/player.js",
+        "loaderCommit": "f7a3dad",
+        "fallback": "Loaded with rigContract game-humanoid-v2. A failed load showed a FALLBACK PLAYER badge and blocked play; no substitute model was loaded. luke-player-v1.glb remained in public/ as the legacy asset."
+      }
+    },
+    {
+      "id": "luke-player-preview-rig22-kit",
+      "category": "model",
+      "status": "preview",
+      "supersededBy": {
+        "commit": "c613ad0",
+        "note": "Restoring the pre-rig build (3a4ecb5) abandoned the 22-bone game-humanoid-v2 work. See archive/player-v2/README.md."
+      },
+      "publication": {
+        "manifestRecorded": false,
+        "deployments": [
+          {
+            "commit": "117e832",
+            "workflowRun": 36962635703,
+            "liveFrom": "2026-10-02T04:00:59Z",
+            "liveUntil": "2026-10-02T05:55:31Z",
+            "selection": "default URL"
+          }
+        ],
+        "note": "Live windows are GitHub Pages workflow completion times. The public manifest at these commits listed only luke-player-v1, so this ledger is the only provenance record of the publication."
+      },
+      "source": {
+        "type": "third-party",
+        "prompt": null,
+        "modelId": "Tripo Studio H3.1",
+        "modelVersion": "H3.1",
+        "settings": {
+          "inputAsset": "luke-player-v1",
+          "inputSha256": "9eedd88b85386084bc1b19ab70d000376d2ab750dfb6d129bb5dd264767a9135",
+          "kitSource": {
+            "path": "art/source/player/basketball-jersey-source.glb",
+            "sha256": "6e2eebe0d508f4c9e943e8b9aca2b3ee9246d360cc83e71a6d9222f3c0a12d96",
+            "tracked": false
+          },
+          "rigContract": "game-humanoid-v2",
+          "builder": "archive/player-v2/scripts/build-player-v2-rig.py",
+          "kitFitter": "scripts/fit-luke-uniform.py at 117e832",
+          "blendSha256": "0ccc586f33793e1948896094fae6e178d03bc1235c42cf626eb57efdd4aeda2d",
+          "textureSha256": "80308401f3ba092430733e2c65e044dd7034d7d8dfb13c143eaecba4d7c00df2",
+          "archivedBinary": null
+        },
+        "seed": null,
+        "scenarioAssetId": null,
+        "scenarioJobId": null,
+        "generatedAt": null,
+        "referenceAssetIds": [],
+        "optimizationSteps": [
+          "Rebuilt in Blender 5.2.1 LTS onto the exact 22-bone game-humanoid-v2 armature: Hips root, three spine, two shoulder and two toe bones, no finger bones.",
+          "Remapped the 17 source vertex groups into the added spine, shoulder, hip and toe regions; normalized to at most four influences; a second shoulder pass drew upper-chest weights into the clavicles.",
+          "Exported one mesh, one skin and one material with animation disabled.",
+          "Baked the user-supplied green number-3 kit into Luke's single atlas by front/back projection over unchanged UVs; Luke-only yoke faces sampled an unbranded green region of the same source. No garment geometry or skinning change."
+        ],
+        "outputNotes": "Kit-fitted variant of luke-player-preview-rig22, published only by 117e832 and reverted by d52b8ec. Not archived; recover with git show 117e832:public/assets/models/player/luke-player-preview.glb."
+      },
+      "license": {
+        "name": "User-supplied Tripo output with a user-supplied kit baked in; branded graphics retained by explicit request",
+        "url": null,
+        "commercialUse": false,
+        "attribution": null,
+        "evidence": "User supplied GLB and explicitly directed retention of branded uniform graphics. Tripo Pro membership is user-reported. No claim of trademark ownership or separate branding clearance is made. User authorized public GitHub review preview. Commercial rights and separate branding rights are not asserted. The kit came from a separate user-supplied model, kept local and untracked; its crest, sponsor, number and shorts marks were baked into this GLB's atlas and so were published with it. No trademark ownership or branding clearance is claimed for the kit."
+      },
+      "runtime": [
+        {
+          "path": "assets/models/player/luke-player-preview.glb",
+          "format": "glb",
+          "bytes": 376264,
+          "maxBytes": 1500000,
+          "sha256": "4c3fda6f26a917f76f84653a164966aebb47595fd5078643d012353cd0619a7e",
+          "triangles": 4754
+        }
+      ],
+      "validation": {
+        "checks": {
+          "rigContract": "pass",
+          "skinWeights": "pass",
+          "runtimeLoad": "pass",
+          "localBrowserDesktop": "pending",
+          "touch": "pending",
+          "physicalPhone": "pending"
+        },
+        "measured": {
+          "downloadBytes": 376264,
+          "triangles": 4754,
+          "vertices": 3287,
+          "materials": 1,
+          "bones": 22,
+          "maximumBoneInfluences": 4,
+          "atlasFormat": "image/jpeg",
+          "atlasWidth": 1024,
+          "atlasHeight": 1024,
+          "animationClips": 0,
+          "bindHeightMeters": 2.05
+        },
+        "evidence": [
+          "docs/evidence/player-v2-uniform/ at 117e832",
+          "docs/evidence/uniform-source/ at 117e832"
+        ],
+        "notes": "CI ran scripts/validate-player-v2-assets.mjs (22-bone contract, one mesh/skin/material/image, normalized weights with at most four influences, no clips) and tests/player-v2-runtime.test.mjs (loads without fallback, survives idle/move/shoot/layup states). Both were removed with the Luke-only restore and are recoverable from Git history. No browser capture of this binary was committed. Its 1024² atlas is twice the width of luke-player-v1's 512² atlas."
+      },
+      "integration": {
+        "module": "src/player.js",
+        "loaderCommit": "117e832",
+        "fallback": "Loaded with rigContract game-humanoid-v2. A failed load showed a FALLBACK PLAYER badge and blocked play; no substitute model was loaded. luke-player-v1.glb remained in public/ as the legacy asset."
+      }
+    },
+    {
+      "id": "luke-player-preview-rig22",
+      "category": "model",
+      "status": "preview",
+      "supersededBy": {
+        "commit": "c613ad0",
+        "note": "Restoring the pre-rig build (3a4ecb5) abandoned the 22-bone game-humanoid-v2 work. See archive/player-v2/README.md."
+      },
+      "publication": {
+        "manifestRecorded": false,
+        "deployments": [
+          {
+            "commit": "d52b8ec",
+            "workflowRun": 36971081525,
+            "liveFrom": "2026-10-02T05:55:31Z",
+            "liveUntil": "2026-10-02T06:00:04Z",
+            "selection": "?player=luke"
+          }
+        ],
+        "note": "Live windows are GitHub Pages workflow completion times. The public manifest at these commits listed only luke-player-v1, so this ledger is the only provenance record of the publication."
+      },
+      "source": {
+        "type": "third-party",
+        "prompt": null,
+        "modelId": "Tripo Studio H3.1",
+        "modelVersion": "H3.1",
+        "settings": {
+          "inputAsset": "luke-player-v1",
+          "inputSha256": "9eedd88b85386084bc1b19ab70d000376d2ab750dfb6d129bb5dd264767a9135",
+          "rigContract": "game-humanoid-v2",
+          "builder": "archive/player-v2/scripts/build-player-v2-rig.py",
+          "blendSha256": "1227c804193b8d729fed269f4bf405de51865ee40c29ad523d1f0ffa742dc67a",
+          "textureSha256": "76b9f57505eb021ad085bd143ee9b0edb169239514590c31603c7a521882fae1",
+          "archivedBinary": "archive/player-v2/art/staging/player/luke-player-preview.glb"
+        },
+        "seed": null,
+        "scenarioAssetId": null,
+        "scenarioJobId": null,
+        "generatedAt": null,
+        "referenceAssetIds": [],
+        "optimizationSteps": [
+          "Rebuilt in Blender 5.2.1 LTS onto the exact 22-bone game-humanoid-v2 armature: Hips root, three spine, two shoulder and two toe bones, no finger bones.",
+          "Remapped the 17 source vertex groups into the added spine, shoulder, hip and toe regions; normalized to at most four influences; a second shoulder pass drew upper-chest weights into the clavicles.",
+          "Exported one mesh, one skin and one material with animation disabled.",
+          "Geometry, proportions, UVs and embedded JPEG bytes retained from luke-player-v1."
+        ],
+        "outputNotes": "Rig rebuild of luke-player-v1 with its original uniform. The current Luke runtime asset is unaffected."
+      },
+      "license": {
+        "name": "User-supplied Tripo output; branded graphics retained by explicit request",
+        "url": null,
+        "commercialUse": false,
+        "attribution": null,
+        "evidence": "User supplied GLB and explicitly directed retention of branded uniform graphics. Tripo Pro membership is user-reported. No claim of trademark ownership or separate branding clearance is made. User authorized public GitHub review preview. Commercial rights and separate branding rights are not asserted. Rig rebuild only; the uniform graphics are byte-identical to luke-player-v1."
+      },
+      "runtime": [
+        {
+          "path": "assets/models/player/luke-player-preview.glb",
+          "format": "glb",
+          "bytes": 248152,
+          "maxBytes": 1500000,
+          "sha256": "8477c992d2cd5170e72cba2bd80d5357bf506f14297e9b9ad50092c06c9fd3e4",
+          "triangles": 4754
+        }
+      ],
+      "validation": {
+        "checks": {
+          "rigContract": "pass",
+          "skinWeights": "pass",
+          "runtimeLoad": "pass",
+          "localBrowserDesktop": "pass",
+          "touch": "pending",
+          "physicalPhone": "pending"
+        },
+        "measured": {
+          "downloadBytes": 248152,
+          "triangles": 4754,
+          "vertices": 3287,
+          "materials": 1,
+          "bones": 22,
+          "maximumBoneInfluences": 4,
+          "atlasFormat": "image/jpeg",
+          "atlasWidth": 512,
+          "atlasHeight": 512,
+          "animationClips": 0,
+          "bindHeightMeters": 2.05
+        },
+        "evidence": [
+          "archive/player-v2/docs/evidence/player-v2/",
+          "archive/player-v2/docs/evidence/player-v2-luke.png"
+        ],
+        "notes": "CI ran scripts/validate-player-v2-assets.mjs (22-bone contract, one mesh/skin/material/image, normalized weights with at most four influences, no clips) and tests/player-v2-runtime.test.mjs (loads without fallback, survives idle/move/shoot/layup states). Both were removed with the Luke-only restore and are recoverable from Git history. Local production-build browser check at f7a3dad (tree identical to d52b8ec) loaded it without fallback through repeated move/shoot input."
+      },
+      "integration": {
+        "module": "src/player.js",
+        "loaderCommit": "f7a3dad",
+        "fallback": "Loaded with rigContract game-humanoid-v2. A failed load showed a FALLBACK PLAYER badge and blocked play; no substitute model was loaded. luke-player-v1.glb remained in public/ as the legacy asset."
       }
     }
   ]
