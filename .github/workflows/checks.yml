@@ -1,0 +1,32 @@
+name: Checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # Inventory checks include recovered players and retained historical Luke.
+      - run: npm run assets:check
+      - run: npm run test:rig
+      - run: npm run test:loading
+      - run: npm run test:motion
+      - run: npm run test:audio
+      - run: node --test tests/recovered-assets.test.mjs tests/nba2k9-motion.test.mjs tests/recovered-player-loading.test.mjs tests/recovered-gameplay.test.mjs
+      - run: npm run build -- --base=/TheArena/

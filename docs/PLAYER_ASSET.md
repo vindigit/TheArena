@@ -83,6 +83,7 @@ Repeat checks:
 ```powershell
 npm run rig:check
 npm run test:rig
+npm run test:loading
 node tests/player.test.mjs
 npm run assets:check
 npm run build

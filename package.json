@@ -16,6 +16,7 @@
     "assets:check": "node scripts/validate-assets.mjs",
     "assets:optimize:texture": "node scripts/prepare-texture.mjs",
     "test:audio": "node --test tests/audio.test.mjs",
+    "test:loading": "node --test tests/player-loading.test.mjs",
     "rig:check": "node scripts/validate-luke-rig.mjs",
     "motion:check": "node scripts/validate-luke-motion.mjs",
     "motion:manifest": "node scripts/update-luke-motion-manifest.mjs",

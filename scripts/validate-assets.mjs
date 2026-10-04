@@ -8,6 +8,7 @@ import Ajv from 'ajv';
 import sharp from 'sharp';
 import { checkLukeRig } from './validate-luke-rig.mjs';
 import { checkLukeMotion } from './validate-luke-motion.mjs';
+import { checkRecoveredPlayers } from './validate-recovered-players.mjs';
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const publicRoot = path.join(projectRoot, 'public');
@@ -189,16 +190,23 @@ async function checkManifest() {
   }
 
   if (errors.length) throw new Error(`asset validation failed:\n  ${errors.join('\n  ')}`);
-  const playerFiles = (await readdir(path.join(publicRoot, 'assets', 'models', 'player'))).filter(name => name.endsWith('.glb'));
-  if (playerFiles.length !== 1 || playerFiles[0] !== 'luke-player-v1.glb') {
-    throw new Error('Only the canonical Luke GLB may be published in the player asset directory');
+  const playerDirectory = path.join(publicRoot, 'assets', 'models', 'player');
+  const playerFiles = (await readdir(playerDirectory, { recursive: true }))
+    .filter(name => name.endsWith('.glb'))
+    .map(name => `assets/models/player/${name.replaceAll(path.sep, '/')}`);
+  const registeredPlayers = new Set(manifest.assets.flatMap(asset => asset.runtime)
+    .filter(entry => entry.path.startsWith('assets/models/player/') && entry.format === 'glb')
+    .map(entry => entry.path));
+  for (const playerFile of playerFiles) {
+    if (!registeredPlayers.has(playerFile)) throw new Error(`Unregistered player asset: ${playerFile}`);
   }
-  const playerAssets = manifest.assets.filter(asset => asset.runtime.some(entry => entry.path.startsWith('assets/models/player/')));
-  if (playerAssets.length !== 1 || playerAssets[0].id !== 'luke-player-v1') {
-    throw new Error('Luke must be the only player model in the production inventory');
+  if (!registeredPlayers.size) throw new Error('The production inventory requires at least one player model');
+  // Historical Luke files remain validated while they are kept in the inventory.
+  if (manifest.assets.some(asset => asset.id === 'luke-player-v1')) {
+    await checkLukeRig();
+    await checkLukeMotion();
   }
-  await checkLukeRig();
-  await checkLukeMotion();
+  if (manifest.assets.some(asset => asset.id.startsWith('nba2k9-'))) await checkRecoveredPlayers(manifest);
   console.log(`Assets valid: ${manifest.assets.filter(a => a.status === 'accepted').length} accepted assets, ${manifest.assets.filter(a => a.status === 'preview').length} preview assets, ${fileCount} runtime files, ${totalBytes} bytes.`);
 }
 

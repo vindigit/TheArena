@@ -2,96 +2,91 @@
 
 ## Canonical locations
 
-- **Repository:** `https://github.com/vindigit/TheArena`
-- **Live demo:** `https://vindigit.github.io/TheArena/`
-- **Local checkout:** `C:\\Users\\valexander\\Documents\\Codex\\2026-09-27\\codex-mcp-add-scenario-url-https\\TheArena`
-- **Primary branch:** `main`
+- Repository: https://github.com/vindigit/TheArena
+- Live game: https://vindigit.github.io/TheArena/
+- Primary deployment branch: `main`
+- This repository is the source of truth. Keep changes focused and preserve unrelated local work.
 
-The Git repository is the source of truth. Work in this checkout, commit focused changes, and push to `main`; GitHub Pages publishes the production build.
+## Product direction
 
-## Current playable slice
+The goal is browser basketball with single-player and online 1v1, 2v2 and 3v3.
+The current release remains a two-minute solo run. Player and animation migration
+comes first; complete CPU 1v1 is the next gameplay milestone. Team modes and online
+play are not implemented by this migration.
 
-### Luke character foundation (Part 1)
+## Current player foundation
 
-The ordinary game URL loads the supplied Luke unconditionally from `public/assets/models/player/luke-player-v1.glb`. The former `?player=luke` review selector is obsolete. Luke is the sole playable character during normal play and reset; a failed Luke load shows an explicit error and never substitutes a mannequin or previous character. His supplied appearance, uniform, texture and proportions are preserved byte-for-byte from the integrated Luke asset. This user-requested exception to the original fictional uniform direction does not establish new branding rights.
+The ordinary URL loads a complete recovered NBA 2K9 player assembly. The start
+screen offers Classic 01 and Classic 02; `?character=classic-two` selects the second
+player directly. Both combine selected athletic body, head and original textures,
+with 33 shared joints: the canonical 26-joint animation family and seven additional
+body/clothing joints. Models are normalized to 2 m height and face the game's -Z
+forward axis. Names are project labels, not verified real-player identities.
 
-The exact 17-bone local rest frames, hierarchy, inverse bind matrices, axes and attachment conventions are pinned in [`docs/rig/luke-rig-contract.json`](docs/rig/luke-rig-contract.json). See [`docs/PLAYER_ASSET.md`](docs/PLAYER_ASSET.md) for maintenance and Part 2 handoff. Editable Blender source stays local and ignored under `art/source/player/`; only the canonical GLB is published. `npm run rig:check` checks the actual binary and the same strict contract used at runtime.
+`src/nba2k9-player.js` loads the registry and compatible motion bundle behind the
+stable gameplay root and attachment API. `src/nba2k9-motion.js` samples recovered
+rotations, adapts them to gameplay clocks, blends transitions, grounds feet and
+solves attached-ball contacts. The four recovered motions supply selected pose
+segments; their original action meanings and exact original-game fidelity remain
+unverified. In-place motion does not own gameplay translation, facing, jump,
+possession, shot grades or free-ball physics. Loading failure blocks play explicitly.
 
-### Video-derived animation
+See `docs/RECOVERED_PLAYER.md` for source selections, regeneration, validation and
+known limits. The owner requested public integration and removal of the previous
+rights-clearance prerequisite. Source hashes and provenance remain accurate;
+unavailable license information is recorded as unknown, not as a grant.
 
-Luke's gather, jump shot and layup now come from reference video supplied by the project owner. MediaPipe extracts the pose; `scripts/video-mocap` cleans and retargets it, and Blender reviews and exports it. The layup no longer uses the procedural pose; dunks still do. See [`docs/VIDEO_MOCAP.md`](docs/VIDEO_MOCAP.md). Source footage is not committed.
+Luke's binary, rig contract, old pose modules and associated tests remain historical
+maintenance work. They are not the default character path. Unfinished local Luke
+changes must not be overwritten by the migration.
 
-### Visual pass (branch `visual-pass`, under review)
+The abandoned 22-bone `game-humanoid-v2` rebuild (`08e36e5`–`d52b8ec`, withdrawn by
+`c613ad0`) is archived under [`archive/player-v2/`](archive/player-v2/README.md).
+Nothing there is loaded, built or tested.
 
-- `?look=old` restores the previous straight-behind camera, four-shadow spotlight rig and black embedded uniform; the default URL uses the new look. The switch lives in `src/look.js`.
-- Camera: 3/4 side view at head height framed on the player-to-rim line, held still from gather until the shot resolves. All tuning numbers are in the `CAMERA` block in `src/main.js`.
-- Lighting: a player key light (the only shadow map), soft hemisphere/ambient fill and a rim light from behind, plus brighter, shadowless court pools. See `src/arena.js`.
-- Kit: `public/assets/textures/player/luke-kit-green-v1.jpg` repaints Luke's existing 512² atlas over his unchanged UVs. Regenerate it with `node scripts/build-luke-kit-texture.mjs`. The GLB is untouched. The sponsor/maker/crest marks were recreated at the user's request from a reference image; this does not establish branding rights.
+## Playable slice
 
-### Superseded hybrid dribble experiment
+- Indoor arena, player, basketball, hoop, backboard and net.
+- Keyboard/mouse and touch movement, sprint, timed jump shots, layups, dunks and reset.
+- Two-minute solo scoring run with deterministic shot grading and arcs.
+- PS2-era presentation, validated court/arena/ball assets and sampled audio with
+  procedural fallback. The arena, court and audio keep their accepted implementations.
 
-The old forward-dribble companion targeted a different rest pose and is removed from production assets and loading paths. `?animation=hybrid` cannot load that clip onto Luke. Luke uses the baseline procedural adapter while Luke-specific animation authoring remains Part 2. [`docs/HYBRID_DRIBBLE.md`](docs/HYBRID_DRIBBLE.md) and the historical validation/provenance remain an audit record; they are not current rig compatibility or animation approval. `scripts/retarget-dribble.py` now validates the Luke target only and exports no clips.
+## Working agreement
 
-### Shelved 22-bone player v2
-
-The 22-bone `game-humanoid-v2` rebuild (`08e36e5`–`d52b8ec`) was abandoned by `c613ad0`. Its write-up, contract, provenance, proof renders, Blender scripts and staged GLBs are under [`archive/player-v2/`](archive/player-v2/README.md). Nothing there is loaded, built or tested. The archive README lists the removed runtime-coupled tests and scripts and how to resume.
-
-The initial release is a browser-based, third-person solo basketball demo with:
-
-- One indoor arena, player, basketball, hoop, backboard, and net
-- Keyboard/mouse and touch controls
-- Dribbling, jump shots, layups, dunks, a two-minute run, and reset
-- Procedural PS2-era visual treatment, validated runtime assets, sampled ball/hoop impacts with synthesized fallback, and a quiet guarded-loop arena bed
-
-The court wood, basketball, and arena shell are accepted runtime assets. The basketball combines a Scenario-generated leather concept with an original local low-poly mesh; the shell and fictional venue atlas are locally authored. Three original local variants now back each basketball bounce, metal-rim impact, tempered-glass backboard hit, and hardwood shoe squeak, while one compact layered impact backs the authored dunk event. One quiet original indoor-arena ambience file loops behind an independent low-level gain path after game-start unlock. All live behind `AudioDirector` with synthesized gameplay fallback and failure-isolated ambience; the remaining one-shot audio cues are procedural placeholders. Luke's supplied branded uniform is the explicitly requested exception to fictional presentation. See [`docs/ASSET_PIPELINE.md`](docs/ASSET_PIPELINE.md) and `public/assets/manifest.json` for provenance, license scope, measurements, and validation limits.
-
-## Project rules
-
-- Keep the PS2/early-2000s console look: chunky silhouettes, readable textures, bold contrast, and focused post-processing.
-- Preserve both desktop and touch playability whenever movement or controls change.
-- Keep third-party/generated assets clearly licensed for a public browser demo before committing them.
-- Prefer replacing a procedural asset behind its existing module boundary instead of mixing asset-loading logic into gameplay code.
+- Keep the early-2000s console basketball look and readable movement.
+- Preserve desktop and touch playability and verify both when controls change.
+- The owner has selected recovered NBA 2K9 player models and motions as project inputs.
+- Keep gameplay orchestration in `src/main.js`; player, arena and audio implementations
+  remain replaceable modules. Animation cannot move the authoritative gameplay root.
+- Run `npm run build` after code, asset or configuration changes.
+- Build production with `npm run build -- --base=/TheArena/`; a push to `main` publishes
+  through GitHub Pages. Verify the actual deployed build after the workflow completes.
 
 ## Source map
 
 | Path | Responsibility |
 | --- | --- |
-| `src/main.js` | Game loop, input, camera, ball interactions, shooting state, HUD |
-| `src/ball.js` | Replaceable basketball GLB visual, procedural loading/error fallback, contact-shadow reference |
-| `src/player.js` | Player model, animation readiness/state, stable dribble attachment points |
-| `src/player-pose.js`, `src/luke-rig-contract.js` | Luke baseline procedural posing, explicit joint ownership and strict canonical rest/skin contract |
-| `scripts/video-mocap/` | Video → cleaned clip → MediaPipe pose → Luke retarget → Blender review/export → runtime sample pack |
-| `src/arena.js` | Court, arena, basket, net, lighting, collision references |
-| `src/audio.js` | Sample-backed basketball bounces, rim/backboard/dunk impacts, and shoe squeaks with synthesized fallback; guarded-loop arena ambience on an independent gain path; synthesized swish and crowd/game feedback |
-| `src/styles.css` | HUD, start screen, and responsive touch controls |
-| `.github/workflows/pages.yml` | GitHub Pages build and deployment |
+| `src/main.js` | Input, game loop, camera, ball interactions, shot/finish timing, HUD and player selection |
+| `src/nba2k9-player.js`, `src/nba2k9-motion.js` | Recovered player loading, pose sampling, transitions, feet and palms |
+| `src/nba2k9-roster.json` | Playable assemblies, scale/orientation and adapted motion segments |
+| `src/ball.js`, `src/arena.js`, `src/audio.js` | Replaceable ball, arena and audio presentation |
+| `scripts/build-nba2k9-assets.mjs` | Reproducible selected body/head/texture assembly and motion bundle |
+| `scripts/validate-recovered-players.mjs` | Independent recovered geometry, skin, clip and roster validation |
+| `public/assets/manifest.json` | Runtime inventory, hashes, source provenance and measured budgets |
+| `src/player.js`, Luke rig/pose/mocap files | Historical Luke work, retained independently of the default player |
 
-## Resume workflow
+## Resume and validation
 
-```powershell
-cd C:\Users\valexander\Documents\Codex\2026-09-27\codex-mcp-add-scenario-url-https\TheArena
-npm ci
-npm run dev
-```
+Run `npm ci`, then `npm run dev`. Before publishing, run asset checks, recovered
+runtime tests, the existing rig/loading/motion/audio regression suites and the
+production build. Inspect the built preview at desktop, narrow portrait and narrow
+landscape sizes. Browser touch emulation does not establish physical-phone
+performance or visual approval.
 
-Before committing gameplay or visual changes, run:
+## Next milestone
 
-```powershell
-npm run build
-```
-
-Then test desktop controls and a narrow touch viewport. A push to `main` triggers the Pages deployment; verify the live URL after the workflow finishes.
-
-## Asset pipeline status and next milestone
-
-The pipeline now has a style guide, budgets, a machine-readable manifest and schema, `npm run assets:check`, and a repeatable WebP optimization command. The first court wood material is integrated behind `src/arena.js` with procedural fallback. It has passed source/runtime seam checks, a production build with the GitHub Pages base path, and local desktop/touch checks.
-
-Continue replacing the remaining placeholders in small passes:
-
-1. Basketball replacement completed: centered 0.12 m radius, 352 triangles, one 256² color map, and a narrow renderer in `src/ball.js` with the original fallback. Desktop and emulated touch checks passed. A tested green-timed jumper missed identically in the original and replacement builds; physics remains unchanged. See the manifest for this existing limitation and detailed checks.
-2. Arena shell replacement completed: an 85.7 KB GLB with 956 triangles, one 512² fictional venue atlas, and 240 instanced seats. The original procedural shell is the loading/error fallback. The court wood, hoop landmarks, lights, camera, and controls remain unchanged. Desktop and narrow portrait/landscape game views and a missing-model fallback were checked; physical-phone FPS remains unmeasured.
-3. Add the remaining tiling materials and short gameplay-audio categories behind `src/arena.js` and `src/audio.js`, one category at a time.
-4. Build a named hoop assembly, preserving the fixed gameplay landmarks and mutable net reference.
-5. Part 1 establishes supplied Luke's canonical rig and baseline pose path. Part 2 may author or retarget Luke-compatible idle, movement, dribble, gather, pickup and finish clips against the pinned contract; do not reuse the superseded old-rig clip.
-
-`main` remains the deployment branch. Verify each replacement before pushing; the current live build should remain on the last accepted asset set. The Scenario project used for the first texture is still named “Default Project”; renaming it to “TheArena” remains a workspace follow-up.
+Build complete CPU 1v1: opponent, defense, contested shots, rebounds, turnovers,
+possession rules, match winner and immediate rematch. Keep player-system refinements
+focused on those interactions. Do not resume an unrelated placeholder-art checklist
+as the project's primary direction.

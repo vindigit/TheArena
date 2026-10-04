@@ -21,7 +21,7 @@
       "required": ["id", "category", "status", "source", "license", "runtime", "validation", "integration"],
       "properties": {
         "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
-        "category": { "enum": ["model", "texture", "audio"] },
+        "category": { "enum": ["model", "animation", "texture", "audio"] },
         "status": { "enum": ["accepted", "preview"] },
         "source": { "$ref": "#/definitions/source" },
         "license": { "$ref": "#/definitions/license" },
@@ -61,7 +61,7 @@
       "properties": {
         "name": { "type": "string", "minLength": 1 },
         "url": { "type": ["string", "null"] },
-        "commercialUse": { "type": "boolean" },
+        "commercialUse": { "type": ["boolean", "null"], "description": "True or false when documented; null when the supplied provenance establishes no commercial-use license." },
         "attribution": { "$ref": "#/definitions/nullableText" },
         "evidence": { "type": "string", "minLength": 1 }
       }
@@ -89,7 +89,7 @@
       "additionalProperties": false,
       "required": ["path", "format", "bytes", "sha256"],
       "properties": {
-        "path": { "type": "string", "pattern": "^assets/(models|textures|audio)/[a-z0-9/_-]+\\.(glb|webp|png|ktx2|mp3|ogg)$" },
+        "path": { "type": "string", "pattern": "^assets/(models|animations|textures|audio)/[a-z0-9/_-]+\\.(glb|webp|png|ktx2|mp3|ogg)$" },
         "format": { "enum": ["glb", "webp", "png", "ktx2", "mp3", "ogg"] },
         "bytes": { "type": "integer", "minimum": 1 },
         "maxBytes": { "type": "integer", "minimum": 1 },

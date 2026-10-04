@@ -2095,7 +2095,7 @@
           "Exported active scene selection only, Y-up GLB, no baked animation clips; working blend and raw exports remain ignored.",
           "Part 1 makes this exact supplied integrated Luke binary canonical, without geometry, texture, proportions or uniform changes; exact local rest/skin contract pinned and checked."
         ],
-        "outputNotes": "User-supplied Luke GLB is the sole runtime player by the current instruction. Former optional-preview decision is superseded. Geometry and embedded uniform atlas unchanged; no replacement generation or new appearance/branding approval inferred. Editable sources stay local and ignored under art/source/player; tracked contract and source provenance describe maintenance."
+        "outputNotes": "Historical user-supplied Luke asset retained with its canonical rig and original evidence. The recovered NBA 2K9 roster supersedes Luke as the default runtime player; this record does not assert current appearance or branding rights."
       },
       "license": {
         "name": "User-supplied Tripo output; branded graphics retained by explicit request",
@@ -2128,7 +2128,7 @@
           "inverseBindMatrices": "pass",
           "normalizedSkinWeights": "pass",
           "sourceRoundTrip": "pass",
-          "onlyRuntimePlayer": "pass"
+          "onlyRuntimePlayer": "not-applicable"
         },
         "measured": {
           "triangles": 4754,
@@ -2153,7 +2153,379 @@
       },
       "integration": {
         "module": "src/player.js",
-        "fallback": "None: clear loading/error state until validated Luke is ready; old character, procedural mannequin and old animation companion are not requested or shipped. Gameplay owns root and ball state; Luke baseline pose adapter owns visual joints."
+        "fallback": "Historical Luke renderer and rig remain available for maintenance evidence. The default game imports the recovered player registry; Luke is no longer the only published player model or the default character."
+      }
+    },
+    {
+      "id": "nba2k9-classic-one-v1",
+      "category": "model",
+      "status": "accepted",
+      "source": {
+        "type": "third-party",
+        "prompt": null,
+        "modelId": "NBA 2K9 PS2 recovered study",
+        "modelVersion": null,
+        "settings": {
+          "provenance": "assets/models/player/nba2k9/provenance.json",
+          "nativeUnitsRetained": true,
+          "sources": [
+            {
+              "file": "models/3165_8d61b035_068_hi_body.glb",
+              "sha256": "99dc403d39f6b8ce4fa5d47f9694051dfe93372f9cdc438df5a9430bd996e2ec",
+              "decodedSha256": "cf755d1a59ed0648b9ba7cfc1a903a7b12d7b9208ae7f93381892a4363599f4e"
+            },
+            {
+              "file": "models/0381_8eeb2674_001_lohead.glb",
+              "sha256": "7177146652e064cd8eca7b2e38daa749c5649f8bcf47092cf8e4665754e3a36c",
+              "decodedSha256": "c5fe0d8eb846e5e9b5885e4151d1a9771dc92eeb97825e01e627f23712a00c54"
+            }
+          ],
+          "textures": [
+            {
+              "id": "0381_8eeb2674_002",
+              "file": "textures/0381_8eeb2674_002_arm.png",
+              "sourceSha256": "1a2e2d2bf7e41a09643c6f3aaccf5639ed25ac3a46cb45692e8ce0e532f75424",
+              "pngSha256": "44bba3caf12fb7954eb331858f4d6950792f62e254158e31de24157f8950527c"
+            },
+            {
+              "id": "2701_2fb6b1d2_008",
+              "file": "textures/2701_2fb6b1d2_008_short.png",
+              "sourceSha256": "21389ef8744e4bb3e1c2ce58b45c0c90fa17b568f4130da13ca44e7595fb4464",
+              "pngSha256": "8c1c0b184d802eed9a3a5a25c850760f564cd1bf433faaa60b4342e5cdf7dfdf"
+            },
+            {
+              "id": "3231_a3c75601_000",
+              "file": "textures/3231_a3c75601_000_shoe_fast_56.png",
+              "sourceSha256": "d470ebca9140349108f5392d59f1dbd75035cecb32e6d7b03d55bb534e363b5a",
+              "pngSha256": "b8ceed4c3f455cfda65386a4955d10807276e9bf6d957fef1286ad57d464a42e"
+            },
+            {
+              "id": "2701_2fb6b1d2_007",
+              "file": "textures/2701_2fb6b1d2_007_unif.png",
+              "sourceSha256": "50517b09d174d42313b5531a8660b7fd93cc35156604b113ca7ec76db1b03cc7",
+              "pngSha256": "7d911a1a65213a64fdd869f7eadd716ef7b9092fef19403502d4f4c8608da856"
+            },
+            {
+              "id": "0381_8eeb2674_000",
+              "file": "textures/0381_8eeb2674_000_face.png",
+              "sourceSha256": "d15d0ff6e87fe4b4a2f4f3aa776fd2bfae16996da16f6a7458ab5647b49f0bc8",
+              "pngSha256": "67a746a88307c953cd6e2e21901e67dcbc6381d9d8274c6da91c16132d4a0152"
+            },
+            {
+              "id": "0381_8eeb2674_003",
+              "file": "textures/0381_8eeb2674_003_neck.png",
+              "sourceSha256": "f2ca26d68ad71d900775309290966478dde52a67e702da9dd065c3dc31fd2351",
+              "pngSha256": "384899123c602faf97dc6b944fcddc57aaed0a362bb0d3dfb1cc0dcb8c85dd02"
+            }
+          ],
+          "originalActorUniformPairingVerified": false,
+          "originalMotionActionSemanticsVerified": false
+        },
+        "seed": null,
+        "scenarioAssetId": null,
+        "scenarioJobId": null,
+        "generatedAt": null,
+        "referenceAssetIds": [
+          "models/3165_8d61b035_068_hi_body.glb",
+          "models/0381_8eeb2674_001_lohead.glb"
+        ],
+        "optimizationSteps": [
+          "Assembled a compatible recovered body and head using shared canonical bone names and preserved source skin weights, rest translations and inverse bind matrices.",
+          "Excluded optional outfit/accessory alternatives, embedded the selected recovered PNG textures by material role, and preserved original UVs.",
+          "Applied physical scale and floor offset only through the runtime roster; source native coordinates remain unchanged."
+        ],
+        "outputNotes": "User-directed public integration. Source geometry and motion are recovered proprietary material. Original actor/uniform pairing and original action labels remain unverified. Source fingerprints and conversion details are retained in the accompanying provenance JSON."
+      },
+      "license": {
+        "name": "Recovered proprietary NBA 2K9 game assets; original ownership unchanged",
+        "url": null,
+        "commercialUse": null,
+        "attribution": null,
+        "evidence": "The project owner supplied the recovered study package and explicitly requested its integration into the public deployed game. The recovery package provides source identity and technical evidence, but does not establish a redistribution or commercial-use license. Publication authorization is recorded separately from license evidence."
+      },
+      "runtime": [
+        {
+          "path": "assets/models/player/nba2k9/player-one.glb",
+          "format": "glb",
+          "bytes": 1019668,
+          "maxBytes": 12000000,
+          "sha256": "226e7312654650663497d55ef25194c908ed47febcc9958589bd521c21a066f4",
+          "triangles": 4676
+        }
+      ],
+      "validation": {
+        "checks": {
+          "sourceFingerprint": "pass",
+          "embeddedResources": "pass",
+          "canonicalBoneFamily": "pass",
+          "finiteRuntimeData": "pass",
+          "completeBodyHeadAssembly": "pass",
+          "normalizedSkinWeights": "pass",
+          "inverseBindAgreement": "pass"
+        },
+        "measured": {
+          "vertices": 6637,
+          "triangles": 4676,
+          "bones": 33,
+          "skins": 2,
+          "clips": 0,
+          "channels": 0,
+          "durationSeconds": 0,
+          "maxWeightSumError": 3.725290298461914e-8,
+          "maxBindError": 0.000004285946488380432,
+          "runtimeBytes": 1019668
+        },
+        "notes": "Independent binary checks validate the shipped output rather than the assembly recipe. These measurements establish structural integrity, not exact original-game pose fidelity, motion semantics, complete gameplay animation coverage or physical-device visual approval. Desktop/touch gameplay evidence is documented with the player integration."
+      },
+      "integration": {
+        "module": "src/nba2k9-player.js",
+        "fallback": "Default recovered player registry loads a complete body/head model and shared motion bundle. Loading and failure are explicit; character switching and reset preserve the selected roster member. Procedural basketball poses supplement recovered motion where action semantics remain unverified."
+      }
+    },
+    {
+      "id": "nba2k9-classic-two-v1",
+      "category": "model",
+      "status": "accepted",
+      "source": {
+        "type": "third-party",
+        "prompt": null,
+        "modelId": "NBA 2K9 PS2 recovered study",
+        "modelVersion": null,
+        "settings": {
+          "provenance": "assets/models/player/nba2k9/provenance.json",
+          "nativeUnitsRetained": true,
+          "sources": [
+            {
+              "file": "models/3165_8d61b035_068_hi_body.glb",
+              "sha256": "99dc403d39f6b8ce4fa5d47f9694051dfe93372f9cdc438df5a9430bd996e2ec",
+              "decodedSha256": "cf755d1a59ed0648b9ba7cfc1a903a7b12d7b9208ae7f93381892a4363599f4e"
+            },
+            {
+              "file": "models/0385_c323877f_002_lohead.glb",
+              "sha256": "6cc283f507f532ef737338bff46245ec87767974bfcd710d424eaec2c2e6d98c",
+              "decodedSha256": "71616939fe0eb79cbd6a39c332dc034fdb0cf22920ba80fefc45e65cd11e4896"
+            }
+          ],
+          "textures": [
+            {
+              "id": "0385_c323877f_003",
+              "file": "textures/0385_c323877f_003_arm.png",
+              "sourceSha256": "2a6e7002200cf4b91f25dcc72b7acb59f58749a52ffdcf00f2f44bce486a5e3a",
+              "pngSha256": "ab566271d09fadc4dcc66664973e717347cf23e082d969e72d4185141269f5ba"
+            },
+            {
+              "id": "2702_12d69862_008",
+              "file": "textures/2702_12d69862_008_short.png",
+              "sourceSha256": "7b0e26da8bee552ffba8c24b67f9ac312a90d71e9efa5a5eb13a0f1638a0b9a9",
+              "pngSha256": "c1fd60f6310da54d056a6d51b12c57914da31cda6f210e9c212c80cb1d718755"
+            },
+            {
+              "id": "3231_a3c75601_001",
+              "file": "textures/3231_a3c75601_001_shoe_fast_52.png",
+              "sourceSha256": "ccd20ca2c71a956b4e99638dfb2de1cf726e144066ae82a145f9a0492b867827",
+              "pngSha256": "8401616827279a986420efae015fa596a0e3a814b25c8a2aeba841bb3d5f0145"
+            },
+            {
+              "id": "2702_12d69862_007",
+              "file": "textures/2702_12d69862_007_unif.png",
+              "sourceSha256": "9a31f2ad15f08d045fa545966da02825189d273be96a1b33b64072083b080989",
+              "pngSha256": "c197cf486b0c8363551e5dbfdb5f96d63f258a5f94a7ef0fb2325d7eea2a1291"
+            },
+            {
+              "id": "0385_c323877f_000",
+              "file": "textures/0385_c323877f_000_face.png",
+              "sourceSha256": "a0e220a72da9a0fd8c8937657605a534675cf0223436d6aff2fc003dcc989b61",
+              "pngSha256": "f9faf5df5553a9f6ff63f30a01edf353b00ebe6f199f67aa6a8dc4373fe20a39"
+            },
+            {
+              "id": "0385_c323877f_004",
+              "file": "textures/0385_c323877f_004_neck.png",
+              "sourceSha256": "626222480741011a4cb3a9556c15d47aa260ab0323b6d09588a56ad72dbc8d2b",
+              "pngSha256": "7a8b5b8a2a72d68776bfa4fae4b2fe9e2472ab3775a85695011569755623d563"
+            }
+          ],
+          "originalActorUniformPairingVerified": false,
+          "originalMotionActionSemanticsVerified": false
+        },
+        "seed": null,
+        "scenarioAssetId": null,
+        "scenarioJobId": null,
+        "generatedAt": null,
+        "referenceAssetIds": [
+          "models/3165_8d61b035_068_hi_body.glb",
+          "models/0385_c323877f_002_lohead.glb"
+        ],
+        "optimizationSteps": [
+          "Assembled a compatible recovered body and head using shared canonical bone names and preserved source skin weights, rest translations and inverse bind matrices.",
+          "Excluded optional outfit/accessory alternatives, embedded the selected recovered PNG textures by material role, and preserved original UVs.",
+          "Applied physical scale and floor offset only through the runtime roster; source native coordinates remain unchanged."
+        ],
+        "outputNotes": "User-directed public integration. Source geometry and motion are recovered proprietary material. Original actor/uniform pairing and original action labels remain unverified. Source fingerprints and conversion details are retained in the accompanying provenance JSON."
+      },
+      "license": {
+        "name": "Recovered proprietary NBA 2K9 game assets; original ownership unchanged",
+        "url": null,
+        "commercialUse": null,
+        "attribution": null,
+        "evidence": "The project owner supplied the recovered study package and explicitly requested its integration into the public deployed game. The recovery package provides source identity and technical evidence, but does not establish a redistribution or commercial-use license. Publication authorization is recorded separately from license evidence."
+      },
+      "runtime": [
+        {
+          "path": "assets/models/player/nba2k9/player-two.glb",
+          "format": "glb",
+          "bytes": 987140,
+          "maxBytes": 12000000,
+          "sha256": "09731824012f341c57ca19ca0883d34e6691abc4b3991ded89bbe156f858108b",
+          "triangles": 4676
+        }
+      ],
+      "validation": {
+        "checks": {
+          "sourceFingerprint": "pass",
+          "embeddedResources": "pass",
+          "canonicalBoneFamily": "pass",
+          "finiteRuntimeData": "pass",
+          "completeBodyHeadAssembly": "pass",
+          "normalizedSkinWeights": "pass",
+          "inverseBindAgreement": "pass"
+        },
+        "measured": {
+          "vertices": 6637,
+          "triangles": 4676,
+          "bones": 33,
+          "skins": 2,
+          "clips": 0,
+          "channels": 0,
+          "durationSeconds": 0,
+          "maxWeightSumError": 3.725290298461914e-8,
+          "maxBindError": 0.000004285946488380432,
+          "runtimeBytes": 987140
+        },
+        "notes": "Independent binary checks validate the shipped output rather than the assembly recipe. These measurements establish structural integrity, not exact original-game pose fidelity, motion semantics, complete gameplay animation coverage or physical-device visual approval. Desktop/touch gameplay evidence is documented with the player integration."
+      },
+      "integration": {
+        "module": "src/nba2k9-player.js",
+        "fallback": "Default recovered player registry loads a complete body/head model and shared motion bundle. Loading and failure are explicit; character switching and reset preserve the selected roster member. Procedural basketball poses supplement recovered motion where action semantics remain unverified."
+      }
+    },
+    {
+      "id": "nba2k9-motions-v1",
+      "category": "animation",
+      "status": "accepted",
+      "source": {
+        "type": "third-party",
+        "prompt": null,
+        "modelId": "NBA 2K9 PS2 recovered study",
+        "modelVersion": null,
+        "settings": {
+          "provenance": "assets/models/player/nba2k9/provenance.json",
+          "nativeUnitsRetained": true,
+          "sources": [
+            {
+              "id": "4187_e76315f3_000n_002",
+              "file": "animations/4187_e76315f3_000n_002.glb",
+              "sourceName": "shooter",
+              "runtimeName": "recovered-run",
+              "sourceSha256": "8eb2928f147facb429196c9115ddd44be76685b4c8fb5018e9607e79f09b3741",
+              "glbSha256": "cf81198aead6fd02a177f92ec97543a885a50c76811f40313664c1dfcadc8d71",
+              "duration": 2.533333333333333,
+              "frames": 39
+            },
+            {
+              "id": "4160_3fa0ba75_000n_003",
+              "file": "animations/4160_3fa0ba75_000n_003.glb",
+              "sourceName": "ftshooter",
+              "runtimeName": "recovered-idle",
+              "sourceSha256": "b89da9e7b5952a5593fba128e15da73abd4cca8de478e4078a4c8070c7825c35",
+              "glbSha256": "f3f8ef0a28f411056765672a01d823c1d3df6419c1dc220e8acffc3cbee58875",
+              "duration": 5,
+              "frames": 76
+            },
+            {
+              "id": "4119_1c9421c4_000n_002",
+              "file": "animations/4119_1c9421c4_000n_002.glb",
+              "sourceName": "randomd1",
+              "runtimeName": "recovered-reach",
+              "sourceSha256": "f363d8f04918242b1480cbc8e137a16f30ef31bfe1f97809ef52457a4a138a03",
+              "glbSha256": "5027a1decf308a987e0b1ec6163863f48c3b809653c52e56102cd0020c16cca8",
+              "duration": 3.6,
+              "frames": 55
+            },
+            {
+              "id": "4190_2f839a83_000n_008",
+              "file": "animations/4190_2f839a83_000n_008.glb",
+              "sourceName": "shooter",
+              "runtimeName": "recovered-overhead",
+              "sourceSha256": "102cd7d1ad53b7a4070d1fb66c7683d5c230f0adc93c0f9adfe658f101f0a928",
+              "glbSha256": "ee306549b0c17457312341c3b304a9c82e8679359335aca3034306056ce4fafc",
+              "duration": 2,
+              "frames": 31
+            }
+          ],
+          "textures": [],
+          "originalActorUniformPairingVerified": false,
+          "originalMotionActionSemanticsVerified": false
+        },
+        "seed": null,
+        "scenarioAssetId": null,
+        "scenarioJobId": null,
+        "generatedAt": null,
+        "referenceAssetIds": [
+          "4187_e76315f3_000n_002",
+          "4160_3fa0ba75_000n_003",
+          "4119_1c9421c4_000n_002",
+          "4190_2f839a83_000n_008"
+        ],
+        "optimizationSteps": [
+          "Bundled selected recovered canonical 26-bone clips into one embedded GLB with stable runtime names.",
+          "Preserved recovered key times and quaternions; gameplay chooses adapted segments while retaining authority over root movement and ball physics."
+        ],
+        "outputNotes": "User-directed public integration. Source geometry and motion are recovered proprietary material. Original actor/uniform pairing and original action labels remain unverified. Source fingerprints and conversion details are retained in the accompanying provenance JSON."
+      },
+      "license": {
+        "name": "Recovered proprietary NBA 2K9 game assets; original ownership unchanged",
+        "url": null,
+        "commercialUse": null,
+        "attribution": null,
+        "evidence": "The project owner supplied the recovered study package and explicitly requested its integration into the public deployed game. The recovery package provides source identity and technical evidence, but does not establish a redistribution or commercial-use license. Publication authorization is recorded separately from license evidence."
+      },
+      "runtime": [
+        {
+          "path": "assets/animations/nba2k9/motions.glb",
+          "format": "glb",
+          "bytes": 115256,
+          "maxBytes": 12000000,
+          "sha256": "df520ad50a8bdf6e4052802c1fccb526816bc4872c3e1b9d63ae7362951c59ef",
+          "durationSeconds": 5
+        }
+      ],
+      "validation": {
+        "checks": {
+          "sourceFingerprint": "pass",
+          "embeddedResources": "pass",
+          "canonicalBoneFamily": "pass",
+          "finiteRuntimeData": "pass",
+          "orderedKeyTimes": "pass",
+          "normalizedQuaternions": "pass",
+          "canonicalAnimationTargets": "pass"
+        },
+        "measured": {
+          "vertices": 0,
+          "triangles": 0,
+          "bones": 26,
+          "skins": 0,
+          "clips": 4,
+          "channels": 104,
+          "durationSeconds": 5,
+          "maxWeightSumError": 0,
+          "maxBindError": 0,
+          "runtimeBytes": 115256
+        },
+        "notes": "Independent binary checks validate the shipped output rather than the assembly recipe. These measurements establish structural integrity, not exact original-game pose fidelity, motion semantics, complete gameplay animation coverage or physical-device visual approval. Desktop/touch gameplay evidence is documented with the player integration."
+      },
+      "integration": {
+        "module": "src/nba2k9-player.js",
+        "fallback": "Default recovered player registry loads a complete body/head model and shared motion bundle. Loading and failure are explicit; character switching and reset preserve the selected roster member. Procedural basketball poses supplement recovered motion where action semantics remain unverified."
       }
     }
   ]

@@ -19,14 +19,19 @@ test('supplied canonical Luke has exact rest transforms, bind matrices and norma
   assert.deepEqual(contract.bones, LUKE_BONES, 'runtime and offline rest contracts must agree');
 });
 
-test('production player directory and manifest contain only canonical Luke', async () => {
+test('retained historical Luke stays canonical alongside the recovered roster', async () => {
   const filenames = await readdir(new URL('../public/assets/models/player/', import.meta.url));
   assert.deepEqual(filenames.filter(name => name.endsWith('.glb')), ['luke-player-v1.glb']);
   const manifest = JSON.parse(await readFile(new URL('../public/assets/manifest.json', import.meta.url), 'utf8'));
   const players = manifest.assets.filter(asset => asset.runtime.some(file => file.path.startsWith('assets/models/player/')));
-  assert.equal(players.length, 1);
-  assert.equal(players[0].id, 'luke-player-v1');
-  assert.equal(players[0].runtime[0].sha256, contract.asset.sha256);
+  const luke = players.find(asset => asset.id === 'luke-player-v1');
+  assert.ok(luke, 'Historical canonical binary remains registered');
+  assert.equal(luke.runtime[0].sha256, contract.asset.sha256);
+  const roster = JSON.parse(await readFile(new URL('../src/nba2k9-roster.json', import.meta.url), 'utf8'));
+  assert.equal(players.length, roster.players.length + 1);
+  for (const character of roster.players) {
+    assert.ok(players.some(asset => asset.runtime.some(file => file.path === character.url)), 'Every selectable player is registered');
+  }
 });
 
 test('motion configuration pins Luke and makes no claim of migrated clips', async () => {

@@ -1,9 +1,9 @@
 # Player v2 (22-bone rig) — shelved
 
-> Historical, not shipped. This is the abandoned 22-bone `game-humanoid-v2`
-> rebuild. Nothing here is loaded, built, tested or validated by the current
-> game, which runs Luke only on the 17-bone contract in
-> [`docs/rig/luke-rig-contract.json`](../../docs/rig/luke-rig-contract.json).
+> Historical. This is the abandoned 22-bone `game-humanoid-v2` rebuild of the
+> 17-bone players (contract:
+> [`docs/rig/luke-rig-contract.json`](../../docs/rig/luke-rig-contract.json)).
+> Nothing here is loaded, built, tested or validated by the current game.
 > It is retained so the work can be audited or resumed.
 
 ## History
