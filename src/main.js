@@ -3,15 +3,16 @@ import * as THREE from 'three';
 import { AudioDirector } from './audio.js';
 import { createArena } from './arena.js';
 import { LOOK } from './look.js';
-import { createPlayer } from './player.js';
+import { createPlayer, RECOVERED_ROSTER } from './nba2k9-player.js';
 import { createBasketball } from './ball.js';
-import { samplePolished, POLISHED_PACK } from './polished-motion-data.js';
 import { PICKUP_SECONDS, dribbleBallLocal, pickupBallLocal, gatherBallLocal } from './player-ball-presentation.js';
 import { SHOT_GRAVITY, meterProgress, greenWindow, gradeShot, shotTarget, solveShotArc, sampleShotArc, crossesHoop } from './shooting.js';
 
 document.documentElement.dataset.look = LOOK;
 const canvas = document.querySelector('#game');
 const startButton = document.querySelector('#startButton');
+const playerPicker = document.querySelector('#playerPicker');
+const playerSelect = document.querySelector('#playerSelect');
 const clockElement = document.querySelector('#clock');
 const scoreElement = document.querySelector('#score');
 const actionLabel = document.querySelector('#actionLabel');
@@ -50,19 +51,42 @@ const player = createPlayer(THREE);
 scene.add(player.group);
 startButton.disabled = true;
 startButton.setAttribute('aria-live', 'polite');
-startButton.querySelector('span').textContent = 'LOADING LUKE…';
+startButton.querySelector('span').textContent = 'LOADING PLAYER…';
 startButton.querySelector('small').textContent = 'Preparing the playable character';
-player.group.userData.assetReady.then(status => {
+function showPlayerReadiness(status) {
+  if (status === 'superseded') return;
+  playerSelect.disabled = false;
   if (status === 'ready') {
+    startButton.classList.remove('has-load-error');
     startButton.disabled = false;
     startButton.querySelector('span').textContent = 'TAP OR CLICK TO PLAY';
-    startButton.querySelector('small').textContent = 'PS2-era basketball vertical slice';
+    startButton.querySelector('strong').textContent = 'SOLO ARENA';
+    startButton.querySelector('small').textContent = player.group.userData.character;
   } else {
     startButton.classList.add('has-load-error');
     startButton.querySelector('span').textContent = 'CHARACTER LOAD FAILED';
-    startButton.querySelector('strong').textContent = 'LUKE UNAVAILABLE';
+    startButton.querySelector('strong').textContent = 'PLAYER UNAVAILABLE';
     startButton.querySelector('small').textContent = player.group.userData.assetError;
   }
+}
+for (const character of RECOVERED_ROSTER) {
+  const option = document.createElement('option'); option.value = character.id; option.textContent = character.label;
+  playerSelect.append(option);
+}
+playerSelect.value = player.group.userData.characterId;
+player.group.userData.assetReady.then(showPlayerReadiness);
+playerSelect.addEventListener('change', async () => {
+  if (game.started) return;
+  playerSelect.disabled = true; startButton.disabled = true;
+  startButton.querySelector('span').textContent = 'LOADING PLAYER…';
+  const id = playerSelect.value;
+  const status = await player.setCharacter(id);
+  if (status === 'ready') {
+    resetPossession(false);
+    const url = new URL(window.location.href); url.searchParams.set('character', id);
+    window.history.replaceState(null, '', url);
+  }
+  showPlayerReadiness(status);
 });
 
 const audio = new AudioDirector({ volume: 0.46 });
@@ -374,7 +398,7 @@ function getShotAnchor(charge = 0, target = temp.ballAnchor) {
   const shot = game.player.shotPending;
   if (shot && !shot.released) {
     const t = clamp(game.player.actionTime / .200, 0, 1), a = t * t * (3 - 2 * t);
-    const authored=samplePolished(THREE,'shoot',Math.min(.2,game.player.actionTime)).ballLocal || POLISHED_PACK.clips.shoot.samples[6].ballLocal;
+    const authored = [.28, 2.05, -.25];
     point = shot.startLocal.map((v, i) => v + (authored[i] - v) * a);
   }
   return localPlayerPoint(...point, target);
@@ -414,7 +438,7 @@ function releaseJumpShot(releaseTime = performance.now()) {
   game.charge.active = false;
   game.player.action = 'shoot';
   game.player.actionTime = 0;
-  game.player.actionDuration = POLISHED_PACK.clips.shoot.duration;
+  game.player.actionDuration = .7;
   game.player.actionProgress = .57;
   game.player.currentSpeed = 0;
   setFeedback(grade, grade === 'ON TIME' ? 'good' : 'bad', 1.1);
@@ -640,12 +664,13 @@ function updateFlightBall(dt) {
     scoreBasket();
   }
 
-  if (!ball.perfectShot || ball.position.y < rim.rimHeight - BALL_RADIUS * 2) {
+  const belowRimOnDescent = ball.velocity.y < 0 && ball.position.y < rim.rimHeight - BALL_RADIUS * 2;
+  if (!ball.perfectShot || belowRimOnDescent) {
     const hitBoard = resolveBackboardCollision();
     const hitRim = resolveRimCollision();
     if (hitBoard || hitRim) ball.shotArc = null;
   }
-  if (ball.position.y < rim.rimHeight - BALL_RADIUS * 2) {
+  if (belowRimOnDescent) {
     ball.shotArc = null;
     ball.perfectShot = false;
   }
@@ -701,10 +726,10 @@ function updateLooseBall(dt) {
   }
 }
 
-function updateBall(dt) {
+function updateBall(dt, justFinished = false) {
   const ball = game.ball;
   const justDetached = game.player.shotPending && !game.player.shotPending.released && game.player.actionTime >= .200 - 1e-8 && detachJumpShot();
-  if (justDetached) { /* Render the exact apex release before any free-flight step. */ }
+  if (justDetached || justFinished) { /* Render the exact release before any free-flight step. */ }
   else if (ball.mode === 'dribble') updateDribble(dt);
   else if (ball.mode === 'gather') updateGatherBall();
   else if (ball.mode === 'finish') updateFinishBall();
@@ -783,8 +808,6 @@ function updatePlayer(dt, now) {
     p.currentSpeed = attackSpeed;
     p.jumpY = Math.sin(Math.PI * p.actionProgress) * (p.action === 'dunk' ? 0.86 : 0.64);
 
-    const releaseAt = p.action === 'dunk' ? 0.57 : 0.59;
-    if (!p.finishReleased && p.actionProgress >= releaseAt) releaseFinish();
     if (p.actionProgress >= 1) {
       p.action = 'idle';
       p.actionProgress = 0;
@@ -844,7 +867,7 @@ function updatePlayer(dt, now) {
     ballRadius: BALL_RADIUS,
     pickupProgress: p.presentationPickup ? p.presentationPickup.elapsed / PICKUP_SECONDS : null,
     gatherElapsed: game.charge.active ? game.charge.value * 1.3 : null,
-    releaseProgress: p.action === 'shoot' && !game.charge.active ? clamp(p.actionTime / POLISHED_PACK.clips.shoot.duration, 0, 1) : null,
+    releaseProgress: p.action === 'shoot' && !game.charge.active ? clamp(p.actionTime / Math.max(.01, p.actionDuration), 0, 1) : null,
     shootElapsed: p.shotPending && p.action==='shoot' ? p.actionTime : null,
     shotReleased: !!p.shotPending?.released,
     stopElapsed: p.stopElapsed,
@@ -855,6 +878,11 @@ function updatePlayer(dt, now) {
     finishOriginLocal: p.presentationFinish?.origin,
     finishElapsed: p.actionTime,
   });
+  // Sample the current recovered pose before launching from its palm.
+  if (p.action === 'layup' || p.action === 'dunk') {
+    const releaseAt = p.action === 'dunk' ? 0.57 : 0.59;
+    if (!p.finishReleased && p.actionProgress >= releaseAt) releaseFinish();
+  }
 }
 
 function updateNet(dt) {
@@ -1017,15 +1045,24 @@ function update(dt, now) {
       update(before, now - after * 1000); update(after, now); return;
     }
   }
+  if ((game.player.action === 'layup' || game.player.action === 'dunk') && !game.player.finishReleased) {
+    const time = game.player.actionTime;
+    const boundary = game.player.actionDuration * (game.player.action === 'dunk' ? .57 : .59);
+    if (time < boundary - 1e-8 && time + dt > boundary + 1e-8) {
+      const before = boundary - time, after = dt - before;
+      update(before, now - after * 1000); update(after, now); return;
+    }
+  }
   game.elapsed += dt;
   if (game.started && game.remaining > 0) game.remaining = Math.max(0, game.remaining - dt);
   if (game.remaining <= 0 && game.started) {
     setFeedback('RUN OVER — PRESS R', 'bad', 999);
   }
 
+  const finishWasReleased = game.player.finishReleased;
   updatePlayer(dt, now);
   player.group.updateMatrixWorld(true);
-  updateBall(dt);
+  updateBall(dt, !finishWasReleased && game.player.finishReleased);
   player.updateHandShapes(dt,game.ball.position,game.ball.mode);
   updateNet(dt);
   updateArenaPresentation();
@@ -1051,11 +1088,22 @@ function unlockAndStart() {
   game.started = true;
   audio.unlock();
   startButton.classList.add('is-hidden');
+  playerPicker.classList.add('is-hidden');
   if (!coarsePointer && document.pointerLockElement !== canvas) canvas.requestPointerLock?.();
   setFeedback('ATTACK THE RIM', '', 1.1);
 }
 
 startButton.addEventListener('click', unlockAndStart);
+if (new URLSearchParams(window.location.search).has('inspect')) {
+  window.__arenaInspection = {
+    snapshot: () => ({ asset: player.group.userData.playerAsset, status: player.group.userData.assetStatus,
+      animation: player.getAnimationDiagnostics(), action: game.player.action, started: game.started,
+      position: game.player.position.toArray(), ball: { mode: game.ball.mode, position: game.ball.position.toArray() },
+      score: game.score, charge: game.charge.value, jump: game.player.jumpY,
+      releaseCount: game.player.shotReleaseCount, detachedAt: game.player.shotPending?.detachedAt,
+      finishReleased: game.player.finishReleased, elapsed: game.elapsed }),
+  };
+}
 canvas.addEventListener('click', () => {
   if (!game.started) {
     unlockAndStart();

@@ -82,6 +82,11 @@ kbd { padding: 2px 4px; border: 1px solid #718697; border-bottom-width: 2px; bor
 
 .touch-controls { display: none; }
 
+.player-picker { position: fixed; z-index: 5; left: 50%; top: calc(50% - 145px); transform: translateX(-50%); width: min(400px, 82vw); display: grid; gap: 7px; }
+.player-picker label { color: #73d6d0; font: 500 11px/1.2 "DM Mono", monospace; letter-spacing: .12em; }
+.player-picker select { width: 100%; min-height: 44px; padding: 8px 12px; color: #f7f2e8; background: #101c2d; border: 2px solid #718697; font: 600 20px/1.2 "Barlow Condensed", sans-serif; }
+.player-picker.is-hidden { display: none; }
+
 @media (any-pointer: coarse) {
   .touch-controls {
     position: fixed;

@@ -1,6 +1,6 @@
 # TheArena asset pipeline
 
-This pipeline replaces original procedural presentation assets one category at a time. Keep the current geometry and synthesized audio available as fallbacks until each replacement passes the checks below, except the player: supplied Luke is the sole runtime character and has an explicit load error instead of geometry fallback. Gameplay timing, collision values, camera, desktop controls, and touch controls remain owned by the existing code.
+This pipeline replaces presentation assets behind their module boundaries. The default player system now uses recovered NBA 2K9 assemblies and motions; see `RECOVERED_PLAYER.md`. Player loading fails explicitly rather than substituting a different character. Luke source and tests are retained as historical work. Gameplay timing, collision values, camera, desktop controls, and touch controls remain owned by the existing code.
 
 ## Visual target
 
@@ -8,7 +8,7 @@ This pipeline replaces original procedural presentation assets one category at a
 - **Surface detail:** 256–512 px color textures, broad painted color regions, subtle grain and wear, and baked-looking ambient shading. Preserve crisp court lines and ball seams at gameplay distance.
 - **Lighting:** warm pools on the court against cool, dark seating. Keep strong light/dark separation and restrained specular highlights. Check textures under the current arena lights, fog, tone mapping, and low-resolution shadows.
 - **Palette:** parquet amber, worn orange leather, cream markings, muted purple paint and seating, charcoal concrete and metal. Reuse a small set of material colors across categories.
-- **Identity:** original fictional direction for new assets and venue graphics. The user explicitly requires preserving supplied Luke's existing uniform; its provenance and rights limits remain in the manifest. Do not generate a substitute or alter those graphics as part of rig maintenance.
+- **Identity:** the owner has selected the recovered NBA 2K9 models and animations for the public player migration. Keep source identifiers and hashes in the manifest; source filenames alone do not prove player identity. Existing arena assets keep their accepted appearance.
 - **Presentation check:** inspect the camera view at desktop and narrow touch sizes. A close-up render alone cannot prove that the object reads during play.
 
 ## Existing replacement contracts
@@ -17,7 +17,7 @@ Three.js units are meters; Y is up, X is court width, and the basket is at negat
 
 | Asset | Current owner and replacement seam | Values and references to preserve |
 | --- | --- | --- |
-| Player | `src/player.js` returns `group`, `update(dt, state)`, `rightHand`, `leftHand`, `chest`, `head`, and hand world-position helpers. | Root at the floor; action states include idle, move, shoot, layup, and dunk. Hand anchors must remain correct throughout each action. A rigged GLB needs a pose adapter inside this module. |
+| Player | `src/nba2k9-player.js` returns `group`, `update(dt, state)`, `rightHand`, `leftHand`, `chest`, `head`, and hand world-position helpers. | Root at the floor; action states include idle, move, shoot, layup, and dunk. The recovered pose adapter handles source skeletons and contact; `src/player.js` retains historical Luke work. |
 | Basketball | `createBasketball()` in `src/ball.js` loads the accepted GLB and retains the original procedural fallback; `src/main.js` owns ball movement, rotation, scoring, and collision. | Visual radius **0.12 m**, origin at ball center, and `group.userData.shadow` for the contact shadow. The root and shadow survive asynchronous visual replacement. |
 | Court and arena | `src/arena.js` returns `{ group, hoop, court }`; visual geometry can change inside this module. | Court **15.2 × 14 m**, floor Y **0**, bounds X **±7.6**, Z **−7 to 7**. Retain the court data and current lighting/gameplay references. |
 | Hoop assembly | `src/arena.js` owns hoop visuals and exported coordinate data. | Rim center **(0, 3.05, −5.82)**, radius **0.23 m**; backboard center **(0, 3.56, −6.25)**, **1.83 × 1.07 m**. `hoop.net` is animated through `userData.energy`, rotation, and scale. Keep collision data independent of decorative mesh topology. |
@@ -189,7 +189,7 @@ For Scenario work, discover a suitable catalog model for each asset at run time,
 
 ## Acceptance gate for each replacement
 
-1. **Provenance:** source files and reference rights are known; the model/service output grant permits a public browser game; the manifest records the license and exact recipe. Reject branding and likeness drift.
+1. **Provenance:** record source files, checksums, selection and conversion steps. The owner removed the rights-clearance requirement for public integration; record unavailable license information as unknown rather than inventing a grant. Preserve the supplied appearance of selected assets.
 2. **Mesh:** inspect GLB node transforms, dimensions, triangle count, material count, normals, UVs, winding, and pivot. Verify Y-up, meter scale, and no unexpected negative scale. Confirm the ball center, player floor origin and hand anchors, and hoop landmarks against the contracts above.
 3. **Texture:** inspect source and encoded size; check sRGB/linear assignment, alpha fringes, compression artifacts, and a 2×2 tiled preview. Compare opposite edges numerically and visually under arena lighting. Check repeated surfaces at the camera's normal distance.
 4. **Rig:** inspect skeleton weights, bone axes, bind pose, and deformation. Exercise idle, movement, shoot, layup, and dunk through `player.update`; compare hand/chest/head world positions with the current implementation and verify ball attachment and release.

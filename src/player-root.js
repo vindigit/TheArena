@@ -1,5 +1,5 @@
-// Geometry-free gameplay infrastructure. Luke's skeletal visual is the sole
-// character; loading and errors never construct a substitute mannequin.
+// Geometry-free gameplay infrastructure shared by player implementations.
+// Loading and errors never construct a substitute mannequin.
 export function createPlayerRoot(THREE) {
   const group = new THREE.Group();
   group.name = 'solo-hoops-player';
