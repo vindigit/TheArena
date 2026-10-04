@@ -40,6 +40,10 @@ Luke's binary, rig contract, old pose modules and associated tests remain histor
 maintenance work. They are not the default character path. Unfinished local Luke
 changes must not be overwritten by the migration.
 
+The abandoned 22-bone `game-humanoid-v2` rebuild (`08e36e5`–`d52b8ec`, withdrawn by
+`c613ad0`) is archived under [`archive/player-v2/`](archive/player-v2/README.md).
+Nothing there is loaded, built or tested.
+
 ## Playable slice
 
 - Indoor arena, player, basketball, hoop, backboard and net.
