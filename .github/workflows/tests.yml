@@ -1,0 +1,45 @@
+name: Tests
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - id: install
+        run: npm ci
+      # Every check below reports even if an earlier one fails, but none run
+      # without a successful install.
+      - name: Test suite
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node --test tests/*.test.mjs
+      - name: Asset manifest check
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm run assets:check
+      - name: Luke rig check
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm run rig:check
+      - name: Luke motion check
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm run motion:check
+      - name: Production build
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm run build -- --base=/TheArena/
