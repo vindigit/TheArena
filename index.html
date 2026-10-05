@@ -2,65 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#07121d" />
-    <title>TheArena // SOLO Hoops</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>TheArena</title>
+    <link rel="stylesheet" href="/src/styles.css" />
   </head>
   <body>
-    <main id="app">
-      <canvas id="game" aria-label="SOLO basketball arena demo"></canvas>
-
-      <section class="hud hud--top" aria-live="polite">
-        <div class="brand">
-          <span class="brand__eyebrow">AFTER HOURS</span>
-          <strong>SOLO <i>HOOPS</i></strong>
-        </div>
-        <div class="scoreboard">
-          <div class="scoreboard__time" id="clock">02:00</div>
-          <div class="scoreboard__score"><span id="score">00</span><em>PTS</em></div>
-        </div>
-        <div class="badge" id="actionLabel">FREE RUN</div>
-      </section>
-
-      <section class="hud hud--bottom">
-        <div class="shot-meter" id="shotMeter" aria-label="shot timing meter">
-          <div class="shot-meter__track"><i></i><b></b></div>
-          <span>RELEASE</span>
-        </div>
-        <div class="feedback" id="feedback">CLICK TO LOCK IN</div>
-        <div class="controls">
-          <span><kbd>WASD</kbd> MOVE</span>
-          <span><kbd>SHIFT</kbd> SPRINT</span>
-          <span><kbd>HOLD SPACE</kbd> SHOOT</span>
-          <span><kbd>F</kbd> FINISH</span>
-          <span><kbd>R</kbd> RESET</span>
-        </div>
-      </section>
-
-      <div class="touch-controls" aria-label="Touch game controls">
-        <button class="touch-reset" id="touchReset" type="button">RESET RUN</button>
-        <div class="touch-stick" id="touchStick" aria-label="Move">
-          <div class="touch-stick__knob" id="touchKnob"></div>
-        </div>
-        <div class="touch-actions">
-          <button id="touchSprint" type="button">RUN</button>
-          <button id="touchFinish" type="button">FINISH</button>
-          <button id="touchShoot" type="button">HOLD<br>SHOOT</button>
-        </div>
-      </div>
-
-      <div class="vignette" aria-hidden="true"></div>
-      <div class="scanlines" aria-hidden="true"></div>
-      <div class="player-picker" id="playerPicker">
-        <label for="playerSelect">CHOOSE YOUR PLAYER</label>
-        <select id="playerSelect" aria-label="Choose your player"></select>
-      </div>
-      <button class="start-card" id="startButton" type="button" disabled>
-        <span>LOADING PLAYER…</span>
-        <strong>SOLO ARENA</strong>
-        <small>Preparing the playable character</small>
-      </button>
-    </main>
+    <canvas id="game"></canvas>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

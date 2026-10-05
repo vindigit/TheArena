@@ -1,35 +1,18 @@
 {
-  "name": "ps2-solo-hoops",
+  "name": "thearena",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "assets:build:ambience": "node scripts/build-arena-ambience.mjs",
-    "assets:build:backboards": "node scripts/build-backboard-audio.mjs",
-    "assets:build:bounces": "node scripts/build-bounce-audio.mjs",
-    "assets:build:dunk": "node scripts/build-dunk-audio.mjs",
-    "assets:build:rims": "node scripts/build-rim-audio.mjs",
-    "assets:build:shoes": "node scripts/build-shoe-audio.mjs",
-    "assets:check": "node scripts/validate-assets.mjs",
-    "assets:optimize:texture": "node scripts/prepare-texture.mjs",
-    "test:audio": "node --test tests/audio.test.mjs",
-    "test:loading": "node --test tests/player-loading.test.mjs",
-    "rig:check": "node scripts/validate-luke-rig.mjs",
-    "motion:check": "node scripts/validate-luke-motion.mjs",
-    "motion:manifest": "node scripts/update-luke-motion-manifest.mjs",
-    "test:motion": "node --test tests/luke-motion.test.mjs tests/luke-motion-continuity.test.mjs tests/player-pose.test.mjs tests/player.test.mjs tests/video-clips.test.mjs",
-    "test:rig": "node --test tests/luke-rig.test.mjs"
+    "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {
     "three": "^0.183.0"
   },
   "devDependencies": {
-    "ajv": "^8.20.0",
-    "sharp": "^0.35.5",
-    "vite": "^7.2.0",
-    "vorbis-encoder-js": "^1.0.2"
+    "vite": "^7.2.0"
   }
 }
