@@ -6,7 +6,8 @@ the playable player path or published to `main`. Revision 4 is a static
 structural/appearance candidate awaiting owner visual approval. The local and
 phone pose galleries show the current stills and texture; motion remains
 disconnected and `/dev/player-rebuild.html` remains suspended.
-See `CLAUDE_HANDOFF.md` for the current resume snapshot and validation limits.
+See `CLAUDE_HANDOFF.md` for the original workspace snapshot and validation limits,
+and `CLAUDE_DEVELOPMENT.md` for this cloud branch's available files and portable paths.
 
 ## Source audit and historical prototypes
 
@@ -211,12 +212,13 @@ To regenerate the current appearance for an authorized asset change: run
 `MODE='bake'`, then run `node scripts/build-selected-neutral-rig.mjs`.
 For static review captures execute the same Blender script with `MODE='render'`
 and `REVIEW_POSES` listing the six named review poses. The script runs inside
-Blender through the bridge, uses this workspace's hardcoded `BASE`, and requires
+Blender (optionally through the bridge), uses `PROJECT_ROOT` or the repository
+working directory for `BASE`, and requires
 the existing `TheArena-Neutral-Structural-Rig` scene before creating its dedicated
 R4 scene. It is not a standalone Python script. Baking preserves the
 source image separately and packs only the new 512 atlas into the final GLB.
 
 The preparation script copies review clips only into ignored repository-local
-`.tmp/player-rebuild-source`; it never edits recovery inputs. Browser recording
+`art/player-rebuild/source-motion` on this cloud branch; it never edits recovery inputs. Browser recording
 uses the existing PLAYWRIGHT_MODULE, PLAYWRIGHT_EXECUTABLE and FFMPEG_EXECUTABLE
 environment overrides. The full rebuild remains incomplete.

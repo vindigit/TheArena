@@ -1,0 +1,390 @@
+{
+  "sha256": "ffe7e05b533f79d3df4899d8de2752d886a9de0bfe418f67d9a2e469d282a0bb",
+  "sourceHash": "26d97a1a31ac65445f06ac0595f08ae3f02174d9aea2ee6225cfffaa6041ada9",
+  "nodes": [
+    {
+      "name": "root",
+      "translation": [
+        0,
+        0.525,
+        -0.014
+      ],
+      "children": [
+        1,
+        5,
+        9
+      ],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "anatomical joint"
+      }
+    },
+    {
+      "name": "lfemur",
+      "translation": [
+        0.068,
+        -0.025000000000000022,
+        0.014
+      ],
+      "children": [
+        2
+      ],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "anatomical joint"
+      }
+    },
+    {
+      "name": "ltibia",
+      "translation": [
+        0.021199999999999997,
+        -0.24259999999999998,
+        -0.03
+      ],
+      "children": [
+        3
+      ],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "anatomical joint"
+      }
+    },
+    {
+      "name": "lfoot",
+      "translation": [
+        0.024599999999999997,
+        -0.1617,
+        -0.009500000000000001
+      ],
+      "children": [
+        4
+      ],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "anatomical joint"
+      }
+    },
+    {
+      "name": "ltoes",
+      "translation": [
+        0.0092,
+        -0.0677,
+        0.0945
+      ],
+      "children": [],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "anatomical joint"
+      }
+    },
+    {
+      "name": "rfemur",
+      "translation": [
+        -0.068,
+        -0.025000000000000022,
+        0.014
+      ],
+      "children": [
+        6
+      ],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "anatomical joint"
+      }
+    },
+    {
+      "name": "rtibia",
+      "translation": [
+        -0.025099999999999997,
+        -0.2425,
+        -0.0306
+      ],
+      "children": [
+        7
+      ],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "anatomical joint"
+      }
+    },
+    {
+      "name": "rfoot",
+      "translation": [
+        -0.023900000000000005,
+        -0.1629,
+        -0.007500000000000003
+      ],
+      "children": [
+        8
+      ],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "anatomical joint"
+      }
+    },
+    {
+      "name": "rtoes",
+      "translation": [
+        -0.0059999999999999915,
+        -0.0666,
+        0.0931
+      ],
+      "children": [],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "anatomical joint"
+      }
+    },
+    {
+      "name": "waist",
+      "translation": [
+        0,
+        0.06499999999999995,
+        0.002
+      ],
+      "children": [
+        10
+      ],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "anatomical joint"
+      }
+    },
+    {
+      "name": "lowback",
+      "translation": [
+        0,
+        0.08400000000000007,
+        0.002
+      ],
+      "children": [
+        11
+      ],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "anatomical joint"
+      }
+    },
+    {
+      "name": "thorax",
+      "translation": [
+        0,
+        0.09199999999999997,
+        -0.007000000000000001
+      ],
+      "children": [
+        12,
+        14,
+        20
+      ],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "anatomical joint"
+      }
+    },
+    {
+      "name": "neck",
+      "translation": [
+        0,
+        0.08099999999999996,
+        0
+      ],
+      "children": [
+        13
+      ],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "anatomical joint"
+      }
+    },
+    {
+      "name": "head",
+      "translation": [
+        0,
+        0.04500000000000004,
+        0.003000000000000001
+      ],
+      "children": [],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "anatomical joint"
+      }
+    },
+    {
+      "name": "lcollar",
+      "translation": [
+        0.055,
+        0.039000000000000035,
+        -0.002999999999999999
+      ],
+      "children": [
+        15
+      ],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "anatomical joint"
+      }
+    },
+    {
+      "name": "lhumerus",
+      "translation": [
+        0.08500000000000002,
+        -0.011700000000000044,
+        -0.0069
+      ],
+      "children": [
+        16
+      ],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "anatomical joint"
+      }
+    },
+    {
+      "name": "ltwist",
+      "translation": [
+        0.07499999999999998,
+        -0.006700000000000039,
+        0.0005000000000000004
+      ],
+      "children": [
+        17
+      ],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "intermediate limb support"
+      }
+    },
+    {
+      "name": "lelbow",
+      "translation": [
+        0.07499999999999998,
+        -0.006699999999999928,
+        0.0005000000000000004
+      ],
+      "children": [
+        18
+      ],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "anatomical joint"
+      }
+    },
+    {
+      "name": "lwrist",
+      "translation": [
+        0.0625,
+        -0.006900000000000017,
+        0.0126
+      ],
+      "children": [
+        19
+      ],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "intermediate limb support"
+      }
+    },
+    {
+      "name": "lhand",
+      "translation": [
+        0.0625,
+        -0.007000000000000006,
+        0.0126
+      ],
+      "children": [],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "anatomical joint"
+      }
+    },
+    {
+      "name": "rcollar",
+      "translation": [
+        -0.055,
+        0.039000000000000035,
+        -0.002999999999999999
+      ],
+      "children": [
+        21
+      ],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "anatomical joint"
+      }
+    },
+    {
+      "name": "rhumerus",
+      "translation": [
+        -0.08500000000000002,
+        -0.011700000000000044,
+        -0.0069
+      ],
+      "children": [
+        22
+      ],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "anatomical joint"
+      }
+    },
+    {
+      "name": "rtwist",
+      "translation": [
+        -0.07499999999999998,
+        -0.006700000000000039,
+        0.0005000000000000004
+      ],
+      "children": [
+        23
+      ],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "intermediate limb support"
+      }
+    },
+    {
+      "name": "relbow",
+      "translation": [
+        -0.07499999999999998,
+        -0.006699999999999928,
+        0.0005000000000000004
+      ],
+      "children": [
+        24
+      ],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "anatomical joint"
+      }
+    },
+    {
+      "name": "rwrist",
+      "translation": [
+        -0.0625,
+        -0.006900000000000017,
+        0.0126
+      ],
+      "children": [
+        25
+      ],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "intermediate limb support"
+      }
+    },
+    {
+      "name": "rhand",
+      "translation": [
+        -0.0625,
+        -0.007000000000000006,
+        0.0126
+      ],
+      "children": [],
+      "extras": {
+        "basis": "selected-athlete-neutral",
+        "role": "anatomical joint"
+      }
+    }
+  ]
+}

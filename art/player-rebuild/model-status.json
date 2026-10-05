@@ -1,0 +1,15 @@
+{
+  "stage": "original-deformation-blockout",
+  "finished": false,
+  "sourceGeometryReused": false,
+  "sourceTexturesReused": false,
+  "rig": "canonical-26",
+  "triangles": 9190,
+  "sha256": "f706b374f1b7a29c7d7012e82716597477d8d1c8921a0cc57b010bf88f634fa8",
+  "pending": [
+    "visual proportion review",
+    "joined deformation topology refinement",
+    "painted texture atlas",
+    "final model approval"
+  ]
+}

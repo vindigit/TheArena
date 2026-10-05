@@ -5,20 +5,16 @@ rebuild. It does not authorize a new implementation task or publication.
 
 ## Start here
 
-### For Claude in a fresh cloud clone
+### Current cloud implementation branch
 
-Fetch and check out `origin/codex/claude-player-handoff`. That branch publishes
-only `CLAUDE.md`, this handoff, `PROJECT.md` and `docs/PLAYER_REBUILD.md` on top of
-the remote main baseline. It provides the current context, not a complete copy
-of the owner's uncommitted implementation. The model/assets, new scripts/tests,
-status JSON, Blender source and local motion copies listed below are unavailable
-in that cloud checkout. Do not claim to have inspected them or reproduce their
-checks there. The validation evidence below was obtained in the local Windows
-workspace. Read and summarize the handoff; a later cloud implementation task
-would first require transferring the relevant implementation and source assets.
-`AGENTS.md` may be absent in that baseline; `PROJECT.md` retains the working
-agreement. References to the "current/local" branch, dirty tree and runtime below
-describe the owner's workspace, not this documentation-only remote branch.
+Fetch and check out `origin/codex/claude-player-development`, then read
+`docs/CLAUDE_DEVELOPMENT.md`. The selected model, editable Blender files,
+rebuild scripts/tests, status JSON and all 976 compatible motion copies are now
+included there. The earlier `codex/claude-player-handoff` branch still contains
+only documentation. The rest of this handoff records the original Windows
+workspace: its dirty runtime and ignored-file statements are historical, not
+the file availability of the new cloud branch. Rejected motion remains disabled
+and publishing the replacement still requires owner visual approval.
 
 ### Owner's local workspace snapshot
 

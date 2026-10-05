@@ -1,2 +1,8 @@
 art/animation/*.json text eol=lf
 public/assets/animation-runtime-manifest.json text eol=lf
+
+# Preserve exact recovery/source hashes across Windows and Linux checkouts.
+art/player-rebuild/** -text
+art/source/player-rebuild/*.blend -text
+# Raw one-line recovery metadata is hashed input, not text to reformat.
+art/player-rebuild/source-motion/*.json -diff

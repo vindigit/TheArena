@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#121821">
+<title>TheArena — player structure preview</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#121821;color:#eef1f5;font:16px/1.55 system-ui,sans-serif}main{max-width:860px;margin:auto;padding:24px 16px 40px}.eyebrow{color:#ffb065;font-size:12px;letter-spacing:.14em;font-weight:750;text-transform:uppercase}h1{font-size:clamp(25px,6vw,38px);line-height:1.15;margin:8px 0 12px}p{margin:0 0 18px;color:#bdc6d3}.poses{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0 14px}button{font:inherit;color:#dce3ed;background:#202b3b;border:1px solid #455469;border-radius:9px;padding:11px 13px;min-height:46px;cursor:pointer}button[aria-pressed=true]{background:#ffb065;color:#171e28;border-color:#ffb065;font-weight:700}button:focus-visible,a:focus-visible{outline:3px solid #fff;outline-offset:3px}figure{margin:0;overflow:hidden;border:1px solid #3d495a;border-radius:14px;background:#454d56}figure img{display:block;width:100%;max-width:600px;height:auto;margin:auto}figcaption{background:#1c2634;padding:14px 16px}.note{margin-top:20px;padding:16px;border-left:3px solid #ffb065;background:#1c2634;border-radius:0 9px 9px 0}.note p{margin:0}.note strong{color:#eef1f5}footer{color:#98a6b7;font-size:13px;margin-top:22px}a{color:#ffb065}noscript p{margin-top:14px}@media(min-width:700px){main{padding-top:36px}}
+</style>
+</head>
+<body><main>
+<div class="eyebrow">TheArena · revision 4 · static pose review</div>
+<h1>Rebuilt player structure</h1>
+<p>Wider shoulders, longer shorts and deeper armholes. Tap a pose to inspect the new fit.</p>
+<div class="poses" role="group" aria-label="Choose a review pose">
+<button type="button" data-pose="relaxed-arms" aria-pressed="true">Arms relaxed</button>
+<button type="button" data-pose="neutral-front" aria-pressed="false">Front</button>
+<button type="button" data-pose="neutral-side" aria-pressed="false">Side</button>
+<button type="button" data-pose="knee-60" aria-pressed="false">Knee 60°</button>
+<button type="button" data-pose="knee-90" aria-pressed="false">Knee 90°</button>
+<button type="button" data-pose="knee-110" aria-pressed="false">Knee 110°</button>
+</div>
+<figure>
+<img id="pose" src="../art/player-rebuild/review/relaxed-arms.png?revision=4" width="600" height="700" alt="Rebuilt basketball player with wider shoulders, long baggy shorts and deeper armholes" fetchpriority="high">
+<figcaption id="caption" aria-live="polite">Arms relaxed — check elbow clearance, upright posture and the jersey outline.</figcaption>
+</figure>
+<div class="note"><p><strong>Walking and running are still disconnected.</strong> The new skeleton needs the 2K motion fitted to it before moving previews return. This character is awaiting your review and remains outside gameplay.</p></div>
+<noscript><p>Open individual poses: <a href="../art/player-rebuild/review/neutral-front.png">front</a>, <a href="../art/player-rebuild/review/neutral-side.png">side</a>, <a href="../art/player-rebuild/review/knee-90.png">90° knee bend</a>.</p></noscript>
+<footer>512×512 color texture · one material · 5,139 triangles.<br><a href="../art/player-rebuild/selected-player-ps2-diffuse.png?revision=4">View the baked color texture</a><br>Static pose checks only. Walking and running still need review.</footer>
+</main>
+<script>
+const descriptions={
+ 'relaxed-arms':'Arms relaxed — check the wider shoulders, deeper armholes and baggy uniform.',
+ 'neutral-front':'Neutral front — shoulders widened 15%; shorts end four inches below each knee with wider openings.',
+ 'neutral-side':'Neutral side — check the armhole depth, shorts length and baked fabric creases.',
+ 'knee-60':'60° isolated knee bend — check that the shin remains straight and the knee keeps its shape.',
+ 'knee-90':'90° isolated knee bend — check the thigh-to-shin hinge and the blended knee area.',
+ 'knee-110':'110° isolated knee bend — a deeper structural check, not a running pose.'
+};
+document.querySelectorAll('[data-pose]').forEach(button=>button.addEventListener('click',()=>{
+ document.querySelectorAll('[data-pose]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
+ const pose=button.dataset.pose,image=document.getElementById('pose');
+ image.src='../art/player-rebuild/review/'+pose+'.png?revision=4';image.alt=descriptions[pose];
+ document.getElementById('caption').textContent=descriptions[pose];
+}));
+</script>
+</body></html>

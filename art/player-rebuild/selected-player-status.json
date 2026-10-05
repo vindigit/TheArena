@@ -1,0 +1,27 @@
+{
+  "stage": "neutral-structural-rebuild",
+  "revision": 4,
+  "approved": false,
+  "previewEnabled": false,
+  "motionConnected": false,
+  "rejection": "Owner rejected collapsed legs, tucked arms, rigid uniform and posture; rebuild structure before motion playback.",
+  "sourceHash": "26d97a1a31ac65445f06ac0595f08ae3f02174d9aea2ee6225cfffaa6041ada9",
+  "triangles": 5139,
+  "vertices": 7476,
+  "joints": 26,
+  "changes": [
+    "anatomical neutral skeleton and volume-preserving skin",
+    "15 percent wider clavicles with intact arm lengths",
+    "shorts hem four inches below each knee",
+    "wider separate cloth leg openings",
+    "deeper armholes and baked 512 diffuse"
+  ],
+  "pending": [
+    "compound-pose deformation and owner silhouette review",
+    "motion retargeting and source selection",
+    "gameplay integration and owner approval"
+  ],
+  "canonicalRestCompatible": false,
+  "retargetRequired": true,
+  "skinningRequired": "dual-quaternion"
+}

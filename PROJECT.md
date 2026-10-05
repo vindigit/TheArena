@@ -7,10 +7,11 @@
 - Primary deployment branch: `main`
 - This repository is the source of truth. Keep changes focused and preserve unrelated local work.
 
-Cloud handoff: `codex/claude-player-handoff` is a documentation-only branch.
-The player-rebuild state described here is the owner's local workspace snapshot;
-its new assets/scripts and ignored Blender/motion sources are not included in
-that remote branch. Read `docs/CLAUDE_HANDOFF.md` before interpreting missing files.
+Cloud development handoff: `codex/claude-player-development` contains the current
+selected-player assets, editable Blender sources, scripts/tests and canonical
+motion copies. Read `docs/CLAUDE_DEVELOPMENT.md` for this branch's exact contents.
+The original Windows workspace descriptions below are historical context; the
+clean development branch excludes unrelated Luke changes and the rejected gait.
 
 ## Product direction
 

@@ -1,0 +1,11 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TheArena — source motion review</title>
+<style>body{margin:0;background:#121821;color:#eef1f5;font:16px system-ui}header{padding:16px;max-width:1000px}select,button,input{padding:8px;margin:4px;font:inherit;background:#263247;color:white;border:1px solid #66788a}select{max-width:100%}canvas{display:block;width:min(100%,960px)}p{line-height:1.45}#details{white-space:pre-wrap;overflow-wrap:anywhere;font:13px monospace}#timeline{width:min(300px,85%)}</style>
+<header><strong>Player rebuild · stage 1 · RAW 2K motion</strong>
+<p>The recovered mesh is a temporary rig reference. Original clips play at 1× speed without gait synthesis, IK, pelvis settling or ball-contact correction. Clip labels are source labels, not approved actions. Root trajectory metadata is not applied.</p>
+<label><input id="all" type="checkbox">All compatible clips</label><select id="clip"></select>
+<select id="view"><option>side</option><option>front</option><option>three-quarter</option></select><button id="play">Pause</button><button id="replay">Replay</button>
+<label><input id="loop" type="checkbox">Loop to inspect seam</label><label><input id="skeleton" type="checkbox">Skeleton</label>
+<input id="timeline" type="range" min="0" max="1" step="0.001" value="0"><span id="time"></span>
+<p id="status">Loading…</p><div id="details"></div></header>
+<script type="module" src="./player-rebuild.js"></script></html>

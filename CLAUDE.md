@@ -7,16 +7,15 @@ changing this project. The handoff is the current player-rebuild snapshot as of
 Verify those against the actual files when resuming; do not assume this snapshot
 will remain current after later changes.
 
-## Cloud checkout notice
+## Cloud development checkout
 
-The remote branch `codex/claude-player-handoff` contains only this context file,
-`PROJECT.md`, `docs/CLAUDE_HANDOFF.md` and `docs/PLAYER_REBUILD.md` over the remote
-main baseline. The revision 4 model, scripts, tests, status JSON, Blender source
-and copied motion library described below remain in the owner's local workspace;
-they are not included in that documentation branch. In a cloud clone, read the
-handoff to understand that state and report those files as unavailable. Do not
-substitute the old main model or historical handoffs for the current candidate.
-The "current/local" descriptions below refer to the owner's Windows working tree.
+Use branch `codex/claude-player-development`. Read
+`docs/CLAUDE_DEVELOPMENT.md` first: this branch includes the selected model,
+editable Blender sources, scripts, tests, static review and all 976 canonical
+motion GLBs. The previous documentation-only branch remains available.
+The historical handoff describes the owner's Windows workspace; this clean
+development branch does not include unrelated Luke changes or the rejected gait.
+The replacement remains outside gameplay and unapproved.
 
 ## Current priority
 
@@ -27,19 +26,19 @@ texture. It is a static structural/appearance candidate awaiting visual approval
 The moving review is suspended. No replacement motion or gameplay integration
 has been completed. CPU 1v1 is a later milestone.
 
-The current playable path still uses recovered Classic 01/02 through
-`src/nba2k9-player.js`; this dirty checkout still runs the rejected authored gait
-on those recovered players. It is not the replacement's approved foundation,
-and local runtime code must not be assumed to match deployed `main`.
-The replacement's current GLB is
+This branch's playable path retains remote main's recovered Classic 01/02
+through `src/nba2k9-player.js`. The owner's separate Windows working tree contains
+the rejected gait, but it is not included in this clean development branch.
+The replacement remains staged separately. Its current GLB is
 `art/player-rebuild/selected-player-neutral-rig.glb`; its editable source is
 `art/source/player-rebuild/selected-ps2-style-r4.blend`.
 
 ## Constraints to carry forward
 
 - Keep work inside this repository, preserve unrelated local Luke work, and
-  inspect the dirty working tree before editing. Many rebuild files are
-  uncommitted; Blender sources, clip copies and archives are ignored by Git.
+  inspect the working tree before editing. This branch tracks the transferred
+  rebuild files, Blender sources and clip copies; local Windows archives and
+  unrelated uncommitted work remain outside this branch.
 - Preserve the supplied character and read-only recovery inputs. Keep the
   PS2/early-2000s style, approximately 2 m height and 20,000-triangle ceiling.
 - The replacement keeps 26 canonical joint names/hierarchy but has its own rest
